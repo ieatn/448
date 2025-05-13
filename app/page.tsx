@@ -17,6 +17,18 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const fillSampleData = () => {
+    setAge('28');
+    setGender('female');
+    setOccupation('Software Engineer');
+    setEducation('bachelors');
+    setIncome('60k-100k');
+    setExercise('3-4');
+    setSocial('medium');
+    setSleep('7.5');
+  };
+  
+
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -190,6 +202,14 @@ export default function Home() {
           </div>
 
           <button
+            type="button"
+            onClick={fillSampleData}
+            className="w-full inline-flex justify-center py-2 px-4 border border-indigo-600 shadow-sm text-sm font-medium rounded-md text-indigo-600 bg-white hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          >
+            Fill with Sample Data
+          </button>
+
+          <button
             type="submit"
             disabled={isLoading} // Disable button while loading
             className="mt-4 w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
@@ -213,6 +233,102 @@ export default function Home() {
             <p className="mt-4 text-xs text-gray-500 dark:text-gray-400">Disclaimer: This prediction is based on a statistical model and is not a substitute for professional medical advice. If you are concerned about your mental health, please consult a healthcare professional.</p>
           </div>
         )}
+
+        {/* Tutorial Section */}
+        <div className="mt-8 w-full">
+          <h2 className="text-xl font-semibold mb-4">Tutorial: Working with Depression Data</h2>
+          
+          <div className="space-y-6">
+            {/* Step 1: Data Loading */}
+            <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+              <h3 className="text-lg font-medium mb-2">Step 1: Loading the Data</h3>
+              <pre className="bg-gray-100 dark:bg-gray-800 p-3 rounded overflow-x-auto text-sm">
+{`import pandas as pd
+
+# Load the depression scores data
+df = pd.read_csv('depression_scores.csv')
+
+# Display basic information
+print(df.info())
+print(df.describe())`}
+              </pre>
+            </div>
+
+            {/* Step 2: Data Preprocessing */}
+            <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+              <h3 className="text-lg font-medium mb-2">Step 2: Data Preprocessing</h3>
+              <pre className="bg-gray-100 dark:bg-gray-800 p-3 rounded overflow-x-auto text-sm">
+{`# Handle missing values
+df = df.fillna(df.mean())
+
+# Convert categorical variables
+df = pd.get_dummies(df, columns=['gender', 'education'])
+
+# Scale numerical features
+from sklearn.preprocessing import StandardScaler
+scaler = StandardScaler()
+numerical_cols = ['age', 'sleep', 'exercise']
+df[numerical_cols] = scaler.fit_transform(df[numerical_cols])`}
+              </pre>
+            </div>
+
+            {/* Step 3: Model Training */}
+            <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+              <h3 className="text-lg font-medium mb-2">Step 3: Model Training</h3>
+              <pre className="bg-gray-100 dark:bg-gray-800 p-3 rounded overflow-x-auto text-sm">
+{`from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+
+# Split the data
+X = df.drop('depression_score', axis=1)
+y = df['depression_score']
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+
+# Train the model
+model = RandomForestClassifier(n_estimators=100)
+model.fit(X_train, y_train)
+
+# Evaluate the model
+score = model.score(X_test, y_test)
+print(f"Model accuracy: {score:.2f}")`}
+              </pre>
+            </div>
+
+            {/* Step 4: Making Predictions */}
+            <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+              <h3 className="text-lg font-medium mb-2">Step 4: Making Predictions</h3>
+              <pre className="bg-gray-100 dark:bg-gray-800 p-3 rounded overflow-x-auto text-sm">
+{`# Example of making a prediction
+def predict_depression_risk(input_data):
+    # Preprocess input data
+    processed_data = preprocess_input(input_data)
+    
+    # Make prediction
+    prediction = model.predict(processed_data)
+    
+    # Return risk level
+    risk_levels = {
+        0: "Low Risk",
+        1: "Moderate Risk",
+        2: "High Risk"
+    }
+    return risk_levels[prediction[0]]`}
+              </pre>
+            </div>
+
+            <div className="mt-4 text-sm text-gray-600 dark:text-gray-400">
+              <p>Note: This is a simplified example. In a real application, you would need to:</p>
+              <ul className="list-disc list-inside mt-2">
+                <li>Implement proper error handling</li>
+                <li>Add data validation</li>
+                <li>Include model evaluation metrics</li>
+                <li>Add cross-validation</li>
+                <li>Implement proper model versioning</li>
+                <li>Add logging and monitoring</li>
+              </ul>
+            </div>
+          </div>
+        </div>
       </main>
     </div>
   );
