@@ -258,6 +258,15 @@ export default function Home() {
             </div>
             <p className="mt-2 text-gray-700 dark:text-gray-300">{prediction.message}</p>
             <p className="mt-4 text-xs text-gray-500 dark:text-gray-400">Disclaimer: This prediction is based on a statistical model and is not a substitute for professional medical advice. If you are concerned about your mental health, please consult a healthcare professional.</p>
+            
+            <div className="mt-6">
+              <Link 
+                href="/analysis" 
+                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              >
+                View Model Analysis
+              </Link>
+            </div>
           </div>
         )}
       </main>
