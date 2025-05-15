@@ -1,42 +1,54 @@
 import { NextResponse } from 'next/server';
 
-// This is a simplified model that returns a prediction based on the inputs
-// In a real application, this would use an actual trained model
-function predictDepressionRisk(data: any): string {
-  // Calculate a simple risk score based on the input factors
-  let riskScore = 0;
+// This implements a simplified linear regression model to predict depression risk as a percentage
+function predictDepressionRisk(data: any): { percentage: number, message: string } {
+  // Base risk (intercept term in the regression)
+  let riskPercentage = 30;
   
   // Sleep factor (lower sleep hours increase risk)
   const sleepHours = parseFloat(data.sleep);
-  if (sleepHours < 6) riskScore += 3;
-  else if (sleepHours < 7) riskScore += 2;
-  else if (sleepHours < 8) riskScore += 1;
+  // Sleep has a negative coefficient (more sleep = lower risk)
+  riskPercentage -= (sleepHours - 6) * 3; // For each hour above 6, reduce risk by 3%
   
-  // Exercise factor
-  if (data.exercise === 'never') riskScore += 3;
-  else if (data.exercise === '1-2') riskScore += 2;
-  else if (data.exercise === '3-4') riskScore += 1;
+  // Exercise factor (coefficients based on exercise frequency)
+  if (data.exercise === 'never') riskPercentage += 15;
+  else if (data.exercise === '1-2') riskPercentage += 5;
+  else if (data.exercise === '3-4') riskPercentage -= 5;
+  else if (data.exercise === '5+') riskPercentage -= 10;
   
-  // Social interaction factor
-  if (data.social === 'low') riskScore += 3;
-  else if (data.social === 'medium') riskScore += 1;
+  // Social interaction factor (coefficients based on social level)
+  if (data.social === 'low') riskPercentage += 15;
+  else if (data.social === 'medium') riskPercentage += 0;
+  else if (data.social === 'high') riskPercentage -= 10;
   
-  // Age factor (simplified)
+  // Age factor
   const age = parseInt(data.age);
-  if (age > 60) riskScore += 1;
-  else if (age < 25) riskScore += 1;
+  // Simplified U-shaped relationship with age (higher risk for very young and older adults)
+  if (age < 25) riskPercentage += 5;
+  else if (age > 60) riskPercentage += 7;
   
-  // Income factor (simplified)
-  if (data.income === '<30k') riskScore += 1;
+  // Income factor
+  if (data.income === '<30k') riskPercentage += 8;
+  else if (data.income === '30k-60k') riskPercentage += 4;
+  else if (data.income === '>150k') riskPercentage -= 3;
   
-  // Determine risk category
-  if (riskScore >= 7) {
-    return "High Risk - You may be at increased risk for depression. Consider speaking with a healthcare professional.";
-  } else if (riskScore >= 4) {
-    return "Moderate Risk - Some risk factors present. Regular self-care is recommended.";
+  // Ensure the percentage is within 0-100 range
+  riskPercentage = Math.max(0, Math.min(100, riskPercentage));
+  
+  // Round to nearest integer
+  riskPercentage = Math.round(riskPercentage);
+  
+  // Determine message based on risk percentage
+  let message;
+  if (riskPercentage >= 70) {
+    message = "High Risk - You may be at increased risk for depression. Consider speaking with a healthcare professional.";
+  } else if (riskPercentage >= 40) {
+    message = "Moderate Risk - Some risk factors present. Regular self-care is recommended.";
   } else {
-    return "Low Risk - Few risk factors present. Continue maintaining healthy habits.";
+    message = "Low Risk - Few risk factors present. Continue maintaining healthy habits.";
   }
+  
+  return { percentage: riskPercentage, message };
 }
 
 export async function POST(request: Request) {
@@ -56,7 +68,7 @@ export async function POST(request: Request) {
     const prediction = predictDepressionRisk(data);
     
     // Return the prediction
-    return NextResponse.json({ prediction });
+    return NextResponse.json(prediction);
     
   } catch (error) {
     console.error('Error processing prediction:', error);

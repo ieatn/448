@@ -3,6 +3,11 @@
 import { useState } from 'react';
 import Link from 'next/link';
 
+interface PredictionResult {
+  percentage: number;
+  message: string;
+}
+
 export default function Home() {
   const [age, setAge] = useState('');
   const [gender, setGender] = useState('');
@@ -12,7 +17,7 @@ export default function Home() {
   const [exercise, setExercise] = useState('');
   const [social, setSocial] = useState('');
   const [sleep, setSleep] = useState('');
-  const [prediction, setPrediction] = useState<string | null>(null);
+  const [prediction, setPrediction] = useState<PredictionResult | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -49,7 +54,7 @@ export default function Home() {
       }
 
       const result = await response.json();
-      setPrediction(result.prediction);
+      setPrediction(result);
 
     } catch (err) {
       console.error('Failed to fetch prediction:', err);
@@ -235,8 +240,23 @@ export default function Home() {
         {/* Prediction results */}
         {prediction && (
           <div className="mt-6 p-4 border border-gray-300 dark:border-gray-700 rounded-md w-full text-center bg-gray-50 dark:bg-gray-700">
-            <h2 className="text-lg font-medium text-gray-900 dark:text-white">Prediction Result:</h2>
-            <p className="mt-2 text-gray-700 dark:text-gray-300">{prediction}</p>
+            <h2 className="text-lg font-medium text-gray-900 dark:text-white">Depression Risk Prediction:</h2>
+            <div className="my-4">
+              <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-4">
+                <div 
+                  className={`h-4 rounded-full ${
+                    prediction.percentage >= 70 
+                      ? 'bg-red-600' 
+                      : prediction.percentage >= 40 
+                        ? 'bg-yellow-500' 
+                        : 'bg-green-500'
+                  }`} 
+                  style={{ width: `${prediction.percentage}%` }}
+                ></div>
+              </div>
+              <p className="mt-2 font-bold text-lg">{prediction.percentage}% Risk</p>
+            </div>
+            <p className="mt-2 text-gray-700 dark:text-gray-300">{prediction.message}</p>
             <p className="mt-4 text-xs text-gray-500 dark:text-gray-400">Disclaimer: This prediction is based on a statistical model and is not a substitute for professional medical advice. If you are concerned about your mental health, please consult a healthcare professional.</p>
           </div>
         )}
