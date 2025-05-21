@@ -21,6 +21,57 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  const testServer = async () => {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+      const data = await response.text();
+      console.log('Server response:', data);
+    } catch (err) {
+      console.error('Failed to connect to server:', err);
+      alert('Failed to connect to server. Check console for details.');
+    }
+  };
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
   const fillSampleData = () => {
     setAge('28');
     setGender('female');
@@ -69,7 +120,13 @@ export default function Home() {
       <main className="flex flex-col gap-8 items-center w-full max-w-6xl bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
         <h1 className="text-2xl font-semibold text-center">Depression Risk Survey</h1>
         
-        <div className="w-full text-right">
+        <div className="w-full text-right flex gap-2 justify-end">
+          <button
+            onClick={testServer}
+            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+          >
+            Test Server Connection
+          </button>
           <Link 
             href="/analysis" 
             className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
