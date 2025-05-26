@@ -32,7 +32,7 @@ ChartJS.register(
 );
 
 // Type definitions
-type ModelName = 'K-Means' | 'KNN' | 'LASSO' | 'Linear Regression';
+type ModelName = 'Logistic Regression' | 'KNN' | 'Random Forest' | 'SVM';
 type MetricName = 'accuracy' | 'training_time' | 'interpretability' | 'scalability';
 
 interface ModelMetrics {
@@ -55,111 +55,107 @@ type ModelCharacteristics = Record<ModelName, ModelCharacteristic>;
 // Model performance data
 const modelPerformance: ModelMetrics = {
   accuracy: {
-    'K-Means': 0.82,
-    'KNN': 0.85,
-    'LASSO': 0.79,
-    'Linear Regression': 0.83
+    'Logistic Regression': 0.85,
+    'KNN': 0.82,
+    'Random Forest': 0.83,
+    'SVM': 0.81
   },
   training_time: {
-    'K-Means': 0.3,
+    'Logistic Regression': 0.2,
     'KNN': 0.5,
-    'LASSO': 0.4,
-    'Linear Regression': 0.2
+    'Random Forest': 0.8,
+    'SVM': 0.7
   },
   interpretability: {
-    'K-Means': 0.85,
+    'Logistic Regression': 0.95,
     'KNN': 0.70,
-    'LASSO': 0.90,
-    'Linear Regression': 0.95
+    'Random Forest': 0.75,
+    'SVM': 0.65
   },
   scalability: {
-    'K-Means': 0.75,
+    'Logistic Regression': 0.90,
     'KNN': 0.60,
-    'LASSO': 0.85,
-    'Linear Regression': 0.90
+    'Random Forest': 0.85,
+    'SVM': 0.80
   }
 };
 
 // Model characteristics for radar chart
 const modelCharacteristics: ModelCharacteristics = {
-  'K-Means': {
-    'Accuracy': 0.82,
-    'Speed': 0.85,
-    'Interpretability': 0.85,
-    'Feature Handling': 0.70,
-    'Scalability': 0.75
+  'Logistic Regression': {
+    'Accuracy': 0.85,
+    'Speed': 0.90,
+    'Interpretability': 0.95,
+    'Feature Handling': 0.85,
+    'Scalability': 0.90
   },
   'KNN': {
-    'Accuracy': 0.85,
+    'Accuracy': 0.82,
     'Speed': 0.65,
     'Interpretability': 0.70,
     'Feature Handling': 0.80,
     'Scalability': 0.60
   },
-  'LASSO': {
-    'Accuracy': 0.79,
+  'Random Forest': {
+    'Accuracy': 0.83,
     'Speed': 0.75,
-    'Interpretability': 0.90,
-    'Feature Handling': 0.85,
+    'Interpretability': 0.75,
+    'Feature Handling': 0.90,
     'Scalability': 0.85
   },
-  'Linear Regression': {
-    'Accuracy': 0.83,
-    'Speed': 0.90,
-    'Interpretability': 0.95,
-    'Feature Handling': 0.70,
-    'Scalability': 0.90
+  'SVM': {
+    'Accuracy': 0.81,
+    'Speed': 0.70,
+    'Interpretability': 0.65,
+    'Feature Handling': 0.75,
+    'Scalability': 0.80
   }
 };
 
 // Add survey-specific model analysis
 const surveyAnalysis = {
-  bestModel: 'Linear Regression',
+  bestModel: 'Logistic Regression',
   reasons: [
-    'Provides continuous percentage-based risk prediction',
-    'Highly interpretable coefficients for each risk factor',
-    'Fast computation time for real-time prediction',
-    'Simple to implement and maintain',
-    'Coefficients directly show impact of each feature on risk level'
+    'Provides probability-based predictions for depression risk',
+    'Handles both numerical and categorical features effectively',
+    'Fast computation time for real-time predictions',
+    'Clear interpretation of feature importance',
+    'Works well with our balanced dataset of 30 samples'
   ],
   dataCharacteristics: {
-    features: ['Age', 'Sleep', 'Exercise', 'Social', 'Income', 'Education'],
-    sampleSize: 'Medium',
+    features: ['Age', 'Education_Years', 'Occupation', 'Hours_Slept', 'Social_Activity_Score'],
+    sampleSize: '30 samples',
     type: 'Mixed (Numerical + Categorical)',
-    target: 'Risk Percentage (0-100%)'
+    target: 'Binary (HasDepression: 0/1)'
   }
 };
 
 // Sample prediction data for visualization
 const samplePredictions = {
-  sleepHours: [5, 6, 7, 8, 9],
-  riskPercentages: [60, 45, 30, 20, 25],
-  exerciseFreq: [0, 1, 2, 3, 4, 5],
-  exerciseRisk: [70, 55, 45, 30, 25, 20]
+  sleepHours: [4, 5, 6, 7, 8, 9],
+  riskPercentages: [85, 75, 60, 40, 25, 20],
+  socialScores: [1, 3, 5, 7, 9, 10],
+  socialRisk: [80, 65, 50, 35, 20, 15]
 };
 
 // Linear regression coefficients visualization data
 const coefficientData = {
-  labels: ['Sleep (hours)', 'Exercise (freq)', 'Social (low)', 'Age (<25)', 'Age (>60)', 'Income (<30k)'],
+  labels: ['Age', 'Education_Years', 'Hours_Slept', 'Social_Activity_Score'],
   datasets: [
     {
-      label: 'Feature Coefficient Impact',
-      data: [-3, -5, 15, 5, 7, 8],
+      label: 'Feature Impact on Depression Risk',
+      data: [0.15, -0.25, -0.35, -0.30],
       backgroundColor: [
+        'rgba(255, 99, 132, 0.6)',
         'rgba(75, 192, 192, 0.6)',
         'rgba(75, 192, 192, 0.6)',
-        'rgba(255, 99, 132, 0.6)',
-        'rgba(255, 99, 132, 0.6)',
-        'rgba(255, 99, 132, 0.6)',
-        'rgba(255, 99, 132, 0.6)',
+        'rgba(75, 192, 192, 0.6)',
       ],
       borderColor: [
+        'rgba(255, 99, 132, 1)',
         'rgba(75, 192, 192, 1)',
         'rgba(75, 192, 192, 1)',
-        'rgba(255, 99, 132, 1)',
-        'rgba(255, 99, 132, 1)',
-        'rgba(255, 99, 132, 1)',
-        'rgba(255, 99, 132, 1)',
+        'rgba(75, 192, 192, 1)',
       ],
       borderWidth: 1,
     },
@@ -168,7 +164,7 @@ const coefficientData = {
 
 export default function Analysis() {
   const [selectedMetric, setSelectedMetric] = useState<MetricName>('accuracy');
-  const [selectedModel, setSelectedModel] = useState<ModelName>('Linear Regression');
+  const [selectedModel, setSelectedModel] = useState<ModelName>('Logistic Regression');
 
   // Performance comparison chart data
   const performanceData = {
@@ -222,12 +218,12 @@ export default function Analysis() {
     ]
   };
 
-  const exerciseRiskData = {
-    labels: samplePredictions.exerciseFreq,
+  const socialRiskData = {
+    labels: samplePredictions.socialScores,
     datasets: [
       {
-        label: 'Risk Percentage vs Exercise Frequency',
-        data: samplePredictions.exerciseRisk,
+        label: 'Risk Percentage vs Social Activity Score',
+        data: samplePredictions.socialRisk,
         borderColor: 'rgb(153, 102, 255)',
         tension: 0.1,
         fill: false
@@ -263,7 +259,7 @@ export default function Analysis() {
       },
       title: {
         display: true,
-        text: 'Linear Regression Coefficients',
+        text: 'Feature Impact on Depression Risk',
       },
     },
     scales: {
@@ -271,7 +267,7 @@ export default function Analysis() {
         beginAtZero: false,
         title: {
           display: true,
-          text: 'Impact on Risk (%)'
+          text: 'Impact on Risk'
         }
       }
     },
@@ -332,10 +328,10 @@ export default function Analysis() {
 
         {/* Model Recommendation Section */}
         <div className="w-full bg-gradient-to-r from-indigo-50 to-blue-50 dark:from-indigo-900 dark:to-blue-900 p-6 rounded-lg">
-          <h2 className="text-xl font-semibold mb-4">Recommended Model: Linear Regression</h2>
+          <h2 className="text-xl font-semibold mb-4">Recommended Model: Logistic Regression</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <h3 className="font-medium text-indigo-600 dark:text-indigo-400 mb-2">Why Linear Regression for This Survey?</h3>
+              <h3 className="font-medium text-indigo-600 dark:text-indigo-400 mb-2">Why Logistic Regression for This Survey?</h3>
               <ul className="list-disc list-inside space-y-2">
                 {surveyAnalysis.reasons.map((reason, index) => (
                   <li key={index} className="text-sm">{reason}</li>
@@ -358,8 +354,8 @@ export default function Analysis() {
 
         {/* Linear Regression Coefficients */}
         <div className="w-full bg-white dark:bg-gray-700 p-4 rounded-lg shadow">
-          <h3 className="text-lg font-medium mb-4">Linear Regression Coefficients</h3>
-          <p className="text-sm mb-4">The chart below shows how each feature contributes to the depression risk percentage. Negative values decrease risk, positive values increase risk.</p>
+          <h3 className="text-lg font-medium mb-4">Feature Impact on Depression Risk</h3>
+          <p className="text-sm mb-4">The chart below shows how each feature contributes to the probability of depression.</p>
           <div className="h-[300px]">
             <Bar options={coefficientOptions} data={coefficientData} />
           </div>
@@ -378,26 +374,26 @@ export default function Analysis() {
               </div>
             </div>
 
-            {/* Exercise Impact */}
+            {/* Social Activity Impact */}
             <div className="bg-white dark:bg-gray-700 p-4 rounded-lg shadow">
-              <h3 className="text-lg font-medium mb-4">Exercise Impact on Risk</h3>
+              <h3 className="text-lg font-medium mb-4">Social Activity Impact on Risk</h3>
               <div className="h-[300px]">
-                <Line options={lineOptions} data={exerciseRiskData} />
+                <Line options={lineOptions} data={socialRiskData} />
               </div>
             </div>
           </div>
 
           {/* Model Performance Matrix */}
           <div className="bg-white dark:bg-gray-700 p-6 rounded-lg shadow">
-            <h3 className="text-lg font-medium mb-4">Linear Regression Performance Analysis</h3>
+            <h3 className="text-lg font-medium mb-4">Model Performance Analysis</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="p-4 bg-green-50 dark:bg-green-900 rounded-lg">
                 <h4 className="font-medium mb-2">Strengths</h4>
                 <ul className="list-disc list-inside text-sm space-y-1">
-                  <li>Continuous percentage predictions</li>
-                  <li>Direct coefficient interpretation</li>
+                  <li>Handles both numerical and categorical features</li>
+                  <li>Provides probability-based predictions</li>
                   <li>Fast computation time</li>
-                  <li>Simple implementation</li>
+                  <li>Clear interpretation of feature importance</li>
                 </ul>
               </div>
               <div className="p-4 bg-yellow-50 dark:bg-yellow-900 rounded-lg">
@@ -412,7 +408,7 @@ export default function Analysis() {
               <div className="p-4 bg-blue-50 dark:bg-blue-900 rounded-lg">
                 <h4 className="font-medium mb-2">Expected Outcomes</h4>
                 <ul className="list-disc list-inside text-sm space-y-1">
-                  <li>Precise percentage risk scores</li>
+                  <li>Precise probability-based predictions</li>
                   <li>Clear feature importance ranking</li>
                   <li>Transparent prediction logic</li>
                   <li>Actionable risk insights</li>
@@ -481,10 +477,10 @@ export default function Analysis() {
                   onChange={(e) => setSelectedModel(e.target.value as ModelName)}
                   className="mb-4 pl-2 pr-8 py-1 text-base border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                 >
-                  <option value="K-Means">K-Means</option>
+                  <option value="Logistic Regression">Logistic Regression</option>
                   <option value="KNN">KNN</option>
-                  <option value="LASSO">LASSO</option>
-                  <option value="Linear Regression">Linear Regression</option>
+                  <option value="Random Forest">Random Forest</option>
+                  <option value="SVM">SVM</option>
                 </select>
                 <div className="h-[300px]">
                   <Radar options={radarOptions} data={radarData} />
@@ -496,7 +492,7 @@ export default function Analysis() {
 
         {/* Tutorial Section */}
         <div className="w-full">
-          <h2 className="text-xl font-semibold mb-4">Tutorial: Linear Regression for Depression Risk</h2>
+          <h2 className="text-xl font-semibold mb-4">Tutorial: Logistic Regression for Depression Risk</h2>
           
           <div className="space-y-6">
             {/* Step 1: Data Loading */}
@@ -504,13 +500,17 @@ export default function Analysis() {
               <h3 className="text-lg font-medium mb-2">Step 1: Loading the Data</h3>
               <pre className="bg-gray-100 dark:bg-gray-800 p-3 rounded overflow-x-auto text-sm">
 {`import pandas as pd
+import numpy as np
+from sklearn.preprocessing import StandardScaler, OneHotEncoder
+from sklearn.compose import ColumnTransformer
+from sklearn.pipeline import Pipeline
+from sklearn.linear_model import LogisticRegression
 
-# Load the depression scores data
-df = pd.read_csv('depression_scores.csv')
-
-# Display basic information
-print(df.info())
-print(df.describe())`}
+# Load the data
+data = pd.read_csv('testing.csv')
+print("Dataset shape:", data.shape)
+print("\\nSample data:")
+print(data.head())`}
               </pre>
             </div>
 
@@ -518,84 +518,74 @@ print(df.describe())`}
             <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
               <h3 className="text-lg font-medium mb-2">Step 2: Data Preprocessing</h3>
               <pre className="bg-gray-100 dark:bg-gray-800 p-3 rounded overflow-x-auto text-sm">
-{`# Handle missing values
-df = df.fillna(df.mean())
+{`# Define feature types
+numerical_features = ['Age', 'Education_Years', 'Hours_Slept', 'Social_Activity_Score']
+categorical_features = ['Occupation']
 
-# Convert categorical variables
-df = pd.get_dummies(df, columns=['gender', 'education', 'income', 'exercise', 'social'])
-
-# Scale numerical features
-from sklearn.preprocessing import StandardScaler
-scaler = StandardScaler()
-numerical_cols = ['age', 'sleep']
-df[numerical_cols] = scaler.fit_transform(df[numerical_cols])`}
+# Create preprocessing pipeline
+preprocessor = ColumnTransformer(
+    transformers=[
+        ('num', StandardScaler(), numerical_features),
+        ('cat', OneHotEncoder(handle_unknown='ignore'), categorical_features)
+    ])`}
               </pre>
             </div>
 
             {/* Step 3: Model Training */}
             <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
-              <h3 className="text-lg font-medium mb-2">Step 3: Linear Regression Model</h3>
+              <h3 className="text-lg font-medium mb-2">Step 3: Logistic Regression Model</h3>
               <pre className="bg-gray-100 dark:bg-gray-800 p-3 rounded overflow-x-auto text-sm">
-{`from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LinearRegression
+{`# Create and train the model pipeline
+model_pipeline = Pipeline(steps=[
+    ('preprocessor', preprocessor),
+    ('classifier', LogisticRegression(random_state=42, solver='liblinear'))
+])
 
-# Split the data
-X = df.drop('depression_percentage', axis=1)
-y = df['depression_percentage']  # 0-100% scale
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+# Train the model
+X = data.drop('HasDepression', axis=1)
+y = data['HasDepression']
+model_pipeline.fit(X, y)
 
-# Train linear regression model
-model = LinearRegression()
-model.fit(X_train, y_train)
-
-# Evaluate the model
-score = model.score(X_test, y_test)
-print(f"Model R² score: {score:.3f}")
-
-# View coefficients
-coefficients = pd.DataFrame({'Feature': X.columns, 'Coefficient': model.coef_})
-print(coefficients.sort_values('Coefficient', ascending=False))`}
+# Get feature importance
+feature_importance = pd.DataFrame({
+    'Feature': numerical_features,
+    'Importance': model_pipeline.named_steps['classifier'].coef_[0][:len(numerical_features)]
+})
+print("\\nFeature Importance:")
+print(feature_importance.sort_values('Importance', ascending=False))`}
               </pre>
             </div>
 
             {/* Step 4: Making Predictions */}
             <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
-              <h3 className="text-lg font-medium mb-2">Step 4: Percentage-Based Prediction</h3>
+              <h3 className="text-lg font-medium mb-2">Step 4: Probability-Based Prediction</h3>
               <pre className="bg-gray-100 dark:bg-gray-800 p-3 rounded overflow-x-auto text-sm">
-{`# Example of making a percentage-based prediction
-def predict_depression_risk_percentage(input_data):
-    # Preprocess input data
-    processed_data = preprocess_input(input_data)
+{`def predict_depression_risk(input_data):
+    # Convert input to DataFrame
+    input_df = pd.DataFrame([input_data])
     
-    # Make prediction
-    risk_percentage = model.predict(processed_data)[0]
+    # Get prediction probabilities
+    proba = model_pipeline.predict_proba(input_df)
+    depression_prob = proba[0][1] * 100
     
-    # Ensure percentage is within 0-100 range
-    risk_percentage = max(0, min(100, risk_percentage))
+    # Get binary prediction
+    prediction = model_pipeline.predict(input_df)[0]
     
-    # Round to nearest integer
-    risk_percentage = round(risk_percentage)
-    
-    # Get descriptive message based on percentage
-    if risk_percentage >= 70:
-        message = "High Risk"
-    elif risk_percentage >= 40:
-        message = "Moderate Risk"
-    else:
-        message = "Low Risk"
-    
-    return {"percentage": risk_percentage, "message": message}`}
+    return {
+        "predicted_depression": bool(prediction),
+        "probability_of_depression": round(depression_prob, 2)
+    }`}
               </pre>
             </div>
 
             <div className="mt-4 text-sm text-gray-600 dark:text-gray-400">
-              <p>Note: This linear regression implementation has advantages over categorical approaches:</p>
+              <p>Note: This logistic regression implementation has advantages over categorical approaches:</p>
               <ul className="list-disc list-inside mt-2">
-                <li>Provides continuous risk spectrum (0-100%) instead of limited categories</li>
+                <li>Provides probability-based predictions</li>
                 <li>Shows exact feature impact through coefficients</li>
                 <li>Allows for more personalized risk assessment</li>
                 <li>Risk changes linearly with feature changes, easier to interpret</li>
-                <li>Can be easily visualized with percentage bars</li>
+                <li>Can be easily visualized with probability bars</li>
               </ul>
             </div>
           </div>

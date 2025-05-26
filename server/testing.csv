@@ -1,0 +1,31 @@
+Age,Education_Years,Occupation,Hours_Slept,Social_Activity_Score,HasDepression
+25,16,Student,7.2,6,0
+40,12,Manual Labor,5.1,3,1
+30,18,Office Worker,8.5,8,0
+55,14,Retired,6.3,4,1
+22,16,Student,7.8,7,0
+48,13,Office Worker,5.9,2,1
+35,17,Manual Labor,7.0,5,0
+60,10,Retired,4.5,1,1
+28,15,Office Worker,8.1,9,0
+50,12,Manual Labor,5.0,3,1
+33,14,Healthcare,6.8,4,1
+27,17,Student,8.2,7,0
+42,11,Unemployed,4.1,2,1
+38,15,Office Worker,7.5,6,0
+65,9,Retired,5.8,3,1
+20,18,Student,9.0,10,0
+45,13,Healthcare,6.1,4,1
+31,16,Office Worker,7.9,8,0
+58,12,Unemployed,4.8,1,1
+24,15,Artist,6.5,5,0
+39,11,Manual Labor,5.3,2,1
+52,14,Office Worker,7.3,6,0
+26,17,Healthcare,6.9,4,1
+47,10,Unemployed,4.3,1,1
+34,18,Student,8.7,9,0
+59,13,Retired,5.6,3,1
+29,15,Artist,6.7,5,0
+41,12,Manual Labor,5.4,2,1
+36,17,Office Worker,8.0,7,0
+62,9,Unemployed,4.6,1,1

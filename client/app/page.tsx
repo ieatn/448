@@ -82,6 +82,17 @@ export default function Home() {
     setSocial('medium');
     setSleep('7.5');
   };
+
+  const fillDepressionSampleData = () => {
+    setAge('43');
+    setGender('male');
+    setOccupation('Manual Labor');
+    setEducation('high-school');
+    setIncome('30k-60k');
+    setExercise('never');
+    setSocial('low');
+    setSleep('4.5');
+  };
   
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -89,10 +100,32 @@ export default function Home() {
     setError(null);
     setPrediction(null);
 
-    const formData = { age, gender, occupation, education, income, exercise, social, sleep };
+    // Convert education to years based on level
+    const educationYears = {
+      'high-school': 12,
+      'bachelors': 16,
+      'masters': 18,
+      'phd': 22,
+      'other': 14
+    }[education] || 12;
+
+    // Convert social level to score
+    const socialScore = {
+      'low': 3,
+      'medium': 6,
+      'high': 9
+    }[social] || 6;
+
+    const formData = {
+      Age: parseInt(age),
+      Education_Years: educationYears,
+      Occupation: occupation,
+      Hours_Slept: parseFloat(sleep),
+      Social_Activity_Score: socialScore
+    };
 
     try {
-      const response = await fetch('/api/predict', {
+      const response = await fetch('http://localhost:4999/predict', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -101,15 +134,29 @@ export default function Home() {
       });
 
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Network response was not ok');
       }
 
       const result = await response.json();
-      setPrediction(result);
+      
+      console.log('Prediction result:', {
+        predicted_depression: result.predicted_depression,
+        probability: result.probability_of_depression,
+        raw_result: result
+      });
+      
+      // Convert the server response to our frontend format
+      setPrediction({
+        percentage: result.probability_of_depression,
+        message: result.predicted_depression 
+          ? "High Risk - You may be at increased risk for depression. Consider speaking with a healthcare professional."
+          : "Low Risk - Few risk factors present. Continue maintaining healthy habits."
+      });
 
     } catch (err) {
       console.error('Failed to fetch prediction:', err);
-      setError('Failed to get prediction. Please try again.');
+      setError(err instanceof Error ? err.message : 'Failed to get prediction. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -274,6 +321,14 @@ export default function Home() {
             type="button"
             onClick={fillSampleData}
             className="w-full inline-flex justify-center py-2 px-4 border border-indigo-600 shadow-sm text-sm font-medium rounded-md text-indigo-600 bg-white hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          >
+            Fill with Sample Data
+          </button>
+
+          <button
+            type="button"
+            onClick={fillDepressionSampleData}
+            className="w-full inline-flex justify-center py-2 px-4 border border-red-600 shadow-sm text-sm font-medium rounded-md text-red-600 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
           >
             Fill with Sample Data
           </button>
