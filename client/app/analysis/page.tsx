@@ -499,22 +499,22 @@ export default function Analysis() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-8 font-[family-name:var(--font-geist-sans)] dark:bg-gray-900 dark:text-white">
-      <main className="flex flex-col gap-8 items-center w-full max-w-6xl bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
-        <div className="w-full flex justify-between items-center">
-          <h1 className="text-2xl font-semibold">Depression Risk Model Analysis</h1>
+    <div className="flex flex-col items-center justify-center min-h-screen p-4 sm:p-8 font-[family-name:var(--font-geist-sans)] dark:bg-gray-900 dark:text-white">
+      <main className="flex flex-col gap-4 sm:gap-8 items-center w-full max-w-6xl bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-lg shadow-md">
+        <div className="w-full flex flex-col sm:flex-row justify-between items-center gap-4">
+          <h1 className="text-xl sm:text-2xl font-semibold">Depression Risk Model Analysis</h1>
           <Link 
             href="/" 
-            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            className="w-full sm:w-auto inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-transform duration-200 hover:scale-105 active:scale-95"
           >
             Back to Survey
           </Link>
         </div>
 
         {/* Model Recommendation Section */}
-        <div className="w-full bg-gradient-to-r from-indigo-50 to-blue-50 dark:from-indigo-900 dark:to-blue-900 p-6 rounded-lg">
-          <h2 className="text-xl font-semibold mb-4">Recommended Model: Logistic Regression</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="w-full bg-gradient-to-r from-indigo-50 to-blue-50 dark:from-indigo-900 dark:to-blue-900 p-4 sm:p-6 rounded-lg">
+          <h2 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">Recommended Model: Logistic Regression</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
             <div>
               <h3 className="font-medium text-indigo-600 dark:text-indigo-400 mb-2">Why Logistic Regression for This Survey?</h3>
               <ul className="list-disc list-inside space-y-2">
@@ -538,40 +538,40 @@ export default function Analysis() {
         </div>
 
         {/* Linear Regression Coefficients */}
-        <div className="w-full bg-white dark:bg-gray-700 p-4 rounded-lg shadow">
-          <h3 className="text-lg font-medium mb-4">Feature Impact on Depression Risk</h3>
-          <p className="text-sm mb-4">The chart below shows how each feature contributes to the probability of depression.</p>
-          <div className="h-[300px]">
+        <div className="w-full bg-white dark:bg-gray-700 p-3 sm:p-4 rounded-lg shadow">
+          <h3 className="text-base sm:text-lg font-medium mb-3 sm:mb-4">Feature Impact on Depression Risk</h3>
+          <p className="text-xs sm:text-sm mb-3 sm:mb-4">The chart below shows how each feature contributes to the probability of depression.</p>
+          <div className="h-[250px] sm:h-[300px]">
             <Bar options={coefficientOptions} data={coefficientData} />
           </div>
         </div>
 
         {/* Prediction Visualizations */}
-        <div className="w-full space-y-6">
-          <h2 className="text-xl font-semibold">Model Predictions & Feature Impact</h2>
+        <div className="w-full space-y-4 sm:space-y-6">
+          <h2 className="text-lg sm:text-xl font-semibold">Model Predictions & Feature Impact</h2>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
             {/* Sleep Hours Impact */}
-            <div className="bg-white dark:bg-gray-700 p-4 rounded-lg shadow">
-              <h3 className="text-lg font-medium mb-4">Sleep Impact on Risk</h3>
-              <div className="h-[300px]">
+            <div className="bg-white dark:bg-gray-700 p-3 sm:p-4 rounded-lg shadow">
+              <h3 className="text-base sm:text-lg font-medium mb-3 sm:mb-4">Sleep Impact on Risk</h3>
+              <div className="h-[250px] sm:h-[300px]">
                 <Line options={lineOptions} data={riskPredictionData} />
               </div>
             </div>
 
             {/* Social Activity Impact */}
-            <div className="bg-white dark:bg-gray-700 p-4 rounded-lg shadow">
-              <h3 className="text-lg font-medium mb-4">Social Activity Impact on Risk</h3>
-              <div className="h-[300px]">
+            <div className="bg-white dark:bg-gray-700 p-3 sm:p-4 rounded-lg shadow">
+              <h3 className="text-base sm:text-lg font-medium mb-3 sm:mb-4">Social Activity Impact on Risk</h3>
+              <div className="h-[250px] sm:h-[300px]">
                 <Line options={lineOptions} data={sleepRiskData} />
               </div>
             </div>
           </div>
 
           {/* Model Performance Matrix */}
-          <div className="bg-white dark:bg-gray-700 p-6 rounded-lg shadow">
-            <h3 className="text-lg font-medium mb-4">Model Performance Analysis</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="bg-white dark:bg-gray-700 p-4 sm:p-6 rounded-lg shadow">
+            <h3 className="text-base sm:text-lg font-medium mb-3 sm:mb-4">Model Performance Analysis</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
               <div className="p-4 bg-green-50 dark:bg-green-900 rounded-lg">
                 <h4 className="font-medium mb-2">Strengths</h4>
                 <ul className="list-disc list-inside text-sm space-y-1">
@@ -629,45 +629,45 @@ export default function Analysis() {
         </div>
 
         {/* Model Comparison Section */}
-        <div className="w-full space-y-6">
-          <h2 className="text-xl font-semibold">Model Comparison</h2>
+        <div className="w-full space-y-4 sm:space-y-6">
+          <h2 className="text-lg sm:text-xl font-semibold">Model Comparison</h2>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
             {/* Bar Chart for Model Performance */}
-            <div className="bg-white dark:bg-gray-700 p-4 rounded-lg shadow">
-              <h3 className="text-lg font-medium mb-4">Performance Metrics</h3>
+            <div className="bg-white dark:bg-gray-700 p-3 sm:p-4 rounded-lg shadow">
+              <h3 className="text-base sm:text-lg font-medium mb-3 sm:mb-4">Performance Metrics</h3>
               <div>
                 <select 
                   value={selectedMetric}
                   onChange={(e) => setSelectedMetric(e.target.value as MetricName)}
-                  className="mb-4 pl-2 pr-8 py-1 text-base border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  className="mb-3 sm:mb-4 w-full sm:w-auto pl-2 pr-8 py-1 text-sm sm:text-base border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-transform duration-200 hover:scale-105 active:scale-95"
                 >
                   <option value="accuracy">Accuracy</option>
                   <option value="training_time">Training Time</option>
                   <option value="interpretability">Interpretability</option>
                   <option value="scalability">Scalability</option>
                 </select>
-                <div className="h-[300px]">
+                <div className="h-[250px] sm:h-[300px]">
                   <Bar options={barOptions} data={performanceData} />
                 </div>
               </div>
             </div>
 
             {/* Radar Chart for Model Characteristics */}
-            <div className="bg-white dark:bg-gray-700 p-4 rounded-lg shadow">
-              <h3 className="text-lg font-medium mb-4">Model Characteristics</h3>
+            <div className="bg-white dark:bg-gray-700 p-3 sm:p-4 rounded-lg shadow">
+              <h3 className="text-base sm:text-lg font-medium mb-3 sm:mb-4">Model Characteristics</h3>
               <div>
                 <select 
                   value={selectedModel}
                   onChange={(e) => setSelectedModel(e.target.value as ModelName)}
-                  className="mb-4 pl-2 pr-8 py-1 text-base border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  className="mb-3 sm:mb-4 w-full sm:w-auto pl-2 pr-8 py-1 text-sm sm:text-base border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-transform duration-200 hover:scale-105 active:scale-95"
                 >
                   <option value="Logistic Regression">Logistic Regression</option>
                   <option value="KNN">KNN</option>
                   <option value="Random Forest">Random Forest</option>
                   <option value="SVM">SVM</option>
                 </select>
-                <div className="h-[300px]">
+                <div className="h-[250px] sm:h-[300px]">
                   <Radar options={radarOptions} data={radarData} />
                 </div>
               </div>
@@ -677,42 +677,42 @@ export default function Analysis() {
 
         {/* Tutorial Section */}
         <div className="w-full">
-          <h2 className="text-xl font-semibold mb-4">Tutorial: Logistic Regression for Depression Risk</h2>
+          <h2 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">Tutorial: Logistic Regression for Depression Risk</h2>
           
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6">
             {/* Step 1: Data Loading */}
-            <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
-              <h3 className="text-lg font-medium mb-2">Step 1: Loading the Data</h3>
-              <pre className="bg-gray-100 dark:bg-gray-800 p-3 rounded overflow-x-auto text-sm">
+            <div className="bg-gray-50 dark:bg-gray-700 p-3 sm:p-4 rounded-lg">
+              <h3 className="text-base sm:text-lg font-medium mb-2">Step 1: Loading the Data</h3>
+              <pre className="bg-gray-100 dark:bg-gray-800 p-2 sm:p-3 rounded overflow-x-auto text-xs sm:text-sm">
                 {tutorialCode.step1}
               </pre>
             </div>
 
             {/* Step 2: Data Preprocessing */}
-            <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
-              <h3 className="text-lg font-medium mb-2">Step 2: Data Preprocessing</h3>
-              <pre className="bg-gray-100 dark:bg-gray-800 p-3 rounded overflow-x-auto text-sm">
+            <div className="bg-gray-50 dark:bg-gray-700 p-3 sm:p-4 rounded-lg">
+              <h3 className="text-base sm:text-lg font-medium mb-2">Step 2: Data Preprocessing</h3>
+              <pre className="bg-gray-100 dark:bg-gray-800 p-2 sm:p-3 rounded overflow-x-auto text-xs sm:text-sm">
                 {tutorialCode.step2}
               </pre>
             </div>
 
             {/* Step 3: Model Training */}
-            <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
-              <h3 className="text-lg font-medium mb-2">Step 3: Logistic Regression Model</h3>
-              <pre className="bg-gray-100 dark:bg-gray-800 p-3 rounded overflow-x-auto text-sm">
+            <div className="bg-gray-50 dark:bg-gray-700 p-3 sm:p-4 rounded-lg">
+              <h3 className="text-base sm:text-lg font-medium mb-2">Step 3: Logistic Regression Model</h3>
+              <pre className="bg-gray-100 dark:bg-gray-800 p-2 sm:p-3 rounded overflow-x-auto text-xs sm:text-sm">
                 {tutorialCode.step3}
               </pre>
             </div>
 
             {/* Step 4: Making Predictions */}
-            <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
-              <h3 className="text-lg font-medium mb-2">Step 4: Probability-Based Prediction</h3>
-              <pre className="bg-gray-100 dark:bg-gray-800 p-3 rounded overflow-x-auto text-sm">
+            <div className="bg-gray-50 dark:bg-gray-700 p-3 sm:p-4 rounded-lg">
+              <h3 className="text-base sm:text-lg font-medium mb-2">Step 4: Probability-Based Prediction</h3>
+              <pre className="bg-gray-100 dark:bg-gray-800 p-2 sm:p-3 rounded overflow-x-auto text-xs sm:text-sm">
                 {tutorialCode.step4}
               </pre>
             </div>
 
-            <div className="mt-4 text-sm text-gray-600 dark:text-gray-400">
+            <div className="mt-3 sm:mt-4 text-xs sm:text-sm text-gray-600 dark:text-gray-400">
               <p>Note: This logistic regression implementation has advantages over categorical approaches:</p>
               <ul className="list-disc list-inside mt-2">
                 <li>Provides probability-based predictions</li>

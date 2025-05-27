@@ -133,6 +133,14 @@ export default function Home() {
           : "Low Risk - Few risk factors present. Continue maintaining healthy habits."
       });
 
+      // Add a small delay to ensure the prediction box is rendered
+      setTimeout(() => {
+        const predictionBox = document.getElementById('prediction-box');
+        if (predictionBox) {
+          predictionBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }, 100);
+
     } catch (err) {
       console.error('Failed to fetch prediction:', err);
       setError(err instanceof Error ? err.message : 'Failed to get prediction. Please try again.');
@@ -142,9 +150,9 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-8 font-[family-name:var(--font-geist-sans)] dark:bg-gray-900 dark:text-white">
-      <main className="flex flex-col gap-8 items-center w-full max-w-6xl bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
-        <h1 className="text-2xl font-semibold text-center">Student Depression Risk Assessment</h1>
+    <div className="flex flex-col items-center justify-center min-h-screen p-4 sm:p-8 font-[family-name:var(--font-geist-sans)] dark:bg-gray-900 dark:text-white">
+      <main className="flex flex-col gap-4 sm:gap-8 items-center w-full max-w-6xl bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-lg shadow-md">
+        <h1 className="text-xl sm:text-2xl font-semibold text-center">Student Depression Risk Assessment</h1>
         
         {/* <div className="w-full text-right flex gap-2 justify-end">
           <button
@@ -161,7 +169,7 @@ export default function Home() {
           </Link>
         </div> */}
 
-        <form onSubmit={handleSubmit} className="w-full max-w-md flex flex-col gap-4">
+        <form onSubmit={handleSubmit} className="w-full max-w-md flex flex-col gap-3 sm:gap-4">
           {/* Age Input */}
           <div>
             <label htmlFor="age" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Age</label>
@@ -397,11 +405,11 @@ export default function Home() {
             </select>
           </div>
 
-          <div className="flex gap-2">
+          <div className="flex flex-col sm:flex-row gap-2">
             <button
               type="button"
               onClick={fillSampleData}
-              className="w-full inline-flex justify-center py-2 px-4 border border-indigo-600 shadow-sm text-sm font-medium rounded-md text-indigo-600 bg-white hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              className="w-full inline-flex justify-center py-2 px-4 border border-indigo-600 shadow-sm text-sm font-medium rounded-md text-indigo-600 bg-white hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-transform duration-200 hover:scale-105 active:scale-95"
             >
               Fill with Low Risk Sample
             </button>
@@ -409,7 +417,7 @@ export default function Home() {
             <button
               type="button"
               onClick={fillDepressionSampleData}
-              className="w-full inline-flex justify-center py-2 px-4 border border-red-600 shadow-sm text-sm font-medium rounded-md text-red-600 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+              className="w-full inline-flex justify-center py-2 px-4 border border-red-600 shadow-sm text-sm font-medium rounded-md text-red-600 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-transform duration-200 hover:scale-105 active:scale-95"
             >
               Fill with High Risk Sample
             </button>
@@ -418,7 +426,7 @@ export default function Home() {
           <button
             type="submit"
             disabled={isLoading}
-            className="mt-4 w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="mt-4 w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition-transform duration-200 hover:scale-105 active:scale-95 disabled:hover:scale-100 disabled:active:scale-100"
           >
             {isLoading ? 'Getting Prediction...' : 'Get Prediction'}
           </button>
@@ -433,12 +441,12 @@ export default function Home() {
 
         {/* Prediction results */}
         {prediction && (
-          <div className="mt-6 p-4 border border-gray-300 dark:border-gray-700 rounded-md w-full text-center bg-gray-50 dark:bg-gray-700">
-            <h2 className="text-lg font-medium text-gray-900 dark:text-white">Depression Risk Prediction:</h2>
-            <div className="my-4">
-              <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-4">
+          <div id="prediction-box" className="mt-4 sm:mt-6 p-3 sm:p-4 border border-gray-300 dark:border-gray-700 rounded-md w-full text-center bg-gray-50 dark:bg-gray-700">
+            <h2 className="text-base sm:text-lg font-medium text-gray-900 dark:text-white">Depression Risk Prediction:</h2>
+            <div className="my-3 sm:my-4">
+              <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-3 sm:h-4">
                 <div 
-                  className={`h-4 rounded-full ${
+                  className={`h-3 sm:h-4 rounded-full ${
                     prediction.percentage >= 70 
                       ? 'bg-red-600' 
                       : prediction.percentage >= 40 
@@ -448,15 +456,15 @@ export default function Home() {
                   style={{ width: `${prediction.percentage}%` }}
                 ></div>
               </div>
-              <p className="mt-2 font-bold text-lg">{prediction.percentage}% Risk</p>
+              <p className="mt-2 font-bold text-base sm:text-lg">{prediction.percentage}% Risk</p>
             </div>
-            <p className="mt-2 text-gray-700 dark:text-gray-300">{prediction.message}</p>
-            <p className="mt-4 text-xs text-gray-500 dark:text-gray-400">Disclaimer: This prediction is based on a statistical model and is not a substitute for professional medical advice. If you are concerned about your mental health, please consult a healthcare professional.</p>
+            <p className="mt-2 text-sm sm:text-base text-gray-700 dark:text-gray-300">{prediction.message}</p>
+            <p className="mt-3 sm:mt-4 text-xs text-gray-500 dark:text-gray-400">Disclaimer: This prediction is based on a statistical model and is not a substitute for professional medical advice. If you are concerned about your mental health, please consult a healthcare professional.</p>
             
-            <div className="mt-6">
+            <div className="mt-4 sm:mt-6">
               <Link 
                 href="/analysis" 
-                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                className="inline-flex items-center px-3 sm:px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-transform duration-200 hover:scale-105 active:scale-95"
               >
                 View Model Analysis
               </Link>
