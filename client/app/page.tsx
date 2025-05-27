@@ -11,30 +11,22 @@ interface PredictionResult {
 export default function Home() {
   const [age, setAge] = useState('');
   const [gender, setGender] = useState('');
-  const [occupation, setOccupation] = useState('');
-  const [education, setEducation] = useState('');
-  const [income, setIncome] = useState('');
-  const [exercise, setExercise] = useState('');
-  const [social, setSocial] = useState('');
-  const [sleep, setSleep] = useState('');
+  const [profession, setProfession] = useState('');
+  const [academicPressure, setAcademicPressure] = useState('');
+  const [workPressure, setWorkPressure] = useState('');
+  const [cgpa, setCgpa] = useState('');
+  const [studySatisfaction, setStudySatisfaction] = useState('');
+  const [jobSatisfaction, setJobSatisfaction] = useState('');
+  const [sleepDuration, setSleepDuration] = useState('');
+  const [dietaryHabits, setDietaryHabits] = useState('');
+  const [degree, setDegree] = useState('');
+  const [suicidalThoughts, setSuicidalThoughts] = useState('');
+  const [workStudyHours, setWorkStudyHours] = useState('');
+  const [financialStress, setFinancialStress] = useState('');
+  const [familyHistory, setFamilyHistory] = useState('');
   const [prediction, setPrediction] = useState<PredictionResult | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-
-
-
-
-
-
-
-
-  
-
-
-
-
-
 
   const testServer = async () => {
     try {
@@ -52,76 +44,64 @@ export default function Home() {
     }
   };
 
-
-
-
-
-
-
-
-  
-
-
-
-
-
-
-  
-
-
-
-
-
   const fillSampleData = () => {
-    setAge('28');
-    setGender('female');
-    setOccupation('Software Engineer');
-    setEducation('bachelors');
-    setIncome('60k-100k');
-    setExercise('3-4');
-    setSocial('medium');
-    setSleep('7.5');
+    setAge('25');
+    setGender('Female');
+    setProfession('Student');
+    setAcademicPressure('3');
+    setWorkPressure('1');
+    setCgpa('7.5');
+    setStudySatisfaction('4');
+    setJobSatisfaction('1');
+    setSleepDuration('7-8 hours');
+    setDietaryHabits('Healthy');
+    setDegree('BSc');
+    setSuicidalThoughts('No');
+    setWorkStudyHours('6');
+    setFinancialStress('2');
+    setFamilyHistory('No');
   };
 
   const fillDepressionSampleData = () => {
-    setAge('43');
-    setGender('male');
-    setOccupation('Manual Labor');
-    setEducation('high-school');
-    setIncome('30k-60k');
-    setExercise('never');
-    setSocial('low');
-    setSleep('4.5');
+    setAge('22');
+    setGender('Male');
+    setProfession('Student');
+    setAcademicPressure('5');
+    setWorkPressure('4');
+    setCgpa('6.2');
+    setStudySatisfaction('2');
+    setJobSatisfaction('2');
+    setSleepDuration('<6 hours');
+    setDietaryHabits('Unhealthy');
+    setDegree('BSc');
+    setSuicidalThoughts('Yes');
+    setWorkStudyHours('12');
+    setFinancialStress('5');
+    setFamilyHistory('Yes');
   };
-  
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setIsLoading(true);
     setError(null);
     setPrediction(null);
 
-    // Convert education to years based on level
-    const educationYears = {
-      'high-school': 12,
-      'bachelors': 16,
-      'masters': 18,
-      'phd': 22,
-      'other': 14
-    }[education] || 12;
-
-    // Convert social level to score
-    const socialScore = {
-      'low': 3,
-      'medium': 6,
-      'high': 9
-    }[social] || 6;
-
     const formData = {
       Age: parseInt(age),
-      Education_Years: educationYears,
-      Occupation: occupation,
-      Hours_Slept: parseFloat(sleep),
-      Social_Activity_Score: socialScore
+      Gender: gender,
+      Profession: profession,
+      'Academic Pressure': parseFloat(academicPressure),
+      'Work Pressure': parseFloat(workPressure),
+      CGPA: parseFloat(cgpa),
+      'Study Satisfaction': parseFloat(studySatisfaction),
+      'Job Satisfaction': parseFloat(jobSatisfaction),
+      'Sleep Duration': sleepDuration,
+      'Dietary Habits': dietaryHabits,
+      Degree: degree,
+      'Have you ever had suicidal thoughts ?': suicidalThoughts,
+      'Work/Study Hours': parseFloat(workStudyHours),
+      'Financial Stress': parseFloat(financialStress),
+      'Family History of Mental Illness': familyHistory
     };
 
     try {
@@ -146,7 +126,6 @@ export default function Home() {
         raw_result: result
       });
       
-      // Convert the server response to our frontend format
       setPrediction({
         percentage: result.probability_of_depression,
         message: result.predicted_depression 
@@ -165,9 +144,9 @@ export default function Home() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-8 font-[family-name:var(--font-geist-sans)] dark:bg-gray-900 dark:text-white">
       <main className="flex flex-col gap-8 items-center w-full max-w-6xl bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
-        <h1 className="text-2xl font-semibold text-center">Depression Risk Survey</h1>
+        <h1 className="text-2xl font-semibold text-center">Student Depression Risk Assessment</h1>
         
-        <div className="w-full text-right flex gap-2 justify-end">
+        {/* <div className="w-full text-right flex gap-2 justify-end">
           <button
             onClick={testServer}
             className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
@@ -180,7 +159,7 @@ export default function Home() {
           >
             View Model Analysis
           </Link>
-        </div>
+        </div> */}
 
         <form onSubmit={handleSubmit} className="w-full max-w-md flex flex-col gap-4">
           {/* Age Input */}
@@ -207,131 +186,234 @@ export default function Home() {
               className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
             >
               <option value="" disabled>Select Gender</option>
-              <option value="male">Male</option>
-              <option value="female">Female</option>
-              <option value="non-binary">Non-binary</option>
-              <option value="prefer-not-to-say">Prefer not to say</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
             </select>
           </div>
 
-          {/* Occupation Input */}
+          {/* Profession Input */}
           <div>
-            <label htmlFor="occupation" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Occupation</label>
+            <label htmlFor="profession" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Profession</label>
             <input
               type="text"
-              id="occupation"
-              value={occupation}
-              onChange={(e) => setOccupation(e.target.value)}
+              id="profession"
+              value={profession}
+              onChange={(e) => setProfession(e.target.value)}
               required
               className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
             />
           </div>
 
-          {/* Education Select */}
+          {/* Academic Pressure */}
           <div>
-            <label htmlFor="education" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Highest Education Level</label>
-            <select
-              id="education"
-              value={education}
-              onChange={(e) => setEducation(e.target.value)}
-              required
-              className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-            >
-              <option value="" disabled>Select Education</option>
-              <option value="high-school">High School</option>
-              <option value="bachelors">Bachelor's Degree</option>
-              <option value="masters">Master's Degree</option>
-              <option value="phd">PhD</option>
-              <option value="other">Other</option>
-            </select>
-          </div>
-
-          {/* Income Select */}
-          <div>
-            <label htmlFor="income" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Approximate Annual Income (USD)</label>
-            <select
-              id="income"
-              value={income}
-              onChange={(e) => setIncome(e.target.value)}
-              required
-              className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-            >
-              <option value="" disabled>Select Income Range</option>
-              <option value="<30k">Less than $30,000</option>
-              <option value="30k-60k">$30,000 - $59,999</option>
-              <option value="60k-100k">$60,000 - $99,999</option>
-              <option value="100k-150k">$100,000 - $149,999</option>
-              <option value=">150k">$150,000 or more</option>
-              <option value="prefer-not-to-say">Prefer not to say</option>
-            </select>
-          </div>
-
-          {/* Exercise Frequency Select */}
-          <div>
-            <label htmlFor="exercise" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Exercise Frequency</label>
-            <select
-              id="exercise"
-              value={exercise}
-              onChange={(e) => setExercise(e.target.value)}
-              required
-              className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-            >
-              <option value="" disabled>Select Frequency</option>
-              <option value="never">Never</option>
-              <option value="1-2">1-2 times/week</option>
-              <option value="3-4">3-4 times/week</option>
-              <option value="5+">5+ times/week</option>
-            </select>
-          </div>
-
-          {/* Social Interaction Select */}
-          <div>
-            <label htmlFor="social" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Social Interaction Level</label>
-            <select
-              id="social"
-              value={social}
-              onChange={(e) => setSocial(e.target.value)}
-              required
-              className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-            >
-              <option value="" disabled>Select Level</option>
-              <option value="low">Low (Rarely interact)</option>
-              <option value="medium">Medium (Few times a week)</option>
-              <option value="high">High (Daily interactions)</option>
-            </select>
-          </div>
-
-          {/* Sleep Hours Input */}
-          <div>
-            <label htmlFor="sleep" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Average Sleep Hours per Night</label>
+            <label htmlFor="academicPressure" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Academic Pressure (1-5)</label>
             <input
               type="number"
-              id="sleep"
-              step="0.5"
-              min="0"
-              max="24"
-              value={sleep}
-              onChange={(e) => setSleep(e.target.value)}
+              id="academicPressure"
+              min="1"
+              max="5"
+              value={academicPressure}
+              onChange={(e) => setAcademicPressure(e.target.value)}
               required
               className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
             />
           </div>
 
-          <button
-            type="button"
-            onClick={fillSampleData}
-            className="w-full inline-flex justify-center py-2 px-4 border border-indigo-600 shadow-sm text-sm font-medium rounded-md text-indigo-600 bg-white hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          >
-            Fill with Sample Data
-          </button>
+          {/* Work Pressure */}
+          <div>
+            <label htmlFor="workPressure" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Work Pressure (1-5)</label>
+            <input
+              type="number"
+              id="workPressure"
+              min="1"
+              max="5"
+              value={workPressure}
+              onChange={(e) => setWorkPressure(e.target.value)}
+              required
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+            />
+          </div>
 
-          <button
-            type="button"
-            onClick={fillDepressionSampleData}
-            className="w-full inline-flex justify-center py-2 px-4 border border-red-600 shadow-sm text-sm font-medium rounded-md text-red-600 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-          >
-            Fill with Sample Data
-          </button>
+          {/* CGPA */}
+          <div>
+            <label htmlFor="cgpa" className="block text-sm font-medium text-gray-700 dark:text-gray-300">CGPA (0-10)</label>
+            <input
+              type="number"
+              id="cgpa"
+              min="0"
+              max="10"
+              step="0.1"
+              value={cgpa}
+              onChange={(e) => setCgpa(e.target.value)}
+              required
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+            />
+          </div>
+
+          {/* Study Satisfaction */}
+          <div>
+            <label htmlFor="studySatisfaction" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Study Satisfaction (1-5)</label>
+            <input
+              type="number"
+              id="studySatisfaction"
+              min="1"
+              max="5"
+              value={studySatisfaction}
+              onChange={(e) => setStudySatisfaction(e.target.value)}
+              required
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+            />
+          </div>
+
+          {/* Job Satisfaction */}
+          <div>
+            <label htmlFor="jobSatisfaction" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Job Satisfaction (1-5)</label>
+            <input
+              type="number"
+              id="jobSatisfaction"
+              min="1"
+              max="5"
+              value={jobSatisfaction}
+              onChange={(e) => setJobSatisfaction(e.target.value)}
+              required
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+            />
+          </div>
+
+          {/* Sleep Duration */}
+          <div>
+            <label htmlFor="sleepDuration" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Sleep Duration</label>
+            <select
+              id="sleepDuration"
+              value={sleepDuration}
+              onChange={(e) => setSleepDuration(e.target.value)}
+              required
+              className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+            >
+              <option value="" disabled>Select Sleep Duration</option>
+              <option value="<6 hours">Less than 6 hours</option>
+              <option value="6-7 hours">6-7 hours</option>
+              <option value="7-8 hours">7-8 hours</option>
+              <option value="8-9 hours">8-9 hours</option>
+              <option value=">9 hours">More than 9 hours</option>
+            </select>
+          </div>
+
+          {/* Dietary Habits */}
+          <div>
+            <label htmlFor="dietaryHabits" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Dietary Habits</label>
+            <select
+              id="dietaryHabits"
+              value={dietaryHabits}
+              onChange={(e) => setDietaryHabits(e.target.value)}
+              required
+              className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+            >
+              <option value="" disabled>Select Dietary Habits</option>
+              <option value="Healthy">Healthy</option>
+              <option value="Moderate">Moderate</option>
+              <option value="Unhealthy">Unhealthy</option>
+            </select>
+          </div>
+
+          {/* Degree */}
+          <div>
+            <label htmlFor="degree" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Degree</label>
+            <select
+              id="degree"
+              value={degree}
+              onChange={(e) => setDegree(e.target.value)}
+              required
+              className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+            >
+              <option value="" disabled>Select Degree</option>
+              <option value="BSc">BSc</option>
+              <option value="MSc">MSc</option>
+              <option value="PhD">PhD</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
+          {/* Suicidal Thoughts */}
+          <div>
+            <label htmlFor="suicidalThoughts" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Have you ever had suicidal thoughts?</label>
+            <select
+              id="suicidalThoughts"
+              value={suicidalThoughts}
+              onChange={(e) => setSuicidalThoughts(e.target.value)}
+              required
+              className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+            >
+              <option value="" disabled>Select Answer</option>
+              <option value="Yes">Yes</option>
+              <option value="No">No</option>
+            </select>
+          </div>
+
+          {/* Work/Study Hours */}
+          <div>
+            <label htmlFor="workStudyHours" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Work/Study Hours per Day</label>
+            <input
+              type="number"
+              id="workStudyHours"
+              min="0"
+              max="24"
+              value={workStudyHours}
+              onChange={(e) => setWorkStudyHours(e.target.value)}
+              required
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+            />
+          </div>
+
+          {/* Financial Stress */}
+          <div>
+            <label htmlFor="financialStress" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Financial Stress (1-5)</label>
+            <input
+              type="number"
+              id="financialStress"
+              min="1"
+              max="5"
+              value={financialStress}
+              onChange={(e) => setFinancialStress(e.target.value)}
+              required
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+            />
+          </div>
+
+          {/* Family History */}
+          <div>
+            <label htmlFor="familyHistory" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Family History of Mental Illness</label>
+            <select
+              id="familyHistory"
+              value={familyHistory}
+              onChange={(e) => setFamilyHistory(e.target.value)}
+              required
+              className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+            >
+              <option value="" disabled>Select Answer</option>
+              <option value="Yes">Yes</option>
+              <option value="No">No</option>
+            </select>
+          </div>
+
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={fillSampleData}
+              className="w-full inline-flex justify-center py-2 px-4 border border-indigo-600 shadow-sm text-sm font-medium rounded-md text-indigo-600 bg-white hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            >
+              Fill with Low Risk Sample
+            </button>
+
+            <button
+              type="button"
+              onClick={fillDepressionSampleData}
+              className="w-full inline-flex justify-center py-2 px-4 border border-red-600 shadow-sm text-sm font-medium rounded-md text-red-600 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+            >
+              Fill with High Risk Sample
+            </button>
+          </div>
 
           <button
             type="submit"

@@ -112,7 +112,7 @@ const modelCharacteristics: ModelCharacteristics = {
   }
 };
 
-// Add survey-specific model analysis
+// Update survey-specific model analysis
 const surveyAnalysis = {
   bestModel: 'Logistic Regression',
   reasons: [
@@ -120,33 +120,40 @@ const surveyAnalysis = {
     'Handles both numerical and categorical features effectively',
     'Fast computation time for real-time predictions',
     'Clear interpretation of feature importance',
-    'Works well with our balanced dataset of 30 samples'
+    'Works well with our student depression dataset'
   ],
   dataCharacteristics: {
-    features: ['Age', 'Education_Years', 'Occupation', 'Hours_Slept', 'Social_Activity_Score'],
-    sampleSize: '30 samples',
+    features: ['Age', 'Gender', 'Profession', 'Academic Pressure', 'Work Pressure', 'CGPA', 
+              'Study Satisfaction', 'Job Satisfaction', 'Sleep Duration', 'Dietary Habits', 
+              'Degree', 'Suicidal Thoughts', 'Work/Study Hours', 'Financial Stress', 
+              'Family History of Mental Illness'],
+    sampleSize: '27,901 student records',
     type: 'Mixed (Numerical + Categorical)',
-    target: 'Binary (HasDepression: 0/1)'
+    target: 'Binary (Depression: 0/1)'
   }
 };
 
-// Sample prediction data for visualization
+// Update sample prediction data for visualization
 const samplePredictions = {
-  sleepHours: [4, 5, 6, 7, 8, 9],
-  riskPercentages: [85, 75, 60, 40, 25, 20],
-  socialScores: [1, 3, 5, 7, 9, 10],
-  socialRisk: [80, 65, 50, 35, 20, 15]
+  academicPressure: [1, 2, 3, 4, 5],
+  riskPercentages: [20, 35, 50, 70, 85],
+  sleepHours: ['<6 hours', '6-7 hours', '7-8 hours', '8-9 hours', '>9 hours'],
+  sleepRisk: [80, 60, 40, 30, 25]
 };
 
-// Linear regression coefficients visualization data
+// Update linear regression coefficients visualization data
 const coefficientData = {
-  labels: ['Age', 'Education_Years', 'Hours_Slept', 'Social_Activity_Score'],
+  labels: ['Academic Pressure', 'Work Pressure', 'CGPA', 'Study Satisfaction', 
+           'Job Satisfaction', 'Work/Study Hours', 'Financial Stress'],
   datasets: [
     {
       label: 'Feature Impact on Depression Risk',
-      data: [0.15, -0.25, -0.35, -0.30],
+      data: [0.35, 0.25, -0.30, -0.25, -0.20, 0.15, 0.30],
       backgroundColor: [
         'rgba(255, 99, 132, 0.6)',
+        'rgba(75, 192, 192, 0.6)',
+        'rgba(75, 192, 192, 0.6)',
+        'rgba(75, 192, 192, 0.6)',
         'rgba(75, 192, 192, 0.6)',
         'rgba(75, 192, 192, 0.6)',
         'rgba(75, 192, 192, 0.6)',
@@ -156,10 +163,188 @@ const coefficientData = {
         'rgba(75, 192, 192, 1)',
         'rgba(75, 192, 192, 1)',
         'rgba(75, 192, 192, 1)',
+        'rgba(75, 192, 192, 1)',
+        'rgba(75, 192, 192, 1)',
+        'rgba(75, 192, 192, 1)',
       ],
       borderWidth: 1,
     },
   ],
+};
+
+// Update risk prediction data
+const riskPredictionData = {
+  labels: samplePredictions.academicPressure,
+  datasets: [
+    {
+      label: 'Risk Percentage vs Academic Pressure',
+      data: samplePredictions.riskPercentages,
+      borderColor: 'rgb(75, 192, 192)',
+      tension: 0.1,
+      fill: false
+    }
+  ]
+};
+
+const sleepRiskData = {
+  labels: samplePredictions.sleepHours,
+  datasets: [
+    {
+      label: 'Risk Percentage vs Sleep Duration',
+      data: samplePredictions.sleepRisk,
+      borderColor: 'rgb(153, 102, 255)',
+      tension: 0.1,
+      fill: false
+    }
+  ]
+};
+
+// Chart options
+const barOptions = {
+  responsive: true,
+  plugins: {
+    legend: {
+      position: 'top' as const,
+    },
+    title: {
+      display: true,
+      text: 'Model Performance Comparison',
+    },
+  },
+  scales: {
+    y: {
+      beginAtZero: true,
+      max: 1,
+    },
+  },
+};
+
+const coefficientOptions = {
+  responsive: true,
+  plugins: {
+    legend: {
+      position: 'top' as const,
+    },
+    title: {
+      display: true,
+      text: 'Feature Impact on Depression Risk',
+    },
+  },
+  scales: {
+    y: {
+      beginAtZero: false,
+      title: {
+        display: true,
+        text: 'Impact on Risk'
+      }
+    }
+  },
+};
+
+const radarOptions = {
+  responsive: true,
+  scales: {
+    r: {
+      beginAtZero: true,
+      max: 1,
+    },
+  },
+};
+
+// Line chart options
+const lineOptions = {
+  responsive: true,
+  plugins: {
+    legend: {
+      position: 'top' as const,
+    },
+    title: {
+      display: true,
+      text: 'Risk Percentage Predictions',
+    },
+  },
+  scales: {
+    y: {
+      beginAtZero: true,
+      max: 100,
+      title: {
+        display: true,
+        text: 'Predicted Risk Percentage'
+      }
+    },
+    x: {
+      title: {
+        display: true,
+        text: 'Feature Value'
+      }
+    }
+  }
+};
+
+// Update tutorial section code
+const tutorialCode = {
+  step1: `import pandas as pd
+import numpy as np
+from sklearn.preprocessing import StandardScaler, OneHotEncoder
+from sklearn.compose import ColumnTransformer
+from sklearn.pipeline import Pipeline
+from sklearn.linear_model import LogisticRegression
+
+# Load the data
+data = pd.read_csv('student_depression_dataset.csv')
+print("Dataset shape:", data.shape)
+print("\\nSample data:")
+print(data.head())`,
+
+  step2: `# Define feature types
+numerical_features = ['Age', 'Academic Pressure', 'Work Pressure', 'CGPA', 
+                     'Study Satisfaction', 'Job Satisfaction', 'Work/Study Hours', 
+                     'Financial Stress']
+categorical_features = ['Gender', 'Profession', 'Sleep Duration', 'Dietary Habits', 
+                       'Degree', 'Have you ever had suicidal thoughts ?', 
+                       'Family History of Mental Illness']
+
+# Create preprocessing pipeline
+preprocessor = ColumnTransformer(
+    transformers=[
+        ('num', StandardScaler(), numerical_features),
+        ('cat', OneHotEncoder(handle_unknown='ignore'), categorical_features)
+    ])`,
+
+  step3: `# Create and train the model pipeline
+model_pipeline = Pipeline(steps=[
+    ('preprocessor', preprocessor),
+    ('classifier', LogisticRegression(random_state=42, solver='liblinear'))
+])
+
+# Train the model
+X = data.drop('Depression', axis=1)
+y = data['Depression']
+model_pipeline.fit(X, y)
+
+# Get feature importance
+feature_importance = pd.DataFrame({
+    'Feature': numerical_features,
+    'Importance': model_pipeline.named_steps['classifier'].coef_[0][:len(numerical_features)]
+})
+print("\\nFeature Importance:")
+print(feature_importance.sort_values('Importance', ascending=False))`,
+
+  step4: `def predict_depression_risk(input_data):
+    # Convert input to DataFrame
+    input_df = pd.DataFrame([input_data])
+    
+    # Get prediction probabilities
+    proba = model_pipeline.predict_proba(input_df)
+    depression_prob = proba[0][1] * 100
+    
+    # Get binary prediction
+    prediction = model_pipeline.predict(input_df)[0]
+    
+    return {
+        "predicted_depression": bool(prediction),
+        "probability_of_depression": round(depression_prob, 2)
+    }`
 };
 
 export default function Analysis() {
@@ -206,10 +391,10 @@ export default function Analysis() {
 
   // Line chart data for risk predictions
   const riskPredictionData = {
-    labels: samplePredictions.sleepHours,
+    labels: samplePredictions.academicPressure,
     datasets: [
       {
-        label: 'Risk Percentage vs Sleep Hours',
+        label: 'Risk Percentage vs Academic Pressure',
         data: samplePredictions.riskPercentages,
         borderColor: 'rgb(75, 192, 192)',
         tension: 0.1,
@@ -218,12 +403,12 @@ export default function Analysis() {
     ]
   };
 
-  const socialRiskData = {
-    labels: samplePredictions.socialScores,
+  const sleepRiskData = {
+    labels: samplePredictions.sleepHours,
     datasets: [
       {
-        label: 'Risk Percentage vs Social Activity Score',
-        data: samplePredictions.socialRisk,
+        label: 'Risk Percentage vs Sleep Duration',
+        data: samplePredictions.sleepRisk,
         borderColor: 'rgb(153, 102, 255)',
         tension: 0.1,
         fill: false
@@ -378,7 +563,7 @@ export default function Analysis() {
             <div className="bg-white dark:bg-gray-700 p-4 rounded-lg shadow">
               <h3 className="text-lg font-medium mb-4">Social Activity Impact on Risk</h3>
               <div className="h-[300px]">
-                <Line options={lineOptions} data={socialRiskData} />
+                <Line options={lineOptions} data={sleepRiskData} />
               </div>
             </div>
           </div>
@@ -499,18 +684,7 @@ export default function Analysis() {
             <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
               <h3 className="text-lg font-medium mb-2">Step 1: Loading the Data</h3>
               <pre className="bg-gray-100 dark:bg-gray-800 p-3 rounded overflow-x-auto text-sm">
-{`import pandas as pd
-import numpy as np
-from sklearn.preprocessing import StandardScaler, OneHotEncoder
-from sklearn.compose import ColumnTransformer
-from sklearn.pipeline import Pipeline
-from sklearn.linear_model import LogisticRegression
-
-# Load the data
-data = pd.read_csv('testing.csv')
-print("Dataset shape:", data.shape)
-print("\\nSample data:")
-print(data.head())`}
+                {tutorialCode.step1}
               </pre>
             </div>
 
@@ -518,16 +692,7 @@ print(data.head())`}
             <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
               <h3 className="text-lg font-medium mb-2">Step 2: Data Preprocessing</h3>
               <pre className="bg-gray-100 dark:bg-gray-800 p-3 rounded overflow-x-auto text-sm">
-{`# Define feature types
-numerical_features = ['Age', 'Education_Years', 'Hours_Slept', 'Social_Activity_Score']
-categorical_features = ['Occupation']
-
-# Create preprocessing pipeline
-preprocessor = ColumnTransformer(
-    transformers=[
-        ('num', StandardScaler(), numerical_features),
-        ('cat', OneHotEncoder(handle_unknown='ignore'), categorical_features)
-    ])`}
+                {tutorialCode.step2}
               </pre>
             </div>
 
@@ -535,24 +700,7 @@ preprocessor = ColumnTransformer(
             <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
               <h3 className="text-lg font-medium mb-2">Step 3: Logistic Regression Model</h3>
               <pre className="bg-gray-100 dark:bg-gray-800 p-3 rounded overflow-x-auto text-sm">
-{`# Create and train the model pipeline
-model_pipeline = Pipeline(steps=[
-    ('preprocessor', preprocessor),
-    ('classifier', LogisticRegression(random_state=42, solver='liblinear'))
-])
-
-# Train the model
-X = data.drop('HasDepression', axis=1)
-y = data['HasDepression']
-model_pipeline.fit(X, y)
-
-# Get feature importance
-feature_importance = pd.DataFrame({
-    'Feature': numerical_features,
-    'Importance': model_pipeline.named_steps['classifier'].coef_[0][:len(numerical_features)]
-})
-print("\\nFeature Importance:")
-print(feature_importance.sort_values('Importance', ascending=False))`}
+                {tutorialCode.step3}
               </pre>
             </div>
 
@@ -560,21 +708,7 @@ print(feature_importance.sort_values('Importance', ascending=False))`}
             <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
               <h3 className="text-lg font-medium mb-2">Step 4: Probability-Based Prediction</h3>
               <pre className="bg-gray-100 dark:bg-gray-800 p-3 rounded overflow-x-auto text-sm">
-{`def predict_depression_risk(input_data):
-    # Convert input to DataFrame
-    input_df = pd.DataFrame([input_data])
-    
-    # Get prediction probabilities
-    proba = model_pipeline.predict_proba(input_df)
-    depression_prob = proba[0][1] * 100
-    
-    # Get binary prediction
-    prediction = model_pipeline.predict(input_df)[0]
-    
-    return {
-        "predicted_depression": bool(prediction),
-        "probability_of_depression": round(depression_prob, 2)
-    }`}
+                {tutorialCode.step4}
               </pre>
             </div>
 
