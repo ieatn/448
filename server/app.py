@@ -58,10 +58,16 @@ preprocessor = ColumnTransformer(
         ('cat', OneHotEncoder(handle_unknown='ignore'), categorical_features)
     ])
 
-# 6. Create the Machine Learning Pipeline
+# 6. Create the Machine Learning Pipeline with LASSO regularization
 model_pipeline = Pipeline(steps=[
     ('preprocessor', preprocessor),
-    ('classifier', LogisticRegression(random_state=42, solver='liblinear'))
+    ('classifier', LogisticRegression(
+        random_state=42,
+        solver='liblinear',
+        penalty='l1',  # LASSO regularization
+        C=0.1,  # Inverse of regularization strength (smaller C = stronger regularization)
+        max_iter=1000
+    ))
 ])
 
 # 7. Train the model
@@ -86,6 +92,21 @@ print(f"\nClass 1 (Depression):")
 print(f"  Precision: {report['1']['precision']:.2f}")
 print(f"  Recall: {report['1']['recall']:.2f}")
 print(f"  F1-score: {report['1']['f1-score']:.2f}")
+
+# Print feature importance from LASSO
+print("\nFeature Importance (LASSO Coefficients):")
+feature_names = numerical_features + [f"{cat}_{val}" for cat, vals in 
+    zip(categorical_features, model_pipeline.named_steps['preprocessor']
+        .named_transformers_['cat'].categories_) for val in vals]
+coefficients = model_pipeline.named_steps['classifier'].coef_[0]
+feature_importance = pd.DataFrame({
+    'Feature': feature_names,
+    'Coefficient': coefficients
+})
+# Sort by absolute coefficient value
+feature_importance['Abs_Coefficient'] = abs(feature_importance['Coefficient'])
+feature_importance = feature_importance.sort_values('Abs_Coefficient', ascending=False)
+print(feature_importance[['Feature', 'Coefficient']].head(10))
 
 # --- Flask Routes ---
 
