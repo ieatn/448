@@ -6,7 +6,12 @@ from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
 from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, classification_report
 import numpy as np
+import warnings
+
+# Suppress pandas warnings
+warnings.filterwarnings('ignore', category=FutureWarning)
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
@@ -36,7 +41,13 @@ for feature in numerical_features:
 X = data.drop('Depression', axis=1)
 y = data['Depression']
 
-# 4. Define preprocessing steps
+# 4. Split the data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+print(f"\nData Split:")
+print(f"Training samples: {len(X_train)}")
+print(f"Testing samples: {len(X_test)}")
+
+# 5. Define preprocessing steps
 categorical_features = ['Gender', 'Profession', 'Sleep Duration', 'Dietary Habits', 'Degree', 
                        'Have you ever had suicidal thoughts ?', 'Family History of Mental Illness']
 
@@ -47,16 +58,34 @@ preprocessor = ColumnTransformer(
         ('cat', OneHotEncoder(handle_unknown='ignore'), categorical_features)
     ])
 
-# 5. Create the Machine Learning Pipeline
+# 6. Create the Machine Learning Pipeline
 model_pipeline = Pipeline(steps=[
     ('preprocessor', preprocessor),
     ('classifier', LogisticRegression(random_state=42, solver='liblinear'))
 ])
 
-# 6. Train the model
-print("Training the machine learning model...")
-model_pipeline.fit(X, y)
-print("Machine learning model trained and ready!")
+# 7. Train the model
+print("\nTraining model...")
+model_pipeline.fit(X_train, y_train)
+print("Model training complete!")
+
+# 8. Evaluate the model
+y_pred = model_pipeline.predict(X_test)
+accuracy = accuracy_score(y_test, y_pred)
+print(f"\nModel Performance:")
+print(f"Test Accuracy: {accuracy:.2f}")
+
+# Print simplified classification report
+print("\nClassification Report:")
+report = classification_report(y_test, y_pred, output_dict=True)
+print(f"Class 0 (No Depression):")
+print(f"  Precision: {report['0']['precision']:.2f}")
+print(f"  Recall: {report['0']['recall']:.2f}")
+print(f"  F1-score: {report['0']['f1-score']:.2f}")
+print(f"\nClass 1 (Depression):")
+print(f"  Precision: {report['1']['precision']:.2f}")
+print(f"  Recall: {report['1']['recall']:.2f}")
+print(f"  F1-score: {report['1']['f1-score']:.2f}")
 
 # --- Flask Routes ---
 
