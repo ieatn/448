@@ -55,7 +55,7 @@ type ModelCharacteristics = Record<ModelName, ModelCharacteristic>;
 // Model performance data
 const modelPerformance: ModelMetrics = {
   accuracy: {
-    'Logistic Regression': 0.85,
+    'Logistic Regression': 0.848,  // From server's test accuracy
     'KNN': 0.82,
     'Random Forest': 0.83,
     'SVM': 0.81
@@ -83,7 +83,7 @@ const modelPerformance: ModelMetrics = {
 // Model characteristics for radar chart
 const modelCharacteristics: ModelCharacteristics = {
   'Logistic Regression': {
-    'Accuracy': 0.85,
+    'Accuracy': 0.848,
     'Speed': 0.90,
     'Interpretability': 0.95,
     'Feature Handling': 0.85,
@@ -119,13 +119,13 @@ const surveyAnalysis = {
     'Provides probability-based predictions for depression risk',
     'Handles both numerical and categorical features effectively',
     'Fast computation time for real-time predictions',
-    'Clear interpretation of feature importance',
+    'Clear interpretation of feature importance through LASSO coefficients',
     'Works well with our student depression dataset'
   ],
   dataCharacteristics: {
     features: ['Age', 'Gender', 'Profession', 'Academic Pressure', 'Work Pressure', 'CGPA', 
               'Study Satisfaction', 'Job Satisfaction', 'Sleep Duration', 'Dietary Habits', 
-              'Degree', 'Suicidal Thoughts', 'Work/Study Hours', 'Financial Stress', 
+              'Degree', 'Have you ever had suicidal thoughts ?', 'Work/Study Hours', 'Financial Stress', 
               'Family History of Mental Illness'],
     sampleSize: '27,901 student records',
     type: 'Mixed (Numerical + Categorical)',
@@ -311,10 +311,16 @@ preprocessor = ColumnTransformer(
         ('cat', OneHotEncoder(handle_unknown='ignore'), categorical_features)
     ])`,
 
-  step3: `# Create and train the model pipeline
+  step3: `# Create and train the model pipeline with LASSO regularization
 model_pipeline = Pipeline(steps=[
     ('preprocessor', preprocessor),
-    ('classifier', LogisticRegression(random_state=42, solver='liblinear'))
+    ('classifier', LogisticRegression(
+        random_state=42,
+        solver='liblinear',
+        penalty='l1',  # LASSO regularization
+        C=0.1,  # Inverse of regularization strength
+        max_iter=1000
+    ))
 ])
 
 # Train the model
@@ -350,6 +356,16 @@ print(feature_importance.sort_values('Importance', ascending=False))`,
 export default function Analysis() {
   const [selectedMetric, setSelectedMetric] = useState<MetricName>('accuracy');
   const [selectedModel, setSelectedModel] = useState<ModelName>('Logistic Regression');
+  const [activeSection, setActiveSection] = useState('overview');
+
+  // Navigation items
+  const navItems = [
+    { id: 'overview', label: 'Overview' },
+    { id: 'model-performance', label: 'Model Performance' },
+    { id: 'feature-impact', label: 'Feature Impact' },
+    { id: 'model-comparison', label: 'Model Comparison' },
+    { id: 'tutorial', label: 'Tutorial' }
+  ];
 
   // Performance comparison chart data
   const performanceData = {
@@ -511,500 +527,610 @@ export default function Analysis() {
           </Link>
         </div>
 
-        {/* Model Recommendation Section */}
-        <div className="w-full bg-gradient-to-r from-indigo-50 to-blue-50 dark:from-indigo-900 dark:to-blue-900 p-4 sm:p-6 rounded-lg">
-          <h2 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">Recommended Model: Logistic Regression</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-            <div>
-              <h3 className="font-medium text-indigo-600 dark:text-indigo-400 mb-2">Why Logistic Regression for This Survey?</h3>
-              <ul className="list-disc list-inside space-y-2">
-                {surveyAnalysis.reasons.map((reason, index) => (
-                  <li key={index} className="text-sm">{reason}</li>
-                ))}
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-medium text-indigo-600 dark:text-indigo-400 mb-2">Survey Data Characteristics</h3>
-              <div className="space-y-2">
-                {Object.entries(surveyAnalysis.dataCharacteristics).map(([key, value]) => (
-                  <div key={key} className="text-sm">
-                    <span className="font-medium">{key}: </span>
-                    {Array.isArray(value) ? value.join(', ') : value}
-                  </div>
-                ))}
-              </div>
-            </div>
+        {/* Navigation Bar */}
+        <nav className="w-full bg-gray-50 dark:bg-gray-700 rounded-lg p-2">
+          <div className="flex flex-wrap gap-2 justify-center">
+            {navItems.map((item) => (
+              <button
+                key={item.id}
+                onClick={() => setActiveSection(item.id)}
+                className={`px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
+                  activeSection === item.id
+                    ? 'bg-indigo-600 text-white'
+                    : 'text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                }`}
+              >
+                {item.label}
+              </button>
+            ))}
           </div>
-        </div>
+        </nav>
 
-        {/* Model Improvement Analysis */}
-        <div className="w-full bg-white dark:bg-gray-700 p-4 sm:p-6 rounded-lg shadow">
-          <h2 className="text-lg sm:text-xl font-semibold mb-4">Model Improvement Analysis</h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Before/After Comparison */}
-            <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
-              <h3 className="text-base font-medium mb-3">Before vs After Improvements</h3>
-              <div className="space-y-4">
-                <div className="p-3 bg-indigo-50 dark:bg-indigo-900 rounded-lg">
-                  <h4 className="font-medium text-indigo-800 dark:text-indigo-200 mb-2">Original Model</h4>
-                  <ul className="text-sm space-y-1">
-                    <li>• No regularization</li>
-                    <li>• All features used</li>
-                    <li>• Training Accuracy: 87.5%</li>
-                    <li>• Test Accuracy: 82.3%</li>
-                    <li>• Gap: 5.2% (Overfitting)</li>
+        {/* Overview Section */}
+        {activeSection === 'overview' && (
+          <div className="w-full space-y-6">
+            {/* Model Recommendation Section */}
+            <div className="w-full bg-gradient-to-r from-indigo-50 to-blue-50 dark:from-indigo-900 dark:to-blue-900 p-4 sm:p-6 rounded-lg">
+              <h2 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">Recommended Model: Logistic Regression</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+                <div>
+                  <h3 className="font-medium text-indigo-600 dark:text-indigo-400 mb-2">Why Logistic Regression for This Survey?</h3>
+                  <ul className="list-disc list-inside space-y-2">
+                    {surveyAnalysis.reasons.map((reason, index) => (
+                      <li key={index} className="text-sm">{reason}</li>
+                    ))}
                   </ul>
                 </div>
+                <div>
+                  <h3 className="font-medium text-indigo-600 dark:text-indigo-400 mb-2">Survey Data Characteristics</h3>
+                  <div className="space-y-2">
+                    {Object.entries(surveyAnalysis.dataCharacteristics).map(([key, value]) => (
+                      <div key={key} className="text-sm">
+                        <span className="font-medium">{key}: </span>
+                        {Array.isArray(value) ? value.join(', ') : value}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
 
-                <div className="p-3 bg-green-50 dark:bg-green-900 rounded-lg">
-                  <h4 className="font-medium text-green-800 dark:text-green-200 mb-2">Improved Model</h4>
-                  <ul className="text-sm space-y-1">
-                    <li>• LASSO regularization (C=0.1)</li>
-                    <li>• Feature selection</li>
-                    <li>• Training Accuracy: 85.2%</li>
-                    <li>• Test Accuracy: 84.8%</li>
-                    <li>• Gap: 0.4% (Better generalization)</li>
+            {/* Model Improvement Analysis */}
+            <div className="w-full bg-white dark:bg-gray-700 p-4 sm:p-6 rounded-lg shadow">
+              <h2 className="text-lg sm:text-xl font-semibold mb-4">Model Improvement Analysis</h2>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Before/After Comparison */}
+                <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                  <h3 className="text-base font-medium mb-3">Before vs After Improvements</h3>
+                  <div className="space-y-4">
+                    <div className="p-3 bg-indigo-50 dark:bg-indigo-900 rounded-lg">
+                      <h4 className="font-medium text-indigo-800 dark:text-indigo-200 mb-2">Original Model</h4>
+                      <ul className="text-sm space-y-1">
+                        <li>• No regularization</li>
+                        <li>• All features used</li>
+                        <li>• Training Accuracy: 87.5%</li>
+                        <li>• Test Accuracy: 82.3%</li>
+                        <li>• Gap: 5.2% (Overfitting)</li>
+                      </ul>
+                    </div>
+
+                    <div className="p-3 bg-green-50 dark:bg-green-900 rounded-lg">
+                      <h4 className="font-medium text-green-800 dark:text-green-200 mb-2">Improved Model</h4>
+                      <ul className="text-sm space-y-1">
+                        <li>• LASSO regularization (C=0.1)</li>
+                        <li>• Feature selection through L1 penalty</li>
+                        <li>• Training Accuracy: 85.2%</li>
+                        <li>• Test Accuracy: 84.8%</li>
+                        <li>• Gap: 0.4% (Better generalization)</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Improvement Metrics */}
+                <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                  <h3 className="text-base font-medium mb-3">Key Improvements</h3>
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-2">
+                      <div className="w-8 h-8 rounded-full bg-green-100 dark:bg-green-800 flex items-center justify-center">
+                        <span className="text-green-600 dark:text-green-300">✓</span>
+                      </div>
+                      <div>
+                        <h4 className="font-medium">Reduced Overfitting</h4>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                          Training-test accuracy gap reduced from 5.2% to 0.4% through LASSO regularization
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <div className="w-8 h-8 rounded-full bg-green-100 dark:bg-green-800 flex items-center justify-center">
+                        <span className="text-green-600 dark:text-green-300">✓</span>
+                      </div>
+                      <div>
+                        <h4 className="font-medium">Better Generalization</h4>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                          Test accuracy improved from 82.3% to 84.8% with more robust feature selection
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <div className="w-8 h-8 rounded-full bg-green-100 dark:bg-green-800 flex items-center justify-center">
+                        <span className="text-green-600 dark:text-green-300">✓</span>
+                      </div>
+                      <div>
+                        <h4 className="font-medium">Feature Selection</h4>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                          LASSO (L1 regularization) automatically identifies and removes less important features
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900 rounded-lg">
+                      <h4 className="font-medium text-blue-800 dark:text-blue-200 mb-2">Conclusion</h4>
+                      <p className="text-sm text-blue-700 dark:text-blue-300">
+                        The improvements have resulted in a more robust model that:
+                        • Generalizes better to new data through LASSO regularization
+                        • Is less prone to overfitting with controlled feature selection
+                        • Provides clearer feature importance through L1 penalty
+                        • Has more consistent performance across training and test sets
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Model Performance Section */}
+        {activeSection === 'model-performance' && (
+          <div className="w-full space-y-6">
+            {/* Train/Test Split Analysis */}
+            <div className="w-full bg-white dark:bg-gray-700 p-4 sm:p-6 rounded-lg shadow">
+              <h2 className="text-lg sm:text-xl font-semibold mb-4">Train/Test Split Analysis</h2>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Split Distribution */}
+                <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                  <h3 className="text-base font-medium mb-3">Data Split Distribution</h3>
+                  <div className="h-[200px]">
+                    <Bar
+                      data={{
+                        labels: ['Training Set', 'Test Set'],
+                        datasets: [{
+                          label: 'Number of Samples',
+                          data: [22320, 5581], // 80-20 split of 27,901 samples
+                          backgroundColor: [
+                            'rgba(54, 162, 235, 0.6)',
+                            'rgba(255, 99, 132, 0.6)',
+                          ],
+                          borderColor: [
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 99, 132, 1)',
+                          ],
+                          borderWidth: 1
+                        }]
+                      }}
+                      options={{
+                        responsive: true,
+                        plugins: {
+                          legend: {
+                            display: false
+                          },
+                          title: {
+                            display: true,
+                            text: 'Dataset Split (80-20)'
+                          }
+                        },
+                        scales: {
+                          y: {
+                            beginAtZero: true,
+                            title: {
+                              display: true,
+                              text: 'Number of Samples'
+                            }
+                          }
+                        }
+                      }}
+                    />
+                  </div>
+                </div>
+
+                {/* Performance Metrics */}
+                <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                  <h3 className="text-base font-medium mb-3">Model Performance</h3>
+                  <div className="space-y-4">
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm">Training Accuracy:</span>
+                      <span className="font-medium">85.2%</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm">Test Accuracy:</span>
+                      <span className="font-medium">84.8%</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm">Precision:</span>
+                      <span className="font-medium">0.83</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm">Recall:</span>
+                      <span className="font-medium">0.86</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm">F1-Score:</span>
+                      <span className="font-medium">0.84</span>
+                    </div>
+                  </div>
+                  <div className="mt-4 text-sm text-gray-600 dark:text-gray-400">
+                    <p>Note: The close performance between training and test sets indicates good generalization.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Model Performance Matrix */}
+            <div className="bg-white dark:bg-gray-700 p-4 sm:p-6 rounded-lg shadow">
+              <h3 className="text-base sm:text-lg font-medium mb-3 sm:mb-4">Model Performance Analysis</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
+                <div className="p-4 bg-green-50 dark:bg-green-900 rounded-lg">
+                  <h4 className="font-medium mb-2">Strengths</h4>
+                  <ul className="list-disc list-inside text-sm space-y-1">
+                    <li>Handles both numerical and categorical features</li>
+                    <li>Provides probability-based predictions</li>
+                    <li>Fast computation time</li>
+                    <li>Clear interpretation of feature importance</li>
+                  </ul>
+                </div>
+                <div className="p-4 bg-yellow-50 dark:bg-yellow-900 rounded-lg">
+                  <h4 className="font-medium mb-2">Considerations</h4>
+                  <ul className="list-disc list-inside text-sm space-y-1">
+                    <li>Assumes linear relationships</li>
+                    <li>Feature scaling important</li>
+                    <li>Categorical encoding needed</li>
+                    <li>Sensitive to outliers</li>
+                  </ul>
+                </div>
+                <div className="p-4 bg-blue-50 dark:bg-blue-900 rounded-lg">
+                  <h4 className="font-medium mb-2">Expected Outcomes</h4>
+                  <ul className="list-disc list-inside text-sm space-y-1">
+                    <li>Precise probability-based predictions</li>
+                    <li>Clear feature importance ranking</li>
+                    <li>Transparent prediction logic</li>
+                    <li>Actionable risk insights</li>
                   </ul>
                 </div>
               </div>
             </div>
-
-            {/* Improvement Metrics */}
-            <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
-              <h3 className="text-base font-medium mb-3">Key Improvements</h3>
-              <div className="space-y-4">
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-full bg-green-100 dark:bg-green-800 flex items-center justify-center">
-                    <span className="text-green-600 dark:text-green-300">✓</span>
-                  </div>
-                  <div>
-                    <h4 className="font-medium">Reduced Overfitting</h4>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
-                      Training-test accuracy gap reduced from 5.2% to 0.4%
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-full bg-green-100 dark:bg-green-800 flex items-center justify-center">
-                    <span className="text-green-600 dark:text-green-300">✓</span>
-                  </div>
-                  <div>
-                    <h4 className="font-medium">Better Generalization</h4>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
-                      Test accuracy improved from 82.3% to 84.8%
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-full bg-green-100 dark:bg-green-800 flex items-center justify-center">
-                    <span className="text-green-600 dark:text-green-300">✓</span>
-                  </div>
-                  <div>
-                    <h4 className="font-medium">Feature Selection</h4>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
-                      LASSO identified and removed less important features
-                    </p>
-                  </div>
-                </div>
-
-                <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900 rounded-lg">
-                  <h4 className="font-medium text-blue-800 dark:text-blue-200 mb-2">Conclusion</h4>
-                  <p className="text-sm text-blue-700 dark:text-blue-300">
-                    The improvements have resulted in a more robust model that:
-                    • Generalizes better to new data
-                    • Is less prone to overfitting
-                    • Provides clearer feature importance
-                    • Has more consistent performance
-                  </p>
-                </div>
-              </div>
-            </div>
           </div>
-        </div>
+        )}
 
-        {/* Train/Test Split Analysis */}
-        <div className="w-full bg-white dark:bg-gray-700 p-4 sm:p-6 rounded-lg shadow">
-          <h2 className="text-lg sm:text-xl font-semibold mb-4">Train/Test Split Analysis</h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Split Distribution */}
-            <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
-              <h3 className="text-base font-medium mb-3">Data Split Distribution</h3>
-              <div className="h-[200px]">
-                <Bar
-                  data={{
-                    labels: ['Training Set', 'Test Set'],
-                    datasets: [{
-                      label: 'Number of Samples',
-                      data: [22320, 5581], // 80-20 split of 27,901 samples
-                      backgroundColor: [
-                        'rgba(54, 162, 235, 0.6)',
-                        'rgba(255, 99, 132, 0.6)',
-                      ],
-                      borderColor: [
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 99, 132, 1)',
-                      ],
-                      borderWidth: 1
-                    }]
-                  }}
-                  options={{
-                    responsive: true,
-                    plugins: {
-                      legend: {
-                        display: false
-                      },
-                      title: {
-                        display: true,
-                        text: 'Dataset Split (80-20)'
-                      }
-                    },
-                    scales: {
-                      y: {
-                        beginAtZero: true,
-                        title: {
-                          display: true,
-                          text: 'Number of Samples'
+        {/* Feature Impact Section */}
+        {activeSection === 'feature-impact' && (
+          <div className="w-full space-y-6">
+            {/* LASSO Regularization Analysis */}
+            <div className="w-full bg-white dark:bg-gray-700 p-4 sm:p-6 rounded-lg shadow">
+              <h2 className="text-lg sm:text-xl font-semibold mb-4">LASSO Regularization Analysis</h2>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Feature Importance */}
+                <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                  <h3 className="text-base font-medium mb-3">Top 10 Feature Importance</h3>
+                  <div className="h-[300px]">
+                    <Bar
+                      data={{
+                        labels: ['Academic Pressure', 'Sleep Duration', 'Work Pressure', 
+                                'Financial Stress', 'Study Satisfaction', 'Job Satisfaction',
+                                'Work/Study Hours', 'CGPA', 'Family History', 'Age'],
+                        datasets: [{
+                          label: 'LASSO Coefficient',
+                          data: [0.35, -0.28, 0.25, 0.22, -0.20, -0.18, 0.15, -0.12, 0.10, 0.08],
+                          backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                          borderColor: 'rgba(54, 162, 235, 1)',
+                          borderWidth: 1
+                        }]
+                      }}
+                      options={{
+                        indexAxis: 'y',
+                        responsive: true,
+                        plugins: {
+                          legend: {
+                            display: false
+                          },
+                          title: {
+                            display: true,
+                            text: 'Feature Impact on Depression Risk'
+                          }
+                        },
+                        scales: {
+                          x: {
+                            title: {
+                              display: true,
+                              text: 'LASSO Coefficient'
+                            }
+                          }
                         }
-                      }
-                    }
-                  }}
-                />
+                      }}
+                    />
+                  </div>
+                </div>
+
+                {/* Regularization Explanation */}
+                <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                  <h3 className="text-base font-medium mb-3">LASSO Regularization Benefits</h3>
+                  <div className="space-y-4">
+                    <div className="p-3 bg-blue-50 dark:bg-blue-900 rounded-lg">
+                      <h4 className="font-medium text-blue-800 dark:text-blue-200 mb-2">Feature Selection</h4>
+                      <p className="text-sm text-blue-700 dark:text-blue-300">
+                        LASSO (L1 regularization) automatically identifies and selects the most important features by setting less relevant features' coefficients to zero, helping to reduce model complexity.
+                      </p>
+                    </div>
+                    
+                    <div className="p-3 bg-green-50 dark:bg-green-900 rounded-lg">
+                      <h4 className="font-medium text-green-800 dark:text-green-200 mb-2">Overfitting Prevention</h4>
+                      <p className="text-sm text-green-700 dark:text-green-300">
+                        By penalizing large coefficients with C=0.1, LASSO helps prevent the model from overfitting to the training data, resulting in better generalization.
+                      </p>
+                    </div>
+
+                    <div className="p-3 bg-purple-50 dark:bg-purple-900 rounded-lg">
+                      <h4 className="font-medium text-purple-800 dark:text-purple-200 mb-2">Model Interpretability</h4>
+                      <p className="text-sm text-purple-700 dark:text-purple-300">
+                        The LASSO coefficients provide clear insights into how each feature affects depression risk prediction, with positive values indicating increased risk and negative values indicating decreased risk.
+                      </p>
+                    </div>
+
+                    <div className="mt-4 text-sm text-gray-600 dark:text-gray-400">
+                      <p>Regularization Strength (C=0.1):</p>
+                      <ul className="list-disc list-inside mt-2">
+                        <li>Stronger regularization to prevent overfitting</li>
+                        <li>More aggressive feature selection through L1 penalty</li>
+                        <li>Better generalization to new data</li>
+                        <li>Clearer interpretation of feature importance</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Feature Impact Analysis */}
+              <div className="mt-6 bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                <h3 className="text-base font-medium mb-3">Feature Impact Analysis</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <h4 className="font-medium text-indigo-600 dark:text-indigo-400 mb-2">Positive Impact Features</h4>
+                    <ul className="list-disc list-inside text-sm space-y-1">
+                      <li>Academic Pressure (0.35) - Strongest positive correlation</li>
+                      <li>Work Pressure (0.25) - Significant impact</li>
+                      <li>Financial Stress (0.22) - Moderate influence</li>
+                      <li>Work/Study Hours (0.15) - Notable contribution</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h4 className="font-medium text-indigo-600 dark:text-indigo-400 mb-2">Negative Impact Features</h4>
+                    <ul className="list-disc list-inside text-sm space-y-1">
+                      <li>Sleep Duration (-0.28) - Strongest protective factor</li>
+                      <li>Study Satisfaction (-0.20) - Significant positive influence</li>
+                      <li>Job Satisfaction (-0.18) - Moderate protective effect</li>
+                      <li>CGPA (-0.12) - Slight protective influence</li>
+                    </ul>
+                  </div>
+                </div>
               </div>
             </div>
 
-            {/* Performance Metrics */}
-            <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
-              <h3 className="text-base font-medium mb-3">Model Performance</h3>
-              <div className="space-y-4">
-                <div className="flex justify-between items-center">
-                  <span className="text-sm">Training Accuracy:</span>
-                  <span className="font-medium">85.2%</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm">Test Accuracy:</span>
-                  <span className="font-medium">84.8%</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm">Precision:</span>
-                  <span className="font-medium">0.83</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm">Recall:</span>
-                  <span className="font-medium">0.86</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm">F1-Score:</span>
-                  <span className="font-medium">0.84</span>
-                </div>
-              </div>
-              <div className="mt-4 text-sm text-gray-600 dark:text-gray-400">
-                <p>Note: The close performance between training and test sets indicates good generalization.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* LASSO Regularization Analysis */}
-        <div className="w-full bg-white dark:bg-gray-700 p-4 sm:p-6 rounded-lg shadow">
-          <h2 className="text-lg sm:text-xl font-semibold mb-4">LASSO Regularization Analysis</h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Feature Importance */}
-            <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
-              <h3 className="text-base font-medium mb-3">Top 10 Feature Importance</h3>
-              <div className="h-[300px]">
-                <Bar
-                  data={{
-                    labels: ['Academic Pressure', 'Sleep Duration', 'Work Pressure', 
-                            'Financial Stress', 'Study Satisfaction', 'Job Satisfaction',
-                            'Work/Study Hours', 'CGPA', 'Family History', 'Age'],
-                    datasets: [{
-                      label: 'LASSO Coefficient',
-                      data: [0.35, -0.28, 0.25, 0.22, -0.20, -0.18, 0.15, -0.12, 0.10, 0.08],
-                      backgroundColor: 'rgba(54, 162, 235, 0.6)',
-                      borderColor: 'rgba(54, 162, 235, 1)',
-                      borderWidth: 1
-                    }]
-                  }}
-                  options={{
-                    indexAxis: 'y',
-                    responsive: true,
-                    plugins: {
-                      legend: {
-                        display: false
-                      },
-                      title: {
-                        display: true,
-                        text: 'Feature Impact on Depression Risk'
-                      }
-                    },
-                    scales: {
-                      x: {
-                        title: {
-                          display: true,
-                          text: 'LASSO Coefficient'
+            {/* Prediction Visualizations */}
+            <div className="w-full space-y-4 sm:space-y-6">
+              <h2 className="text-lg sm:text-xl font-semibold">Model Predictions & Feature Impact</h2>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+                {/* Academic Pressure Impact */}
+                <div className="bg-white dark:bg-gray-700 p-3 sm:p-4 rounded-lg shadow">
+                  <h3 className="text-base sm:text-lg font-medium mb-3 sm:mb-4">Academic Pressure Impact</h3>
+                  <div className="h-[250px] sm:h-[300px]">
+                    <Line 
+                      options={{
+                        ...lineOptions,
+                        plugins: {
+                          ...lineOptions.plugins,
+                          title: {
+                            display: true,
+                            text: 'LASSO Coefficient: 0.35 (Strongest Risk Factor)'
+                          }
                         }
-                      }
-                    }
-                  }}
-                />
-              </div>
-            </div>
-
-            {/* Regularization Explanation */}
-            <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
-              <h3 className="text-base font-medium mb-3">LASSO Regularization Benefits</h3>
-              <div className="space-y-4">
-                <div className="p-3 bg-blue-50 dark:bg-blue-900 rounded-lg">
-                  <h4 className="font-medium text-blue-800 dark:text-blue-200 mb-2">Feature Selection</h4>
-                  <p className="text-sm text-blue-700 dark:text-blue-300">
-                    LASSO automatically identifies and selects the most important features by setting less relevant features' coefficients to zero.
-                  </p>
+                      }} 
+                      data={{
+                        labels: [1, 2, 3, 4, 5],
+                        datasets: [{
+                          label: 'Risk Percentage',
+                          data: [25, 40, 55, 70, 85],
+                          borderColor: 'rgb(255, 99, 132)',
+                          tension: 0.1,
+                          fill: false
+                        }]
+                      }} 
+                    />
+                  </div>
                 </div>
+
+                {/* Sleep Duration Impact */}
+                <div className="bg-white dark:bg-gray-700 p-3 sm:p-4 rounded-lg shadow">
+                  <h3 className="text-base sm:text-lg font-medium mb-3 sm:mb-4">Sleep Duration Impact</h3>
+                  <div className="h-[250px] sm:h-[300px]">
+                    <Line 
+                      options={{
+                        ...lineOptions,
+                        plugins: {
+                          ...lineOptions.plugins,
+                          title: {
+                            display: true,
+                            text: 'LASSO Coefficient: -0.28 (Strongest Protective Factor)'
+                          }
+                        }
+                      }} 
+                      data={{
+                        labels: ['<6 hours', '6-7 hours', '7-8 hours', '8-9 hours', '>9 hours'],
+                        datasets: [{
+                          label: 'Risk Percentage',
+                          data: [75, 60, 45, 35, 30],
+                          borderColor: 'rgb(75, 192, 192)',
+                          tension: 0.1,
+                          fill: false
+                        }]
+                      }} 
+                    />
+                  </div>
+                </div>
+                {/* Work & Financial Impact */}
                 
-                <div className="p-3 bg-green-50 dark:bg-green-900 rounded-lg">
-                  <h4 className="font-medium text-green-800 dark:text-green-200 mb-2">Overfitting Prevention</h4>
-                  <p className="text-sm text-green-700 dark:text-green-300">
-                    By penalizing large coefficients, LASSO helps prevent the model from overfitting to the training data.
-                  </p>
+                <div className="bg-white dark:bg-gray-700 p-3 sm:p-4 rounded-lg shadow md:col-span-2">
+                  <h3 className="text-base sm:text-lg font-medium mb-3 sm:mb-4">Work & Financial Impact</h3>
+                  <div className="h-[250px] sm:h-[300px] flex justify-center items-center">
+                    <Line 
+                      options={{
+                        ...lineOptions,
+                        plugins: {
+                          ...lineOptions.plugins,
+                          title: {
+                            display: true,
+                            text: 'LASSO Coefficients: 0.25 (Work) & 0.22 (Financial)'
+                          }
+                        }
+                      }} 
+                      data={{
+                        labels: [1, 2, 3, 4, 5],
+                        datasets: [
+                          {
+                            label: 'Work Pressure',
+                            data: [30, 40, 50, 65, 80],
+                            borderColor: 'rgb(153, 102, 255)',
+                            tension: 0.1,
+                            fill: false
+                          },
+                          {
+                            label: 'Financial Stress',
+                            data: [25, 35, 45, 60, 75],
+                            borderColor: 'rgb(255, 159, 64)',
+                            tension: 0.1,
+                            fill: false
+                          }
+                        ]
+                      }} 
+                    />
+                  </div>
                 </div>
-
-                <div className="p-3 bg-purple-50 dark:bg-purple-900 rounded-lg">
-                  <h4 className="font-medium text-purple-800 dark:text-purple-200 mb-2">Model Interpretability</h4>
-                  <p className="text-sm text-purple-700 dark:text-purple-300">
-                    The coefficients provide clear insights into how each feature affects depression risk prediction.
-                  </p>
-                </div>
-
-                <div className="mt-4 text-sm text-gray-600 dark:text-gray-400">
-                  <p>Regularization Strength (C=0.1):</p>
-                  <ul className="list-disc list-inside mt-2">
-                    <li>Stronger regularization to prevent overfitting</li>
-                    <li>More aggressive feature selection</li>
-                    <li>Better generalization to new data</li>
-                  </ul>
-                </div>
               </div>
-            </div>
-          </div>
 
-          {/* Feature Impact Analysis */}
-          <div className="mt-6 bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
-            <h3 className="text-base font-medium mb-3">Feature Impact Analysis</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <h4 className="font-medium text-indigo-600 dark:text-indigo-400 mb-2">Positive Impact Features</h4>
-                <ul className="list-disc list-inside text-sm space-y-1">
-                  <li>Academic Pressure (0.35) - Strongest positive correlation</li>
-                  <li>Work Pressure (0.25) - Significant impact</li>
-                  <li>Financial Stress (0.22) - Moderate influence</li>
-                  <li>Work/Study Hours (0.15) - Notable contribution</li>
-                </ul>
-              </div>
-              <div>
-                <h4 className="font-medium text-indigo-600 dark:text-indigo-400 mb-2">Negative Impact Features</h4>
-                <ul className="list-disc list-inside text-sm space-y-1">
-                  <li>Sleep Duration (-0.28) - Strongest protective factor</li>
-                  <li>Study Satisfaction (-0.20) - Significant positive influence</li>
-                  <li>Job Satisfaction (-0.18) - Moderate protective effect</li>
-                  <li>CGPA (-0.12) - Slight protective influence</li>
+              <div className="mt-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                <h3 className="text-base font-medium mb-2">Feature Impact Analysis</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  These visualizations show the three most significant feature groups affecting depression risk:
+                </p>
+                <ul className="list-disc list-inside mt-2 text-sm text-gray-600 dark:text-gray-400">
+                  <li>Academic Pressure (0.35): The strongest risk factor, showing a clear positive correlation with depression risk</li>
+                  <li>Sleep Duration (-0.28): The strongest protective factor, with risk decreasing as sleep duration increases</li>
+                  <li>Work Pressure (0.25) & Financial Stress (0.22): Combined impact showing how work and financial factors contribute to risk</li>
                 </ul>
               </div>
             </div>
           </div>
-        </div>
-
-        {/* Linear Regression Coefficients */}
-        <div className="w-full bg-white dark:bg-gray-700 p-3 sm:p-4 rounded-lg shadow">
-          <h3 className="text-base sm:text-lg font-medium mb-3 sm:mb-4">Feature Impact on Depression Risk</h3>
-          <p className="text-xs sm:text-sm mb-3 sm:mb-4">The chart below shows how each feature contributes to the probability of depression.</p>
-          <div className="h-[250px] sm:h-[300px]">
-            <Bar options={coefficientOptions} data={coefficientData} />
-          </div>
-        </div>
-
-        {/* Prediction Visualizations */}
-        <div className="w-full space-y-4 sm:space-y-6">
-          <h2 className="text-lg sm:text-xl font-semibold">Model Predictions & Feature Impact</h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-            {/* Sleep Hours Impact */}
-            <div className="bg-white dark:bg-gray-700 p-3 sm:p-4 rounded-lg shadow">
-              <h3 className="text-base sm:text-lg font-medium mb-3 sm:mb-4">Sleep Impact on Risk</h3>
-              <div className="h-[250px] sm:h-[300px]">
-                <Line options={lineOptions} data={riskPredictionData} />
-              </div>
-            </div>
-
-            {/* Social Activity Impact */}
-            <div className="bg-white dark:bg-gray-700 p-3 sm:p-4 rounded-lg shadow">
-              <h3 className="text-base sm:text-lg font-medium mb-3 sm:mb-4">Social Activity Impact on Risk</h3>
-              <div className="h-[250px] sm:h-[300px]">
-                <Line options={lineOptions} data={sleepRiskData} />
-              </div>
-            </div>
-          </div>
-
-          {/* Model Performance Matrix */}
-          <div className="bg-white dark:bg-gray-700 p-4 sm:p-6 rounded-lg shadow">
-            <h3 className="text-base sm:text-lg font-medium mb-3 sm:mb-4">Model Performance Analysis</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
-              <div className="p-4 bg-green-50 dark:bg-green-900 rounded-lg">
-                <h4 className="font-medium mb-2">Strengths</h4>
-                <ul className="list-disc list-inside text-sm space-y-1">
-                  <li>Handles both numerical and categorical features</li>
-                  <li>Provides probability-based predictions</li>
-                  <li>Fast computation time</li>
-                  <li>Clear interpretation of feature importance</li>
-                </ul>
-              </div>
-              <div className="p-4 bg-yellow-50 dark:bg-yellow-900 rounded-lg">
-                <h4 className="font-medium mb-2">Considerations</h4>
-                <ul className="list-disc list-inside text-sm space-y-1">
-                  <li>Assumes linear relationships</li>
-                  <li>Feature scaling important</li>
-                  <li>Categorical encoding needed</li>
-                  <li>Sensitive to outliers</li>
-                </ul>
-              </div>
-              <div className="p-4 bg-blue-50 dark:bg-blue-900 rounded-lg">
-                <h4 className="font-medium mb-2">Expected Outcomes</h4>
-                <ul className="list-disc list-inside text-sm space-y-1">
-                  <li>Precise probability-based predictions</li>
-                  <li>Clear feature importance ranking</li>
-                  <li>Transparent prediction logic</li>
-                  <li>Actionable risk insights</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          {/* Implementation Notes */}
-          <div className="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
-            <h3 className="text-lg font-medium mb-4">Implementation Guidelines</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <h4 className="font-medium text-indigo-600 dark:text-indigo-400 mb-2">Data Preprocessing</h4>
-                <ul className="list-disc list-inside text-sm space-y-1">
-                  <li>Normalize numerical features (age, sleep hours)</li>
-                  <li>One-hot encode categorical variables</li>
-                  <li>Handle missing values with mean/mode imputation</li>
-                  <li>Consider feature interactions</li>
-                </ul>
-              </div>
-              <div>
-                <h4 className="font-medium text-indigo-600 dark:text-indigo-400 mb-2">Model Maintenance</h4>
-                <ul className="list-disc list-inside text-sm space-y-1">
-                  <li>Recalibrate coefficients as needed</li>
-                  <li>Monitor prediction distribution</li>
-                  <li>Compare with expert assessments</li>
-                  <li>Adjust base risk as population changes</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
+        )}  
 
         {/* Model Comparison Section */}
-        <div className="w-full space-y-4 sm:space-y-6">
-          <h2 className="text-lg sm:text-xl font-semibold">Model Comparison</h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-            {/* Bar Chart for Model Performance */}
-            <div className="bg-white dark:bg-gray-700 p-3 sm:p-4 rounded-lg shadow">
-              <h3 className="text-base sm:text-lg font-medium mb-3 sm:mb-4">Performance Metrics</h3>
-              <div>
-                <select 
-                  value={selectedMetric}
-                  onChange={(e) => setSelectedMetric(e.target.value as MetricName)}
-                  className="mb-3 sm:mb-4 w-full sm:w-auto pl-2 pr-8 py-1 text-sm sm:text-base border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-transform duration-200 hover:scale-105 active:scale-95"
-                >
-                  <option value="accuracy">Accuracy</option>
-                  <option value="training_time">Training Time</option>
-                  <option value="interpretability">Interpretability</option>
-                  <option value="scalability">Scalability</option>
-                </select>
-                <div className="h-[250px] sm:h-[300px]">
-                  <Bar options={barOptions} data={performanceData} />
+        {activeSection === 'model-comparison' && (
+          <div className="w-full space-y-6">
+            <div className="w-full space-y-4 sm:space-y-6">
+              <h2 className="text-lg sm:text-xl font-semibold">Model Comparison</h2>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+                {/* Bar Chart for Model Performance */}
+                <div className="bg-white dark:bg-gray-700 p-3 sm:p-4 rounded-lg shadow">
+                  <h3 className="text-base sm:text-lg font-medium mb-3 sm:mb-4">Performance Metrics</h3>
+                  <div>
+                    <select 
+                      value={selectedMetric}
+                      onChange={(e) => setSelectedMetric(e.target.value as MetricName)}
+                      className="mb-3 sm:mb-4 w-full sm:w-auto pl-2 pr-8 py-1 text-sm sm:text-base border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-transform duration-200 hover:scale-105 active:scale-95"
+                    >
+                      <option value="accuracy">Accuracy</option>
+                      <option value="training_time">Training Time</option>
+                      <option value="interpretability">Interpretability</option>
+                      <option value="scalability">Scalability</option>
+                    </select>
+                    <div className="h-[250px] sm:h-[300px]">
+                      <Bar options={barOptions} data={performanceData} />
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
 
-            {/* Radar Chart for Model Characteristics */}
-            <div className="bg-white dark:bg-gray-700 p-3 sm:p-4 rounded-lg shadow">
-              <h3 className="text-base sm:text-lg font-medium mb-3 sm:mb-4">Model Characteristics</h3>
-              <div>
-                <select 
-                  value={selectedModel}
-                  onChange={(e) => setSelectedModel(e.target.value as ModelName)}
-                  className="mb-3 sm:mb-4 w-full sm:w-auto pl-2 pr-8 py-1 text-sm sm:text-base border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-transform duration-200 hover:scale-105 active:scale-95"
-                >
-                  <option value="Logistic Regression">Logistic Regression</option>
-                  <option value="KNN">KNN</option>
-                  <option value="Random Forest">Random Forest</option>
-                  <option value="SVM">SVM</option>
-                </select>
-                <div className="h-[250px] sm:h-[300px]">
-                  <Radar options={radarOptions} data={radarData} />
+                {/* Radar Chart for Model Characteristics */}
+                <div className="bg-white dark:bg-gray-700 p-3 sm:p-4 rounded-lg shadow">
+                  <h3 className="text-base sm:text-lg font-medium mb-3 sm:mb-4">Model Characteristics</h3>
+                  <div>
+                    <select 
+                      value={selectedModel}
+                      onChange={(e) => setSelectedModel(e.target.value as ModelName)}
+                      className="mb-3 sm:mb-4 w-full sm:w-auto pl-2 pr-8 py-1 text-sm sm:text-base border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-transform duration-200 hover:scale-105 active:scale-95"
+                    >
+                      <option value="Logistic Regression">Logistic Regression</option>
+                      <option value="KNN">KNN</option>
+                      <option value="Random Forest">Random Forest</option>
+                      <option value="SVM">SVM</option>
+                    </select>
+                    <div className="h-[250px] sm:h-[300px]">
+                      <Radar options={radarOptions} data={radarData} />
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
 
         {/* Tutorial Section */}
-        <div className="w-full">
-          <h2 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">Tutorial: Logistic Regression for Depression Risk</h2>
-          
-          <div className="space-y-4 sm:space-y-6">
-            {/* Step 1: Data Loading */}
-            <div className="bg-gray-50 dark:bg-gray-700 p-3 sm:p-4 rounded-lg">
-              <h3 className="text-base sm:text-lg font-medium mb-2">Step 1: Loading the Data</h3>
-              <pre className="bg-gray-100 dark:bg-gray-800 p-2 sm:p-3 rounded overflow-x-auto text-xs sm:text-sm">
-                {tutorialCode.step1}
-              </pre>
-            </div>
+        {activeSection === 'tutorial' && (
+          <div className="w-full space-y-6">
+            <div className="w-full">
+              <h2 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">Tutorial: Logistic Regression for Depression Risk</h2>
+              
+              <div className="space-y-4 sm:space-y-6">
+                {/* Step 1: Data Loading */}
+                <div className="bg-gray-50 dark:bg-gray-700 p-3 sm:p-4 rounded-lg">
+                  <h3 className="text-base sm:text-lg font-medium mb-2">Step 1: Loading the Data</h3>
+                  <pre className="bg-gray-100 dark:bg-gray-800 p-2 sm:p-3 rounded overflow-x-auto text-xs sm:text-sm">
+                    {tutorialCode.step1}
+                  </pre>
+                </div>
 
-            {/* Step 2: Data Preprocessing */}
-            <div className="bg-gray-50 dark:bg-gray-700 p-3 sm:p-4 rounded-lg">
-              <h3 className="text-base sm:text-lg font-medium mb-2">Step 2: Data Preprocessing</h3>
-              <pre className="bg-gray-100 dark:bg-gray-800 p-2 sm:p-3 rounded overflow-x-auto text-xs sm:text-sm">
-                {tutorialCode.step2}
-              </pre>
-            </div>
+                {/* Step 2: Data Preprocessing */}
+                <div className="bg-gray-50 dark:bg-gray-700 p-3 sm:p-4 rounded-lg">
+                  <h3 className="text-base sm:text-lg font-medium mb-2">Step 2: Data Preprocessing</h3>
+                  <div className="mb-3 text-sm text-gray-600 dark:text-gray-400">
+                    <p>Key preprocessing steps:</p>
+                    <ul className="list-disc list-inside mt-2">
+                      <li>Normalize numerical features (age, sleep hours, CGPA, etc.)</li>
+                      <li>One-hot encode categorical variables (gender, profession, etc.)</li>
+                      <li>Handle missing values with mean/mode imputation</li>
+                      <li>Scale features to similar ranges for better model performance</li>
+                    </ul>
+                  </div>
+                  <pre className="bg-gray-100 dark:bg-gray-800 p-2 sm:p-3 rounded overflow-x-auto text-xs sm:text-sm">
+                    {tutorialCode.step2}
+                  </pre>
+                </div>
 
-            {/* Step 3: Model Training */}
-            <div className="bg-gray-50 dark:bg-gray-700 p-3 sm:p-4 rounded-lg">
-              <h3 className="text-base sm:text-lg font-medium mb-2">Step 3: Logistic Regression Model</h3>
-              <pre className="bg-gray-100 dark:bg-gray-800 p-2 sm:p-3 rounded overflow-x-auto text-xs sm:text-sm">
-                {tutorialCode.step3}
-              </pre>
-            </div>
+                {/* Step 3: Model Training */}
+                <div className="bg-gray-50 dark:bg-gray-700 p-3 sm:p-4 rounded-lg">
+                  <h3 className="text-base sm:text-lg font-medium mb-2">Step 3: Logistic Regression Model</h3>
+                  <pre className="bg-gray-100 dark:bg-gray-800 p-2 sm:p-3 rounded overflow-x-auto text-xs sm:text-sm">
+                    {tutorialCode.step3}
+                  </pre>
+                </div>
 
-            {/* Step 4: Making Predictions */}
-            <div className="bg-gray-50 dark:bg-gray-700 p-3 sm:p-4 rounded-lg">
-              <h3 className="text-base sm:text-lg font-medium mb-2">Step 4: Probability-Based Prediction</h3>
-              <pre className="bg-gray-100 dark:bg-gray-800 p-2 sm:p-3 rounded overflow-x-auto text-xs sm:text-sm">
-                {tutorialCode.step4}
-              </pre>
-            </div>
+                {/* Step 4: Making Predictions */}
+                <div className="bg-gray-50 dark:bg-gray-700 p-3 sm:p-4 rounded-lg">
+                  <h3 className="text-base sm:text-lg font-medium mb-2">Step 4: Probability-Based Prediction</h3>
+                  <pre className="bg-gray-100 dark:bg-gray-800 p-2 sm:p-3 rounded overflow-x-auto text-xs sm:text-sm">
+                    {tutorialCode.step4}
+                  </pre>
+                </div>
 
-            <div className="mt-3 sm:mt-4 text-xs sm:text-sm text-gray-600 dark:text-gray-400">
-              <p>Note: This logistic regression implementation has advantages over categorical approaches:</p>
-              <ul className="list-disc list-inside mt-2">
-                <li>Provides probability-based predictions</li>
-                <li>Shows exact feature impact through coefficients</li>
-                <li>Allows for more personalized risk assessment</li>
-                <li>Risk changes linearly with feature changes, easier to interpret</li>
-                <li>Can be easily visualized with probability bars</li>
-              </ul>
+                <div className="mt-3 sm:mt-4 text-xs sm:text-sm text-gray-600 dark:text-gray-400">
+                  <p>Note: This logistic regression implementation has advantages over categorical approaches:</p>
+                  <ul className="list-disc list-inside mt-2">
+                    <li>Provides probability-based predictions</li>
+                    <li>Shows exact feature impact through coefficients</li>
+                    <li>Allows for more personalized risk assessment</li>
+                    <li>Risk changes linearly with feature changes, easier to interpret</li>
+                    <li>Can be easily visualized with probability bars</li>
+                  </ul>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </main>
     </div>
   );
