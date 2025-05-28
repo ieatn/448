@@ -6,6 +6,7 @@ import Link from 'next/link';
 interface PredictionResult {
   percentage: number;
   message: string;
+  most_important_factor: string;
 }
 
 export default function Home() {
@@ -123,6 +124,7 @@ export default function Home() {
       console.log('Prediction result:', {
         predicted_depression: result.predicted_depression,
         probability: result.probability_of_depression,
+        most_important_factor: result.most_important_factor,
         raw_result: result
       });
       
@@ -130,7 +132,8 @@ export default function Home() {
         percentage: result.probability_of_depression,
         message: result.predicted_depression 
           ? "High Risk - You may be at increased risk for depression. Consider speaking with a healthcare professional."
-          : "Low Risk - Few risk factors present. Continue maintaining healthy habits."
+          : "Low Risk - Few risk factors present. Continue maintaining healthy habits.",
+        most_important_factor: result.most_important_factor
       });
 
       // Add a small delay to ensure the prediction box is rendered
@@ -459,6 +462,9 @@ export default function Home() {
               <p className="mt-2 font-bold text-base sm:text-lg">{prediction.percentage}% Risk</p>
             </div>
             <p className="mt-2 text-sm sm:text-base text-gray-700 dark:text-gray-300">{prediction.message}</p>
+            <p className="mt-3 text-sm sm:text-base text-gray-700 dark:text-gray-300">
+              <span className="font-semibold">Most Important Factor:</span> {prediction.most_important_factor}
+            </p>
             <p className="mt-3 sm:mt-4 text-xs text-gray-500 dark:text-gray-400">Disclaimer: This prediction is based on a statistical model and is not a substitute for professional medical advice. If you are concerned about your mental health, please consult a healthcare professional.</p>
             
             <div className="mt-4 sm:mt-6">

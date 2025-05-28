@@ -137,6 +137,24 @@ def predict():
 
     # 3. Make a prediction using the trained pipeline
     try:
+        # Get the preprocessed features
+        preprocessed_features = model_pipeline.named_steps['preprocessor'].transform(input_df)
+        feature_names = model_pipeline.named_steps['preprocessor'].get_feature_names_out()
+        coefficients = model_pipeline.named_steps['classifier'].coef_[0]
+        
+        # Calculate impact of each feature for this specific input
+        feature_impacts = {}
+        for i, feature_name in enumerate(feature_names):
+            # Get the preprocessed value for this feature
+            feature_value = preprocessed_features[0, i]
+            # Calculate impact as coefficient * value
+            impact = abs(coefficients[i] * feature_value)
+            feature_impacts[feature_name] = impact
+        
+        # Find the feature with maximum impact
+        most_important_factor = max(feature_impacts.items(), key=lambda x: x[1])[0]
+        
+        # Get prediction probabilities
         prediction_proba = model_pipeline.predict_proba(input_df)
         depression_percentage = prediction_proba[0][1] * 100
         predicted_class = int(model_pipeline.predict(input_df)[0])
@@ -144,7 +162,8 @@ def predict():
         # 4. Return the prediction as a JSON response
         response = {
             "predicted_depression": bool(predicted_class),
-            "probability_of_depression": round(depression_percentage, 2)
+            "probability_of_depression": round(depression_percentage, 2),
+            "most_important_factor": most_important_factor
         }
         print(f"Prediction successful: {response}")
         return jsonify(response)
