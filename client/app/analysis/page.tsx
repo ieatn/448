@@ -118,7 +118,7 @@ const modelCharacteristics: ModelCharacteristics = {
 const surveyAnalysis = {
   bestModel: 'Logistic Regression',
   reasons: [
-    'Provides probability-based predictions for depression risk',
+    'Provides clear, interpretable probability-based predictions',
     'Handles both numerical and categorical features effectively',
     'Fast computation time for real-time predictions',
     'Clear interpretation of feature importance through LASSO coefficients',
@@ -683,25 +683,35 @@ export default function Analysis() {
                 {/* Model Recommendation Card */}
                 <motion.div 
                   variants={fadeIn}
-                  className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 transform hover:scale-[1.02] transition-transform duration-300"
+                  className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-3xl shadow-xl p-8 transform hover:scale-[1.02] transition-all duration-300 border border-gray-100 dark:border-gray-700"
                 >
                   <div className="flex items-center gap-4 mb-6">
-                    <div className="p-3 bg-indigo-100 dark:bg-indigo-900 rounded-xl">
-                      <FiBarChart2 className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
+                    <div className="p-3 bg-gradient-to-br from-indigo-500 to-blue-500 rounded-2xl shadow-lg">
+                      <FiBarChart2 className="w-6 h-6 text-white" />
                     </div>
-                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Recommended Model</h2>
+                    <h2 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300">
+                      Recommended Model
+                    </h2>
                   </div>
                   <div className="space-y-4">
+                    <div className="p-4 bg-gradient-to-br from-indigo-50 to-blue-50 dark:from-indigo-900/50 dark:to-blue-900/50 rounded-2xl">
+                      <h3 className="text-lg font-semibold text-indigo-900 dark:text-indigo-200 mb-2">
+                        Logistic Regression with LASSO
+                      </h3>
+                      <p className="text-sm text-indigo-700 dark:text-indigo-300">
+                        Selected for its balance of accuracy, interpretability, and real-time prediction capabilities
+                      </p>
+                    </div>
                     {surveyAnalysis.reasons.map((reason, index) => (
                       <motion.div
                         key={index}
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: index * 0.1 }}
-                        className="flex items-start gap-3"
+                        className="flex items-start gap-3 p-3 bg-white/50 dark:bg-gray-700/50 rounded-xl hover:bg-white/80 dark:hover:bg-gray-700/80 transition-colors duration-200"
                       >
-                        <div className="mt-1 w-2 h-2 rounded-full bg-indigo-600 dark:bg-indigo-400" />
-                        <p className="text-gray-600 dark:text-gray-300">{reason}</p>
+                        <div className="mt-1 w-2 h-2 rounded-full bg-gradient-to-r from-indigo-500 to-blue-500" />
+                        <p className="text-gray-700 dark:text-gray-300">{reason}</p>
                       </motion.div>
                     ))}
                   </div>
@@ -710,13 +720,15 @@ export default function Analysis() {
                 {/* Data Characteristics Card */}
                 <motion.div 
                   variants={fadeIn}
-                  className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 transform hover:scale-[1.02] transition-transform duration-300"
+                  className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-3xl shadow-xl p-8 transform hover:scale-[1.02] transition-all duration-300 border border-gray-100 dark:border-gray-700"
                 >
                   <div className="flex items-center gap-4 mb-6">
-                    <div className="p-3 bg-blue-100 dark:bg-blue-900 rounded-xl">
-                      <FiInfo className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                    <div className="p-3 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-2xl shadow-lg">
+                      <FiInfo className="w-6 h-6 text-white" />
                     </div>
-                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Data Characteristics</h2>
+                    <h2 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300">
+                      Data Characteristics
+                    </h2>
                   </div>
                   <div className="space-y-4">
                     {Object.entries(surveyAnalysis.dataCharacteristics).map(([key, value], index) => (
@@ -725,15 +737,12 @@ export default function Analysis() {
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: index * 0.1 }}
-                        className="flex items-start gap-3"
+                        className="p-4 bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-900/50 dark:to-cyan-900/50 rounded-2xl hover:bg-white/80 dark:hover:bg-gray-700/80 transition-colors duration-200"
                       >
-                        <div className="mt-1 w-2 h-2 rounded-full bg-blue-600 dark:bg-blue-400" />
-                        <div>
-                          <p className="font-medium text-gray-900 dark:text-white">{key}</p>
-                          <p className="text-gray-600 dark:text-gray-300">
-                            {Array.isArray(value) ? value.join(', ') : value}
-                          </p>
-                        </div>
+                        <p className="font-medium text-blue-900 dark:text-blue-200 mb-1">{key}</p>
+                        <p className="text-sm text-blue-700 dark:text-blue-300">
+                          {Array.isArray(value) ? value.join(', ') : value}
+                        </p>
                       </motion.div>
                     ))}
                   </div>
@@ -743,135 +752,162 @@ export default function Analysis() {
               {/* Model Improvement Analysis */}
               <motion.div 
                 variants={fadeIn}
-                className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8"
+                className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-3xl shadow-xl p-8 border border-gray-100 dark:border-gray-700"
               >
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="p-3 bg-green-100 dark:bg-green-900 rounded-xl">
-                    <FiTrendingUp className="w-6 h-6 text-green-600 dark:text-green-400" />
+                <div className="flex items-center gap-4 mb-8">
+                  <div className="p-3 bg-gradient-to-br from-green-500 to-emerald-500 rounded-2xl shadow-lg">
+                    <FiTrendingUp className="w-6 h-6 text-white" />
                   </div>
-                  <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Model Improvement Analysis</h2>
+                  <h2 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300">
+                    Model Comparison
+                  </h2>
                 </div>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  {/* Before/After Comparison */}
-                  <div className="space-y-6">
-                    <div className="bg-gradient-to-br from-indigo-50 to-blue-50 dark:from-indigo-900/50 dark:to-blue-900/50 rounded-xl p-6">
-                      <h3 className="text-lg font-semibold text-indigo-900 dark:text-indigo-200 mb-4">Original Model</h3>
-                      <ul className="space-y-3">
-                        <li className="flex items-center gap-2 text-indigo-700 dark:text-indigo-300">
-                          <span className="w-1.5 h-1.5 rounded-full bg-indigo-600 dark:bg-indigo-400" />
-                          No regularization
-                        </li>
-                        <li className="flex items-center gap-2 text-indigo-700 dark:text-indigo-300">
-                          <span className="w-1.5 h-1.5 rounded-full bg-indigo-600 dark:bg-indigo-400" />
-                          All features used
-                        </li>
-                        <li className="flex items-center gap-2 text-indigo-700 dark:text-indigo-300">
-                          <span className="w-1.5 h-1.5 rounded-full bg-indigo-600 dark:bg-indigo-400" />
-                          Training Accuracy: 87.5%
-                        </li>
-                        <li className="flex items-center gap-2 text-indigo-700 dark:text-indigo-300">
-                          <span className="w-1.5 h-1.5 rounded-full bg-indigo-600 dark:bg-indigo-400" />
-                          Test Accuracy: 82.3%
-                        </li>
-                        <li className="flex items-center gap-2 text-indigo-700 dark:text-indigo-300">
-                          <span className="w-1.5 h-1.5 rounded-full bg-indigo-600 dark:bg-indigo-400" />
-                          Gap: 5.2% (Overfitting)
-                        </li>
-                      </ul>
+                {/* Model Comparison Cards */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+                  {/* Original Model Card */}
+                  <motion.div 
+                    variants={fadeIn}
+                    className="bg-gradient-to-br from-indigo-50 to-blue-50 dark:from-indigo-900/50 dark:to-blue-900/50 rounded-2xl p-8 shadow-lg border border-indigo-100 dark:border-indigo-800"
+                  >
+                    <div className="flex items-center gap-4 mb-6">
+                      <div className="p-3 bg-gradient-to-br from-indigo-500 to-blue-500 rounded-xl shadow-lg">
+                        <FiBarChart2 className="w-6 h-6 text-white" />
+                      </div>
+                      <h3 className="text-xl font-semibold text-indigo-900 dark:text-indigo-200">Original Model</h3>
                     </div>
-
-                    <div className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/50 dark:to-emerald-900/50 rounded-xl p-6">
-                      <h3 className="text-lg font-semibold text-green-900 dark:text-green-200 mb-4">Improved Model</h3>
-                      <ul className="space-y-3">
-                        <li className="flex items-center gap-2 text-green-700 dark:text-green-300">
-                          <span className="w-1.5 h-1.5 rounded-full bg-green-600 dark:bg-green-400" />
-                          LASSO regularization (C=0.1)
-                        </li>
-                        <li className="flex items-center gap-2 text-green-700 dark:text-green-300">
-                          <span className="w-1.5 h-1.5 rounded-full bg-green-600 dark:bg-green-400" />
-                          Feature selection through L1 penalty
-                        </li>
-                        <li className="flex items-center gap-2 text-green-700 dark:text-green-300">
-                          <span className="w-1.5 h-1.5 rounded-full bg-green-600 dark:bg-green-400" />
-                          Training Accuracy: 85.2%
-                        </li>
-                        <li className="flex items-center gap-2 text-green-700 dark:text-green-300">
-                          <span className="w-1.5 h-1.5 rounded-full bg-green-600 dark:bg-green-400" />
-                          Test Accuracy: 84.8%
-                        </li>
-                        <li className="flex items-center gap-2 text-green-700 dark:text-green-300">
-                          <span className="w-1.5 h-1.5 rounded-full bg-green-600 dark:bg-green-400" />
-                          Gap: 0.4% (Better generalization)
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-
-                  {/* Improvement Metrics */}
-                  <div className="space-y-6">
-                    <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/50 dark:to-indigo-900/50 rounded-xl p-6">
-                      <h3 className="text-lg font-semibold text-blue-900 dark:text-blue-200 mb-4">Key Improvements</h3>
-                      <div className="space-y-4">
-                        <div className="flex items-start gap-3">
-                          <div className="p-2 bg-blue-100 dark:bg-blue-800 rounded-lg">
-                            <FiTrendingUp className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-                          </div>
-                          <div>
-                            <h4 className="font-medium text-blue-900 dark:text-blue-200">Reduced Overfitting</h4>
-                            <p className="text-sm text-blue-700 dark:text-blue-300">
-                              Training-test accuracy gap reduced from 5.2% to 0.4% through LASSO regularization
-                            </p>
-                          </div>
-                        </div>
-                        <div className="flex items-start gap-3">
-                          <div className="p-2 bg-green-100 dark:bg-green-800 rounded-lg">
-                            <FiTrendingUp className="w-5 h-5 text-green-600 dark:text-green-400" />
-                          </div>
-                          <div>
-                            <h4 className="font-medium text-green-900 dark:text-green-200">Better Generalization</h4>
-                            <p className="text-sm text-green-700 dark:text-green-300">
-                              Test accuracy improved from 82.3% to 84.8% with more robust feature selection
-                            </p>
-                          </div>
-                        </div>
-                        <div className="flex items-start gap-3">
-                          <div className="p-2 bg-purple-100 dark:bg-purple-800 rounded-lg">
-                            <FiPieChart className="w-5 h-5 text-purple-600 dark:text-purple-400" />
-                          </div>
-                          <div>
-                            <h4 className="font-medium text-purple-900 dark:text-purple-200">Feature Selection</h4>
-                            <p className="text-sm text-purple-700 dark:text-purple-300">
-                              LASSO (L1 regularization) automatically identifies and removes less important features
-                            </p>
-                          </div>
-                        </div>
+                    <div className="space-y-6">
+                      <div className="bg-white/50 dark:bg-gray-800/50 rounded-xl p-6">
+                        <h4 className="text-lg font-medium text-indigo-800 dark:text-indigo-300 mb-4">Performance Metrics</h4>
+                        <ul className="space-y-4">
+                          <li className="flex items-center gap-3">
+                            <span className="w-2 h-2 rounded-full bg-indigo-600 dark:bg-indigo-400" />
+                            <span className="text-indigo-700 dark:text-indigo-300">Training Accuracy: 87.5%</span>
+                          </li>
+                          <li className="flex items-center gap-3">
+                            <span className="w-2 h-2 rounded-full bg-indigo-600 dark:bg-indigo-400" />
+                            <span className="text-indigo-700 dark:text-indigo-300">Test Accuracy: 82.3%</span>
+                          </li>
+                          <li className="flex items-center gap-3">
+                            <span className="w-2 h-2 rounded-full bg-indigo-600 dark:bg-indigo-400" />
+                            <span className="text-indigo-700 dark:text-indigo-300">Accuracy Gap: 5.2%</span>
+                          </li>
+                        </ul>
+                      </div>
+                      <div className="bg-white/50 dark:bg-gray-800/50 rounded-xl p-6">
+                        <h4 className="text-lg font-medium text-indigo-800 dark:text-indigo-300 mb-4">Characteristics</h4>
+                        <ul className="space-y-4">
+                          <li className="flex items-center gap-3">
+                            <span className="w-2 h-2 rounded-full bg-indigo-600 dark:bg-indigo-400" />
+                            <span className="text-indigo-700 dark:text-indigo-300">No regularization</span>
+                          </li>
+                          <li className="flex items-center gap-3">
+                            <span className="w-2 h-2 rounded-full bg-indigo-600 dark:bg-indigo-400" />
+                            <span className="text-indigo-700 dark:text-indigo-300">All features used</span>
+                          </li>
+                          <li className="flex items-center gap-3">
+                            <span className="w-2 h-2 rounded-full bg-indigo-600 dark:bg-indigo-400" />
+                            <span className="text-indigo-700 dark:text-indigo-300">Higher training accuracy</span>
+                          </li>
+                          <li className="flex items-center gap-3">
+                            <span className="w-2 h-2 rounded-full bg-indigo-600 dark:bg-indigo-400" />
+                            <span className="text-indigo-700 dark:text-indigo-300">Significant overfitting</span>
+                          </li>
+                        </ul>
                       </div>
                     </div>
+                  </motion.div>
 
-                    <div className="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-900/50 dark:to-purple-900/50 rounded-xl p-6">
-                      <h3 className="text-lg font-semibold text-indigo-900 dark:text-indigo-200 mb-4">Conclusion</h3>
-                      <p className="text-indigo-700 dark:text-indigo-300">
-                        The improvements have resulted in a more robust model that:
+                  {/* Improved Model Card */}
+                  <motion.div 
+                    variants={fadeIn}
+                    className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/50 dark:to-emerald-900/50 rounded-2xl p-8 shadow-lg border border-green-100 dark:border-green-800"
+                  >
+                    <div className="flex items-center gap-4 mb-6">
+                      <div className="p-3 bg-gradient-to-br from-green-500 to-emerald-500 rounded-xl shadow-lg">
+                        <FiTrendingUp className="w-6 h-6 text-white" />
+                      </div>
+                      <h3 className="text-xl font-semibold text-green-900 dark:text-green-200">Improved Model</h3>
+                    </div>
+                    <div className="space-y-6">
+                      <div className="bg-white/50 dark:bg-gray-800/50 rounded-xl p-6">
+                        <h4 className="text-lg font-medium text-green-800 dark:text-green-300 mb-4">Performance Metrics</h4>
+                        <ul className="space-y-4">
+                          <li className="flex items-center gap-3">
+                            <span className="w-2 h-2 rounded-full bg-green-600 dark:bg-green-400" />
+                            <span className="text-green-700 dark:text-green-300">Training Accuracy: 85.2%</span>
+                          </li>
+                          <li className="flex items-center gap-3">
+                            <span className="w-2 h-2 rounded-full bg-green-600 dark:bg-green-400" />
+                            <span className="text-green-700 dark:text-green-300">Test Accuracy: 84.8%</span>
+                          </li>
+                          <li className="flex items-center gap-3">
+                            <span className="w-2 h-2 rounded-full bg-green-600 dark:bg-green-400" />
+                            <span className="text-green-700 dark:text-green-300">Accuracy Gap: 0.4%</span>
+                          </li>
+                        </ul>
+                      </div>
+                      <div className="bg-white/50 dark:bg-gray-800/50 rounded-xl p-6">
+                        <h4 className="text-lg font-medium text-green-800 dark:text-green-300 mb-4">Improvements</h4>
+                        <ul className="space-y-4">
+                          <li className="flex items-center gap-3">
+                            <span className="w-2 h-2 rounded-full bg-green-600 dark:bg-green-400" />
+                            <span className="text-green-700 dark:text-green-300">LASSO regularization (C=0.1)</span>
+                          </li>
+                          <li className="flex items-center gap-3">
+                            <span className="w-2 h-2 rounded-full bg-green-600 dark:bg-green-400" />
+                            <span className="text-green-700 dark:text-green-300">Feature selection through L1 penalty</span>
+                          </li>
+                          <li className="flex items-center gap-3">
+                            <span className="w-2 h-2 rounded-full bg-green-600 dark:bg-green-400" />
+                            <span className="text-green-700 dark:text-green-300">Better generalization</span>
+                          </li>
+                          <li className="flex items-center gap-3">
+                            <span className="w-2 h-2 rounded-full bg-green-600 dark:bg-green-400" />
+                            <span className="text-green-700 dark:text-green-300">Clearer feature importance</span>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </motion.div>
+                </div>
+
+                {/* Key Improvements Section */}
+                <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/50 dark:to-indigo-900/50 rounded-2xl p-8">
+                  <h3 className="text-xl font-semibold text-blue-900 dark:text-blue-200 mb-6">Key Improvements</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div className="bg-white/50 dark:bg-gray-800/50 rounded-xl p-6">
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="p-2 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-lg">
+                          <FiTrendingUp className="w-5 h-5 text-white" />
+                        </div>
+                        <h4 className="font-medium text-blue-900 dark:text-blue-200">Reduced Overfitting</h4>
+                      </div>
+                      <p className="text-sm text-blue-700 dark:text-blue-300">
+                        Training-test accuracy gap reduced from 5.2% to 0.4% through LASSO regularization
                       </p>
-                      <ul className="mt-3 space-y-2">
-                        <li className="flex items-center gap-2 text-indigo-700 dark:text-indigo-300">
-                          <span className="w-1.5 h-1.5 rounded-full bg-indigo-600 dark:bg-indigo-400" />
-                          Generalizes better to new data through LASSO regularization
-                        </li>
-                        <li className="flex items-center gap-2 text-indigo-700 dark:text-indigo-300">
-                          <span className="w-1.5 h-1.5 rounded-full bg-indigo-600 dark:bg-indigo-400" />
-                          Is less prone to overfitting with controlled feature selection
-                        </li>
-                        <li className="flex items-center gap-2 text-indigo-700 dark:text-indigo-300">
-                          <span className="w-1.5 h-1.5 rounded-full bg-indigo-600 dark:bg-indigo-400" />
-                          Provides clearer feature importance through L1 penalty
-                        </li>
-                        <li className="flex items-center gap-2 text-indigo-700 dark:text-indigo-300">
-                          <span className="w-1.5 h-1.5 rounded-full bg-indigo-600 dark:bg-indigo-400" />
-                          Has more consistent performance across training and test sets
-                        </li>
-                      </ul>
+                    </div>
+                    <div className="bg-white/50 dark:bg-gray-800/50 rounded-xl p-6">
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="p-2 bg-gradient-to-br from-green-500 to-emerald-500 rounded-lg">
+                          <FiTrendingUp className="w-5 h-5 text-white" />
+                        </div>
+                        <h4 className="font-medium text-green-900 dark:text-green-200">Better Generalization</h4>
+                      </div>
+                      <p className="text-sm text-green-700 dark:text-green-300">
+                        Test accuracy improved from 82.3% to 84.8% with more robust feature selection
+                      </p>
+                    </div>
+                    <div className="bg-white/50 dark:bg-gray-800/50 rounded-xl p-6">
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="p-2 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg">
+                          <FiPieChart className="w-5 h-5 text-white" />
+                        </div>
+                        <h4 className="font-medium text-purple-900 dark:text-purple-200">Feature Selection</h4>
+                      </div>
+                      <p className="text-sm text-purple-700 dark:text-purple-300">
+                        LASSO (L1 regularization) automatically identifies and removes less important features
+                      </p>
                     </div>
                   </div>
                 </div>
