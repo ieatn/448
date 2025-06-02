@@ -236,10 +236,24 @@ const barOptions = {
     },
   },
   scales: {
+    x: {
+      beginAtZero: true,
+      max: 1,
+      ticks: {
+        font: {
+          size: 11
+        }
+      }
+    },
     y: {
       beginAtZero: true,
       max: 1,
-    },
+      ticks: {
+        font: {
+          size: 11
+        }
+      }
+    }
   },
 };
 
@@ -553,10 +567,24 @@ export default function Analysis() {
       },
     },
     scales: {
+      x: {
+        beginAtZero: true,
+        max: 1,
+        ticks: {
+          font: {
+            size: 11
+          }
+        }
+      },
       y: {
         beginAtZero: true,
         max: 1,
-      },
+        ticks: {
+          font: {
+            size: 11
+          }
+        }
+      }
     },
   };
 
@@ -624,7 +652,7 @@ export default function Analysis() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 pb-24 sm:pb-12">
         {/* Header Section */}
         <motion.div 
           initial={{ opacity: 0, y: -20 }}
@@ -650,14 +678,39 @@ export default function Analysis() {
         <motion.nav 
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="flex justify-center mb-8 sm:mb-12"
+          className="sm:flex sm:justify-center sm:mb-8 sm:mb-12"
         >
-          <div className="inline-flex flex-wrap justify-center gap-2 sm:gap-0 sm:rounded-lg bg-white dark:bg-gray-800 p-1 shadow-lg">
+          {/* Mobile Navigation - Bottom Bar */}
+          <div className="fixed bottom-0 left-0 right-0 bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl border-t border-gray-200 dark:border-gray-700 sm:hidden z-50">
+            <div className="flex justify-around items-center h-16">
+              {navItems.map((item) => (
+                <button
+                  key={item.id}
+                  onClick={() => setActiveSection(item.id)}
+                  className={`flex flex-col items-center justify-center w-full h-full transition-all duration-200 ${
+                    activeSection === item.id
+                      ? 'text-indigo-600 dark:text-indigo-400'
+                      : 'text-gray-600 dark:text-gray-400'
+                  }`}
+                >
+                  <div className={`w-1 h-1 rounded-full mb-1 ${
+                    activeSection === item.id
+                      ? 'bg-indigo-600 dark:bg-indigo-400'
+                      : 'bg-transparent'
+                  }`} />
+                  <span className="text-xs font-medium">{item.label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Desktop Navigation */}
+          <div className="hidden sm:inline-flex sm:rounded-lg bg-white dark:bg-gray-800 p-1 shadow-lg">
             {navItems.map((item) => (
               <button
                 key={item.id}
                 onClick={() => setActiveSection(item.id)}
-                className={`px-3 sm:px-6 py-2 sm:py-3 rounded-lg text-sm font-medium transition-all duration-200 ${
+                className={`px-6 py-3 rounded-lg text-sm font-medium transition-all duration-200 ${
                   activeSection === item.id
                     ? 'bg-indigo-600 text-white shadow-md'
                     : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
@@ -1161,9 +1214,9 @@ export default function Analysis() {
                 </div>
 
                 {/* Feature Importance Chart - Full Width */}
-                <div className="bg-gradient-to-br from-indigo-50/50 to-blue-50/50 dark:from-indigo-900/20 dark:to-blue-900/20 rounded-2xl sm:rounded-3xl p-6 sm:p-8 backdrop-blur-sm mb-6 sm:mb-8">
+                <div className="bg-gradient-to-br from-indigo-50/50 to-blue-50/50 dark:from-indigo-900/20 dark:to-blue-900/20 rounded-2xl sm:rounded-3xl p-4 sm:p-8 backdrop-blur-sm mb-6 sm:mb-8">
                   <h3 className="text-lg sm:text-xl font-semibold text-indigo-900 dark:text-indigo-200 mb-4 sm:mb-6 text-center">Feature Impact on Depression Risk</h3>
-                  <div className="h-[300px] sm:h-[400px] max-w-4xl mx-auto">
+                  <div className="w-full h-[400px] sm:h-[500px]">
                     <Bar
                       data={{
                         labels: ['Suicidal Thoughts (Yes)', 'Academic Pressure', 'Financial Stress', 
@@ -1201,6 +1254,7 @@ export default function Analysis() {
                       options={{
                         indexAxis: 'y',
                         responsive: true,
+                        maintainAspectRatio: false,
                         plugins: {
                           legend: {
                             display: false
@@ -1216,6 +1270,11 @@ export default function Analysis() {
                             },
                             border: {
                               display: false
+                            },
+                            ticks: {
+                              font: {
+                                size: 12
+                              }
                             }
                           },
                           y: {
@@ -1224,7 +1283,23 @@ export default function Analysis() {
                             },
                             border: {
                               display: false
+                            },
+                            ticks: {
+                              font: {
+                                size: 12
+                              },
+                              padding: 10,
+                              callback: function(value, index) {
+                                const label = this.getLabelForValue(index);
+                                return label.length > 25 ? label.substring(0, 25) + '...' : label;
+                              }
                             }
+                          }
+                        },
+                        layout: {
+                          padding: {
+                            left: 10,
+                            right: 10
                           }
                         }
                       }}
@@ -1254,8 +1329,8 @@ export default function Analysis() {
                           </div>
                         </motion.div>
                       ))}
-                    </div>
                   </div>
+                </div>
 
                   {/* Protective Factors */}
                   <div className="bg-gradient-to-br from-green-50/50 to-emerald-50/50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-3xl p-8 backdrop-blur-sm">
@@ -1346,20 +1421,57 @@ export default function Analysis() {
                 {/* Interactive Model Comparison Charts */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 mb-8 sm:mb-12">
                   {/* Performance Metrics Chart */}
-                  <div className="bg-gradient-to-br from-indigo-50/50 to-blue-50/50 dark:from-indigo-900/20 dark:to-blue-900/20 rounded-3xl p-8 backdrop-blur-sm">
+                  <div className="bg-gradient-to-br from-indigo-50/50 to-blue-50/50 dark:from-indigo-900/20 dark:to-blue-900/20 rounded-3xl p-4 sm:p-8 backdrop-blur-sm">
                     <h3 className="text-xl font-semibold text-indigo-900 dark:text-indigo-200 mb-6">Performance Metrics</h3>
-                    <div className="h-[400px]">
+                    <div className="h-[300px] sm:h-[400px] w-full">
                       <Bar
                         data={performanceData}
-                        options={barOptions}
+                        options={{
+                          ...barOptions,
+                          maintainAspectRatio: false,
+                          responsive: true,
+                          plugins: {
+                            ...barOptions.plugins,
+                            legend: {
+                              position: 'top' as const,
+                              labels: {
+                                boxWidth: 12,
+                                padding: 15,
+                                font: {
+                                  size: 12
+                                }
+                              }
+                            }
+                          },
+                          scales: {
+                            x: {
+                              ...barOptions.scales.x,
+                              ticks: {
+                                font: {
+                                  size: 11
+                                },
+                                maxRotation: 45,
+                                minRotation: 45
+                              }
+                            },
+                            y: {
+                              ...barOptions.scales.y,
+                              ticks: {
+                                font: {
+                                  size: 11
+                                }
+                              }
+                            }
+                          }
+                        }}
                       />
                     </div>
-                    <div className="mt-4 flex justify-center gap-4">
+                    <div className="mt-4 flex flex-wrap justify-center gap-2">
                       {Object.keys(modelPerformance).map((metric) => (
                         <button
                           key={metric}
                           onClick={() => setSelectedMetric(metric as MetricName)}
-                          className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                          className={`px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 ${
                             selectedMetric === metric
                               ? 'bg-indigo-600 text-white shadow-md'
                               : 'bg-white/50 text-gray-600 dark:text-gray-300 hover:bg-white/80'
@@ -1370,22 +1482,54 @@ export default function Analysis() {
                       ))}
                     </div>
                   </div>
-
+                  
                   {/* Model Characteristics Radar Chart */}
-                  <div className="bg-gradient-to-br from-green-50/50 to-emerald-50/50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-3xl p-8 backdrop-blur-sm">
+                  <div className="bg-gradient-to-br from-green-50/50 to-emerald-50/50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-3xl p-4 sm:p-8 backdrop-blur-sm">
                     <h3 className="text-xl font-semibold text-green-900 dark:text-green-200 mb-6">Model Characteristics</h3>
-                    <div className="h-[400px]">
+                    <div className="h-[300px] sm:h-[400px] w-full">
                       <Radar
                         data={radarData}
-                        options={radarOptions}
+                        options={{
+                          ...radarOptions,
+                          maintainAspectRatio: false,
+                          responsive: true,
+                          plugins: {
+                            legend: {
+                              position: 'top' as const,
+                              labels: {
+                                boxWidth: 12,
+                                padding: 15,
+                                font: {
+                                  size: 12
+                                }
+                              }
+                            }
+                          },
+                          scales: {
+                            r: {
+                              ...radarOptions.scales.r,
+                              ticks: {
+                                font: {
+                                  size: 11
+                                },
+                                backdropColor: 'transparent'
+                              },
+                              pointLabels: {
+                                font: {
+                                  size: 11
+                                }
+                              }
+                            }
+                          }
+                        }}
                       />
                     </div>
-                    <div className="mt-4 flex justify-center gap-4">
+                    <div className="mt-4 flex flex-wrap justify-center gap-2">
                       {Object.keys(modelCharacteristics).map((model) => (
                         <button
                           key={model}
                           onClick={() => setSelectedModel(model as ModelName)}
-                          className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                          className={`px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 ${
                             selectedModel === model
                               ? 'bg-green-600 text-white shadow-md'
                               : 'bg-white/50 text-gray-600 dark:text-gray-300 hover:bg-white/80'

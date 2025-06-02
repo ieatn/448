@@ -209,10 +209,10 @@ export default function Home() {
           initial="initial"
           animate="animate"
           onSubmit={handleSubmit}
-          className="space-y-8"
+          className="space-y-8 max-w-full overflow-x-hidden"
         >
           {/* Personal Information Section */}
-          <motion.div variants={fadeIn} className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
+          <motion.div variants={fadeIn} className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-4 sm:p-8">
             <div className="flex items-center gap-4 mb-6">
               <div className="p-3 bg-indigo-100 dark:bg-indigo-900 rounded-xl">
                 <FiUser className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
@@ -220,7 +220,7 @@ export default function Home() {
               <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Personal Information</h2>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
               <div>
                 <label htmlFor="age" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Age
@@ -295,7 +295,7 @@ export default function Home() {
           </motion.div>
 
           {/* Academic Information Section */}
-          <motion.div variants={fadeIn} className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
+          <motion.div variants={fadeIn} className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-4 sm:p-8">
             <div className="flex items-center gap-4 mb-6">
               <div className="p-3 bg-blue-100 dark:bg-blue-900 rounded-xl">
                 <FiBook className="w-6 h-6 text-blue-600 dark:text-blue-400" />
@@ -303,7 +303,7 @@ export default function Home() {
               <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Academic Information</h2>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
               <div>
                 <label htmlFor="cgpa" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   CGPA
@@ -382,7 +382,7 @@ export default function Home() {
           </motion.div>
 
           {/* Work & Financial Information Section */}
-          <motion.div variants={fadeIn} className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
+          <motion.div variants={fadeIn} className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-4 sm:p-8">
             <div className="flex items-center gap-4 mb-6">
               <div className="p-3 bg-green-100 dark:bg-green-900 rounded-xl">
                 <FiDollarSign className="w-6 h-6 text-green-600 dark:text-green-400" />
@@ -390,7 +390,7 @@ export default function Home() {
               <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Work & Financial Information</h2>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
               <div>
                 <label htmlFor="work_pressure" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Work Pressure
@@ -455,7 +455,7 @@ export default function Home() {
           </motion.div>
 
           {/* Lifestyle Information Section */}
-          <motion.div variants={fadeIn} className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
+          <motion.div variants={fadeIn} className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-4 sm:p-8">
             <div className="flex items-center gap-4 mb-6">
               <div className="p-3 bg-purple-100 dark:bg-purple-900 rounded-xl">
                 <FiHeart className="w-6 h-6 text-purple-600 dark:text-purple-400" />
@@ -463,7 +463,7 @@ export default function Home() {
               <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Lifestyle Information</h2>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
               <div>
                 <label htmlFor="sleep_duration" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Sleep Duration
@@ -543,7 +543,7 @@ export default function Home() {
           <motion.div variants={fadeIn} className="flex justify-center">
             <button
               type="submit"
-              className="inline-flex items-center px-8 py-3 text-lg font-medium text-white bg-gradient-to-r from-indigo-600 to-blue-500 rounded-xl shadow-lg hover:from-indigo-700 hover:to-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transform transition-all duration-200 hover:scale-105 active:scale-95"
+              className="inline-flex items-center px-6 sm:px-8 py-3 text-base sm:text-lg font-medium text-white bg-gradient-to-r from-indigo-600 to-blue-500 rounded-xl shadow-lg hover:from-indigo-700 hover:to-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transform transition-all duration-200 hover:scale-105 active:scale-95"
             >
               Analyze Risk Level
               <FiArrowRight className="ml-2 w-5 h-5" />
