@@ -2,11 +2,28 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { motion } from 'framer-motion';
+import { FiArrowRight, FiUser, FiBook, FiClock, FiHeart, FiDollarSign, FiHome } from 'react-icons/fi';
 
 interface PredictionResult {
   percentage: number;
   message: string;
 }
+
+// Add animation variants
+const fadeIn = {
+  initial: { opacity: 0, y: 20 },
+  animate: { opacity: 1, y: 0 },
+  exit: { opacity: 0, y: -20 }
+};
+
+const staggerContainer = {
+  animate: {
+    transition: {
+      staggerChildren: 0.1
+    }
+  }
+};
 
 export default function Home() {
   const [age, setAge] = useState('');
@@ -150,287 +167,389 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-4 sm:p-8 font-[family-name:var(--font-geist-sans)] dark:bg-gray-900 dark:text-white">
-      <main className="flex flex-col gap-4 sm:gap-8 items-center w-full max-w-6xl bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-lg shadow-md">
-        <h1 className="text-xl sm:text-2xl font-semibold text-center">Student Depression Risk Assessment</h1>
-        
-        {/* <div className="w-full text-right flex gap-2 justify-end">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
+      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Header Section */}
+        <motion.div 
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center mb-12"
+        >
+          <h1 className="text-4xl sm:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-blue-500 dark:from-indigo-400 dark:to-blue-300 mb-4">
+            Depression Risk Assessment
+          </h1>
+          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+            Complete this survey to assess your risk level and receive personalized insights
+          </p>
+        </motion.div>
+
+        {/* Sample Data Buttons */}
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="flex justify-center gap-4 mb-8"
+        >
           <button
-            onClick={testServer}
-            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+            onClick={fillSampleData}
+            className="px-4 py-2 text-sm font-medium text-indigo-600 bg-indigo-50 dark:bg-indigo-900/50 dark:text-indigo-300 rounded-lg hover:bg-indigo-100 dark:hover:bg-indigo-900 transition-all duration-200"
           >
-            Test Server Connection
+            Fill Low Risk Sample
           </button>
-          <Link 
-            href="/analysis" 
-            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          >
-            View Model Analysis
-          </Link>
-        </div> */}
-
-        <form onSubmit={handleSubmit} className="w-full max-w-md flex flex-col gap-3 sm:gap-4">
-          {/* Age Input */}
-          <div>
-            <label htmlFor="age" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Age</label>
-            <input
-              type="number"
-              id="age"
-              value={age}
-              onChange={(e) => setAge(e.target.value)}
-              required
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-            />
-          </div>
-
-          {/* Gender Select */}
-          <div>
-            <label htmlFor="gender" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Gender</label>
-            <select
-              id="gender"
-              value={gender}
-              onChange={(e) => setGender(e.target.value)}
-              required
-              className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-            >
-              <option value="" disabled>Select Gender</option>
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
-              <option value="Other">Other</option>
-            </select>
-          </div>
-
-          {/* Profession Input */}
-          <div>
-            <label htmlFor="profession" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Profession</label>
-            <input
-              type="text"
-              id="profession"
-              value={profession}
-              onChange={(e) => setProfession(e.target.value)}
-              required
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-            />
-          </div>
-
-          {/* Academic Pressure */}
-          <div>
-            <label htmlFor="academicPressure" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Academic Pressure (1-5)</label>
-            <input
-              type="number"
-              id="academicPressure"
-              min="1"
-              max="5"
-              value={academicPressure}
-              onChange={(e) => setAcademicPressure(e.target.value)}
-              required
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-            />
-          </div>
-
-          {/* Work Pressure */}
-          <div>
-            <label htmlFor="workPressure" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Work Pressure (1-5)</label>
-            <input
-              type="number"
-              id="workPressure"
-              min="1"
-              max="5"
-              value={workPressure}
-              onChange={(e) => setWorkPressure(e.target.value)}
-              required
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-            />
-          </div>
-
-          {/* CGPA */}
-          <div>
-            <label htmlFor="cgpa" className="block text-sm font-medium text-gray-700 dark:text-gray-300">CGPA (0-10)</label>
-            <input
-              type="number"
-              id="cgpa"
-              min="0"
-              max="10"
-              step="0.1"
-              value={cgpa}
-              onChange={(e) => setCgpa(e.target.value)}
-              required
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-            />
-          </div>
-
-          {/* Study Satisfaction */}
-          <div>
-            <label htmlFor="studySatisfaction" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Study Satisfaction (1-5)</label>
-            <input
-              type="number"
-              id="studySatisfaction"
-              min="1"
-              max="5"
-              value={studySatisfaction}
-              onChange={(e) => setStudySatisfaction(e.target.value)}
-              required
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-            />
-          </div>
-
-          {/* Job Satisfaction */}
-          <div>
-            <label htmlFor="jobSatisfaction" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Job Satisfaction (1-5)</label>
-            <input
-              type="number"
-              id="jobSatisfaction"
-              min="1"
-              max="5"
-              value={jobSatisfaction}
-              onChange={(e) => setJobSatisfaction(e.target.value)}
-              required
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-            />
-          </div>
-
-          {/* Sleep Duration */}
-          <div>
-            <label htmlFor="sleepDuration" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Sleep Duration</label>
-            <select
-              id="sleepDuration"
-              value={sleepDuration}
-              onChange={(e) => setSleepDuration(e.target.value)}
-              required
-              className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-            >
-              <option value="" disabled>Select Sleep Duration</option>
-              <option value="<6 hours">Less than 6 hours</option>
-              <option value="6-7 hours">6-7 hours</option>
-              <option value="7-8 hours">7-8 hours</option>
-              <option value="8-9 hours">8-9 hours</option>
-              <option value=">9 hours">More than 9 hours</option>
-            </select>
-          </div>
-
-          {/* Dietary Habits */}
-          <div>
-            <label htmlFor="dietaryHabits" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Dietary Habits</label>
-            <select
-              id="dietaryHabits"
-              value={dietaryHabits}
-              onChange={(e) => setDietaryHabits(e.target.value)}
-              required
-              className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-            >
-              <option value="" disabled>Select Dietary Habits</option>
-              <option value="Healthy">Healthy</option>
-              <option value="Moderate">Moderate</option>
-              <option value="Unhealthy">Unhealthy</option>
-            </select>
-          </div>
-
-          {/* Degree */}
-          <div>
-            <label htmlFor="degree" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Degree</label>
-            <select
-              id="degree"
-              value={degree}
-              onChange={(e) => setDegree(e.target.value)}
-              required
-              className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-            >
-              <option value="" disabled>Select Degree</option>
-              <option value="BSc">BSc</option>
-              <option value="MSc">MSc</option>
-              <option value="PhD">PhD</option>
-              <option value="Other">Other</option>
-            </select>
-          </div>
-
-          {/* Suicidal Thoughts */}
-          <div>
-            <label htmlFor="suicidalThoughts" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Have you ever had suicidal thoughts?</label>
-            <select
-              id="suicidalThoughts"
-              value={suicidalThoughts}
-              onChange={(e) => setSuicidalThoughts(e.target.value)}
-              required
-              className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-            >
-              <option value="" disabled>Select Answer</option>
-              <option value="Yes">Yes</option>
-              <option value="No">No</option>
-            </select>
-          </div>
-
-          {/* Work/Study Hours */}
-          <div>
-            <label htmlFor="workStudyHours" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Work/Study Hours per Day</label>
-            <input
-              type="number"
-              id="workStudyHours"
-              min="0"
-              max="24"
-              value={workStudyHours}
-              onChange={(e) => setWorkStudyHours(e.target.value)}
-              required
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-            />
-          </div>
-
-          {/* Financial Stress */}
-          <div>
-            <label htmlFor="financialStress" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Financial Stress (1-5)</label>
-            <input
-              type="number"
-              id="financialStress"
-              min="1"
-              max="5"
-              value={financialStress}
-              onChange={(e) => setFinancialStress(e.target.value)}
-              required
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-            />
-          </div>
-
-          {/* Family History */}
-          <div>
-            <label htmlFor="familyHistory" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Family History of Mental Illness</label>
-            <select
-              id="familyHistory"
-              value={familyHistory}
-              onChange={(e) => setFamilyHistory(e.target.value)}
-              required
-              className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-            >
-              <option value="" disabled>Select Answer</option>
-              <option value="Yes">Yes</option>
-              <option value="No">No</option>
-            </select>
-          </div>
-
-          <div className="flex flex-col sm:flex-row gap-2">
-            <button
-              type="button"
-              onClick={fillSampleData}
-              className="w-full inline-flex justify-center py-2 px-4 border border-indigo-600 shadow-sm text-sm font-medium rounded-md text-indigo-600 bg-white hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-transform duration-200 hover:scale-105 active:scale-95"
-            >
-              Fill with Low Risk Sample
-            </button>
-
-            <button
-              type="button"
-              onClick={fillDepressionSampleData}
-              className="w-full inline-flex justify-center py-2 px-4 border border-red-600 shadow-sm text-sm font-medium rounded-md text-red-600 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-transform duration-200 hover:scale-105 active:scale-95"
-            >
-              Fill with High Risk Sample
-            </button>
-          </div>
-
           <button
-            type="submit"
-            disabled={isLoading}
-            className="mt-4 w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition-transform duration-200 hover:scale-105 active:scale-95 disabled:hover:scale-100 disabled:active:scale-100"
+            onClick={fillDepressionSampleData}
+            className="px-4 py-2 text-sm font-medium text-red-600 bg-red-50 dark:bg-red-900/50 dark:text-red-300 rounded-lg hover:bg-red-100 dark:hover:bg-red-900 transition-all duration-200"
           >
-            {isLoading ? 'Getting Prediction...' : 'Get Prediction'}
+            Fill High Risk Sample
           </button>
-        </form>
+        </motion.div>
+
+        {/* Form Section */}
+        <motion.form
+          variants={staggerContainer}
+          initial="initial"
+          animate="animate"
+          onSubmit={handleSubmit}
+          className="space-y-8"
+        >
+          {/* Personal Information Section */}
+          <motion.div variants={fadeIn} className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
+            <div className="flex items-center gap-4 mb-6">
+              <div className="p-3 bg-indigo-100 dark:bg-indigo-900 rounded-xl">
+                <FiUser className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
+              </div>
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Personal Information</h2>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label htmlFor="age" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Age
+                </label>
+                <input
+                  type="number"
+                  id="age"
+                  name="age"
+                  value={age}
+                  onChange={(e) => setAge(e.target.value)}
+                  className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
+                  required
+                />
+              </div>
+              <div>
+                <label htmlFor="gender" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Gender
+                </label>
+                <select
+                  id="gender"
+                  name="gender"
+                  value={gender}
+                  onChange={(e) => setGender(e.target.value)}
+                  className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
+                  required
+                >
+                  <option value="">Select gender</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              <div>
+                <label htmlFor="profession" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Profession
+                </label>
+                <select
+                  id="profession"
+                  name="profession"
+                  value={profession}
+                  onChange={(e) => setProfession(e.target.value)}
+                  className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
+                  required
+                >
+                  <option value="">Select profession</option>
+                  <option value="Student">Student</option>
+                  <option value="Working Professional">Working Professional</option>
+                  <option value="Self-employed">Self-employed</option>
+                  <option value="Unemployed">Unemployed</option>
+                </select>
+              </div>
+              <div>
+                <label htmlFor="degree" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Degree
+                </label>
+                <select
+                  id="degree"
+                  name="degree"
+                  value={degree}
+                  onChange={(e) => setDegree(e.target.value)}
+                  className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
+                  required
+                >
+                  <option value="">Select degree</option>
+                  <option value="BSc">BSc</option>
+                  <option value="MSc">MSc</option>
+                  <option value="PhD">PhD</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Academic Information Section */}
+          <motion.div variants={fadeIn} className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
+            <div className="flex items-center gap-4 mb-6">
+              <div className="p-3 bg-blue-100 dark:bg-blue-900 rounded-xl">
+                <FiBook className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+              </div>
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Academic Information</h2>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label htmlFor="cgpa" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  CGPA
+                </label>
+                <input
+                  type="number"
+                  id="cgpa"
+                  name="cgpa"
+                  value={cgpa}
+                  onChange={(e) => setCgpa(e.target.value)}
+                  step="0.01"
+                  min="0"
+                  max="10"
+                  className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
+                  required
+                />
+              </div>
+              <div>
+                <label htmlFor="academic_pressure" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Academic Pressure
+                </label>
+                <select
+                  id="academic_pressure"
+                  name="academic_pressure"
+                  value={academicPressure}
+                  onChange={(e) => setAcademicPressure(e.target.value)}
+                  className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
+                  required
+                >
+                  <option value="">Select pressure level</option>
+                  <option value="1">Very Low</option>
+                  <option value="2">Low</option>
+                  <option value="3">Moderate</option>
+                  <option value="4">High</option>
+                  <option value="5">Very High</option>
+                </select>
+              </div>
+              <div>
+                <label htmlFor="study_satisfaction" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Study Satisfaction
+                </label>
+                <select
+                  id="study_satisfaction"
+                  name="study_satisfaction"
+                  value={studySatisfaction}
+                  onChange={(e) => setStudySatisfaction(e.target.value)}
+                  className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
+                  required
+                >
+                  <option value="">Select satisfaction level</option>
+                  <option value="1">Very Dissatisfied</option>
+                  <option value="2">Dissatisfied</option>
+                  <option value="3">Neutral</option>
+                  <option value="4">Satisfied</option>
+                  <option value="5">Very Satisfied</option>
+                </select>
+              </div>
+              <div>
+                <label htmlFor="work_study_hours" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Work/Study Hours per Day
+                </label>
+                <input
+                  type="number"
+                  id="work_study_hours"
+                  name="work_study_hours"
+                  value={workStudyHours}
+                  onChange={(e) => setWorkStudyHours(e.target.value)}
+                  min="0"
+                  max="24"
+                  step="0.5"
+                  className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
+                  required
+                />
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Work & Financial Information Section */}
+          <motion.div variants={fadeIn} className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
+            <div className="flex items-center gap-4 mb-6">
+              <div className="p-3 bg-green-100 dark:bg-green-900 rounded-xl">
+                <FiDollarSign className="w-6 h-6 text-green-600 dark:text-green-400" />
+              </div>
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Work & Financial Information</h2>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label htmlFor="work_pressure" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Work Pressure
+                </label>
+                <select
+                  id="work_pressure"
+                  name="work_pressure"
+                  value={workPressure}
+                  onChange={(e) => setWorkPressure(e.target.value)}
+                  className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
+                  required
+                >
+                  <option value="">Select pressure level</option>
+                  <option value="1">Very Low</option>
+                  <option value="2">Low</option>
+                  <option value="3">Moderate</option>
+                  <option value="4">High</option>
+                  <option value="5">Very High</option>
+                </select>
+              </div>
+              <div>
+                <label htmlFor="job_satisfaction" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Job Satisfaction
+                </label>
+                <select
+                  id="job_satisfaction"
+                  name="job_satisfaction"
+                  value={jobSatisfaction}
+                  onChange={(e) => setJobSatisfaction(e.target.value)}
+                  className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
+                  required
+                >
+                  <option value="">Select satisfaction level</option>
+                  <option value="1">Very Dissatisfied</option>
+                  <option value="2">Dissatisfied</option>
+                  <option value="3">Neutral</option>
+                  <option value="4">Satisfied</option>
+                  <option value="5">Very Satisfied</option>
+                </select>
+              </div>
+              <div>
+                <label htmlFor="financial_stress" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Financial Stress
+                </label>
+                <select
+                  id="financial_stress"
+                  name="financial_stress"
+                  value={financialStress}
+                  onChange={(e) => setFinancialStress(e.target.value)}
+                  className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
+                  required
+                >
+                  <option value="">Select stress level</option>
+                  <option value="1">Very Low</option>
+                  <option value="2">Low</option>
+                  <option value="3">Moderate</option>
+                  <option value="4">High</option>
+                  <option value="5">Very High</option>
+                </select>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Lifestyle Information Section */}
+          <motion.div variants={fadeIn} className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
+            <div className="flex items-center gap-4 mb-6">
+              <div className="p-3 bg-purple-100 dark:bg-purple-900 rounded-xl">
+                <FiHeart className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+              </div>
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Lifestyle Information</h2>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label htmlFor="sleep_duration" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Sleep Duration
+                </label>
+                <select
+                  id="sleep_duration"
+                  name="sleep_duration"
+                  value={sleepDuration}
+                  onChange={(e) => setSleepDuration(e.target.value)}
+                  className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
+                  required
+                >
+                  <option value="">Select sleep duration</option>
+                  <option value="<6 hours">Less than 6 hours</option>
+                  <option value="6-7 hours">6-7 hours</option>
+                  <option value="7-8 hours">7-8 hours</option>
+                  <option value="8-9 hours">8-9 hours</option>
+                  <option value=">9 hours">More than 9 hours</option>
+                </select>
+              </div>
+              <div>
+                <label htmlFor="dietary_habits" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Dietary Habits
+                </label>
+                <select
+                  id="dietary_habits"
+                  name="dietary_habits"
+                  value={dietaryHabits}
+                  onChange={(e) => setDietaryHabits(e.target.value)}
+                  className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
+                  required
+                >
+                  <option value="">Select dietary habits</option>
+                  <option value="Healthy">Healthy</option>
+                  <option value="Moderate">Moderate</option>
+                  <option value="Unhealthy">Unhealthy</option>
+                </select>
+              </div>
+              <div>
+                <label htmlFor="suicidal_thoughts" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Have you ever had suicidal thoughts?
+                </label>
+                <select
+                  id="suicidal_thoughts"
+                  name="suicidal_thoughts"
+                  value={suicidalThoughts}
+                  onChange={(e) => setSuicidalThoughts(e.target.value)}
+                  className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
+                  required
+                >
+                  <option value="">Select an option</option>
+                  <option value="Yes">Yes</option>
+                  <option value="No">No</option>
+                </select>
+              </div>
+              <div>
+                <label htmlFor="family_history" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Family History of Mental Illness
+                </label>
+                <select
+                  id="family_history"
+                  name="family_history"
+                  value={familyHistory}
+                  onChange={(e) => setFamilyHistory(e.target.value)}
+                  className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
+                  required
+                >
+                  <option value="">Select an option</option>
+                  <option value="Yes">Yes</option>
+                  <option value="No">No</option>
+                </select>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Submit Button */}
+          <motion.div variants={fadeIn} className="flex justify-center">
+            <button
+              type="submit"
+              className="inline-flex items-center px-8 py-3 text-lg font-medium text-white bg-gradient-to-r from-indigo-600 to-blue-500 rounded-xl shadow-lg hover:from-indigo-700 hover:to-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transform transition-all duration-200 hover:scale-105 active:scale-95"
+            >
+              Analyze Risk Level
+              <FiArrowRight className="ml-2 w-5 h-5" />
+            </button>
+          </motion.div>
+        </motion.form>
 
         {/* Display Error Message */}
         {error && (
@@ -441,35 +560,94 @@ export default function Home() {
 
         {/* Prediction results */}
         {prediction && (
-          <div id="prediction-box" className="mt-4 sm:mt-6 p-3 sm:p-4 border border-gray-300 dark:border-gray-700 rounded-md w-full text-center bg-gray-50 dark:bg-gray-700">
-            <h2 className="text-base sm:text-lg font-medium text-gray-900 dark:text-white">Depression Risk Prediction:</h2>
-            <div className="my-3 sm:my-4">
-              <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-3 sm:h-4">
-                <div 
-                  className={`h-3 sm:h-4 rounded-full ${
+          <motion.div 
+            id="prediction-box"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mt-8 bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden"
+          >
+            {/* Header with gradient background */}
+            <div className={`p-6 ${
+              prediction.percentage >= 70 
+                ? 'bg-gradient-to-r from-red-500 to-pink-500' 
+                : prediction.percentage >= 40 
+                  ? 'bg-gradient-to-r from-yellow-400 to-orange-500' 
+                  : 'bg-gradient-to-r from-green-400 to-emerald-500'
+            }`}>
+              <h2 className="text-2xl font-bold text-white text-center">
+                Risk Assessment Results
+              </h2>
+            </div>
+
+            {/* Content */}
+            <div className="p-8">
+              {/* Risk Percentage */}
+              <div className="text-center mb-8">
+                <div className="inline-flex items-center justify-center w-32 h-32 rounded-full bg-gray-50 dark:bg-gray-700 mb-4">
+                  <span className={`text-4xl font-bold ${
                     prediction.percentage >= 70 
-                      ? 'bg-red-600' 
+                      ? 'text-red-500' 
                       : prediction.percentage >= 40 
-                        ? 'bg-yellow-500' 
-                        : 'bg-green-500'
-                  }`} 
-                  style={{ width: `${prediction.percentage}%` }}
-                ></div>
+                        ? 'text-yellow-500' 
+                        : 'text-green-500'
+                  }`}>
+                    {prediction.percentage}%
+                  </span>
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                  {prediction.percentage >= 70 
+                    ? 'High Risk Level' 
+                    : prediction.percentage >= 40 
+                      ? 'Moderate Risk Level' 
+                      : 'Low Risk Level'}
+                </h3>
               </div>
-              <p className="mt-2 font-bold text-base sm:text-lg">{prediction.percentage}% Risk</p>
+
+              {/* Progress Bar */}
+              <div className="mb-8">
+                <div className="h-3 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
+                  <motion.div 
+                    initial={{ width: 0 }}
+                    animate={{ width: `${prediction.percentage}%` }}
+                    transition={{ duration: 1, ease: "easeOut" }}
+                    className={`h-full rounded-full ${
+                      prediction.percentage >= 70 
+                        ? 'bg-gradient-to-r from-red-500 to-pink-500' 
+                        : prediction.percentage >= 40 
+                          ? 'bg-gradient-to-r from-yellow-400 to-orange-500' 
+                          : 'bg-gradient-to-r from-green-400 to-emerald-500'
+                    }`}
+                  />
+                </div>
+              </div>
+
+              {/* Message */}
+              <div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-6 mb-8">
+                <p className="text-gray-700 dark:text-gray-300 text-center">
+                  {prediction.message}
+                </p>
+              </div>
+
+              {/* Disclaimer */}
+              <div className="text-center mb-8">
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  This prediction is based on a statistical model and is not a substitute for professional medical advice. 
+                  If you are concerned about your mental health, please consult a healthcare professional.
+                </p>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex flex-col sm:flex-row justify-center gap-4">
+                <Link 
+                  href="/analysis" 
+                  className="inline-flex items-center justify-center px-6 py-3 text-base font-medium text-white bg-gradient-to-r from-indigo-600 to-blue-500 rounded-xl shadow-lg hover:from-indigo-700 hover:to-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transform transition-all duration-200 hover:scale-105 active:scale-95"
+                >
+                  View Model Analysis
+                  <FiArrowRight className="ml-2 w-5 h-5" />
+                </Link>
+              </div>
             </div>
-            <p className="mt-2 text-sm sm:text-base text-gray-700 dark:text-gray-300">{prediction.message}</p>
-            <p className="mt-3 sm:mt-4 text-xs text-gray-500 dark:text-gray-400">Disclaimer: This prediction is based on a statistical model and is not a substitute for professional medical advice. If you are concerned about your mental health, please consult a healthcare professional.</p>
-            
-            <div className="mt-4 sm:mt-6">
-              <Link 
-                href="/analysis" 
-                className="inline-flex items-center px-3 sm:px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-transform duration-200 hover:scale-105 active:scale-95"
-              >
-                View Model Analysis
-              </Link>
-            </div>
-          </div>
+          </motion.div>
         )}
       </main>
     </div>

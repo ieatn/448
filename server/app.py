@@ -110,9 +110,16 @@ feature_importance = pd.DataFrame({
     'Feature': feature_names,
     'Coefficient': coefficients
 })
+
+# Print sleep duration specific coefficients
+print("\nSleep Duration Coefficients:")
+sleep_coefficients = feature_importance[feature_importance['Feature'].str.startswith('Sleep Duration_')]
+print(sleep_coefficients.sort_values('Coefficient', ascending=False))
+
 # Sort by absolute coefficient value
 feature_importance['Abs_Coefficient'] = abs(feature_importance['Coefficient'])
 feature_importance = feature_importance.sort_values('Abs_Coefficient', ascending=False)
+print("\nTop 10 Most Important Features:")
 print(feature_importance[['Feature', 'Coefficient']].head(10))
 
 # Store model evaluation results
