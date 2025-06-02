@@ -650,14 +650,14 @@ export default function Analysis() {
         <motion.nav 
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="flex justify-center mb-12"
+          className="flex justify-center mb-8 sm:mb-12"
         >
-          <div className="inline-flex rounded-lg bg-white dark:bg-gray-800 p-1 shadow-lg">
+          <div className="inline-flex flex-wrap justify-center gap-2 sm:gap-0 sm:rounded-lg bg-white dark:bg-gray-800 p-1 shadow-lg">
             {navItems.map((item) => (
               <button
                 key={item.id}
                 onClick={() => setActiveSection(item.id)}
-                className={`px-6 py-3 rounded-lg text-sm font-medium transition-all duration-200 ${
+                className={`px-3 sm:px-6 py-2 sm:py-3 rounded-lg text-sm font-medium transition-all duration-200 ${
                   activeSection === item.id
                     ? 'bg-indigo-600 text-white shadow-md'
                     : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
@@ -678,12 +678,12 @@ export default function Analysis() {
         >
           {/* Overview Section */}
           {activeSection === 'overview' && (
-            <motion.div variants={fadeIn} className="space-y-8">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <motion.div variants={fadeIn} className="space-y-6 sm:space-y-8">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
                 {/* Model Recommendation Card */}
                 <motion.div 
                   variants={fadeIn}
-                  className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-3xl shadow-xl p-8 transform hover:scale-[1.02] transition-all duration-300 border border-gray-100 dark:border-gray-700"
+                  className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl sm:rounded-3xl shadow-xl p-6 sm:p-8 transform hover:scale-[1.02] transition-all duration-300 border border-gray-100 dark:border-gray-700"
                 >
                   <div className="flex items-center gap-4 mb-6">
                     <div className="p-3 bg-gradient-to-br from-indigo-500 to-blue-500 rounded-2xl shadow-lg">
@@ -720,7 +720,7 @@ export default function Analysis() {
                 {/* Data Characteristics Card */}
                 <motion.div 
                   variants={fadeIn}
-                  className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-3xl shadow-xl p-8 transform hover:scale-[1.02] transition-all duration-300 border border-gray-100 dark:border-gray-700"
+                  className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl sm:rounded-3xl shadow-xl p-6 sm:p-8 transform hover:scale-[1.02] transition-all duration-300 border border-gray-100 dark:border-gray-700"
                 >
                   <div className="flex items-center gap-4 mb-6">
                     <div className="p-3 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-2xl shadow-lg">
@@ -752,10 +752,10 @@ export default function Analysis() {
               {/* Key Features Box */}
               <motion.div 
                 variants={fadeIn}
-                className="bg-gradient-to-br from-blue-50/50 to-cyan-50/50 dark:from-blue-900/20 dark:to-cyan-900/20 rounded-3xl p-8 backdrop-blur-sm"
+                className="bg-gradient-to-br from-blue-50/50 to-cyan-50/50 dark:from-blue-900/20 dark:to-cyan-900/20 rounded-2xl sm:rounded-3xl p-6 sm:p-8 backdrop-blur-sm"
               >
-                <h3 className="text-xl font-semibold text-blue-900 dark:text-blue-200 mb-6">Key Features</h3>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <h3 className="text-lg sm:text-xl font-semibold text-blue-900 dark:text-blue-200 mb-4 sm:mb-6">Key Features</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                   <div className="bg-white/50 dark:bg-gray-800/50 rounded-xl p-6">
                     <h4 className="font-medium text-blue-800 dark:text-blue-300 mb-2">Probability-Based Predictions</h4>
                     <p className="text-sm text-blue-700 dark:text-blue-400">
@@ -805,11 +805,11 @@ export default function Analysis() {
                 </div>
                 
                 {/* Model Comparison Cards */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 mb-8 sm:mb-12">
                   {/* Original Model Card */}
                   <motion.div 
                     variants={fadeIn}
-                    className="bg-gradient-to-br from-indigo-50 to-blue-50 dark:from-indigo-900/50 dark:to-blue-900/50 rounded-2xl p-8 shadow-lg border border-indigo-100 dark:border-indigo-800"
+                    className="bg-gradient-to-br from-indigo-50 to-blue-50 dark:from-indigo-900/50 dark:to-blue-900/50 rounded-2xl p-6 sm:p-8 shadow-lg border border-indigo-100 dark:border-indigo-800"
                   >
                     <div className="flex items-center gap-4 mb-6">
                       <div className="p-3 bg-gradient-to-br from-indigo-500 to-blue-500 rounded-xl shadow-lg">
@@ -862,7 +862,7 @@ export default function Analysis() {
                   {/* Improved Model Card */}
                   <motion.div 
                     variants={fadeIn}
-                    className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/50 dark:to-emerald-900/50 rounded-2xl p-8 shadow-lg border border-green-100 dark:border-green-800"
+                    className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/50 dark:to-emerald-900/50 rounded-2xl p-6 sm:p-8 shadow-lg border border-green-100 dark:border-green-800"
                   >
                     <div className="flex items-center gap-4 mb-6">
                       <div className="p-3 bg-gradient-to-br from-green-500 to-emerald-500 rounded-xl shadow-lg">
@@ -914,9 +914,9 @@ export default function Analysis() {
                 </div>
 
                 {/* Key Improvements Section */}
-                <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/50 dark:to-indigo-900/50 rounded-2xl p-8">
-                  <h3 className="text-xl font-semibold text-blue-900 dark:text-blue-200 mb-6">Key Improvements</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/50 dark:to-indigo-900/50 rounded-2xl p-6 sm:p-8">
+                  <h3 className="text-lg sm:text-xl font-semibold text-blue-900 dark:text-blue-200 mb-4 sm:mb-6">Key Improvements</h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                     <div className="bg-white/50 dark:bg-gray-800/50 rounded-xl p-6">
                       <div className="flex items-center gap-3 mb-4">
                         <div className="p-2 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-lg">
@@ -958,9 +958,9 @@ export default function Analysis() {
 
           {/* Model Performance Section */}
           {activeSection === 'model-performance' && (
-            <motion.div variants={fadeIn} className="space-y-8">
+            <motion.div variants={fadeIn} className="space-y-6 sm:space-y-8">
               {/* Performance Overview */}
-              <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-3xl shadow-xl p-8 border border-gray-100 dark:border-gray-700">
+              <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl sm:rounded-3xl shadow-xl p-6 sm:p-8 border border-gray-100 dark:border-gray-700">
                 <div className="flex items-center gap-4 mb-8">
                   <div className="p-3 bg-gradient-to-br from-indigo-500 to-blue-500 rounded-2xl shadow-lg">
                     <FiBarChart2 className="w-6 h-6 text-white" />
@@ -971,7 +971,7 @@ export default function Analysis() {
                 </div>
 
                 {/* Performance Metrics Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
                   <div className="bg-gradient-to-br from-indigo-50 to-blue-50 dark:from-indigo-900/50 dark:to-blue-900/50 rounded-2xl p-6">
                     <h3 className="text-lg font-semibold text-indigo-900 dark:text-indigo-200 mb-2">Accuracy</h3>
                     <div className="flex items-baseline gap-2">
@@ -1007,7 +1007,7 @@ export default function Analysis() {
                 </div>
 
                 {/* LASSO Regularization Details */}
-                <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/50 dark:to-indigo-900/50 rounded-2xl p-8 mb-8">
+                <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/50 dark:to-indigo-900/50 rounded-2xl p-6 sm:p-8 mb-6 sm:mb-8">
                   <div className="flex items-center gap-4 mb-6">
                     <div className="p-3 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-xl shadow-lg">
                       <FiTrendingUp className="w-6 h-6 text-white" />
@@ -1015,7 +1015,7 @@ export default function Analysis() {
                     <h3 className="text-xl font-semibold text-blue-900 dark:text-blue-200">LASSO Regularization</h3>
                   </div>
                   
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
                     <div className="space-y-4">
                       <div className="bg-white/50 dark:bg-gray-800/50 rounded-xl p-4">
                         <h4 className="font-medium text-blue-800 dark:text-blue-300 mb-2">Regularization Strength (C=0.1)</h4>
@@ -1092,7 +1092,7 @@ export default function Analysis() {
                 </div>
 
                 {/* Cross-Validation Results */}
-                <div className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/50 dark:to-emerald-900/50 rounded-2xl p-8">
+                <div className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/50 dark:to-emerald-900/50 rounded-2xl p-6 sm:p-8">
                   <div className="flex items-center gap-4 mb-6">
                     <div className="p-3 bg-gradient-to-br from-green-500 to-emerald-500 rounded-xl shadow-lg">
                       <FiTrendingUp className="w-6 h-6 text-white" />
@@ -1100,7 +1100,7 @@ export default function Analysis() {
                     <h3 className="text-xl font-semibold text-green-900 dark:text-green-200">Cross-Validation Results</h3>
                   </div>
                   
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
                     <div className="bg-white/50 dark:bg-gray-800/50 rounded-xl p-6">
                       <h4 className="font-medium text-green-800 dark:text-green-300 mb-4">5-Fold Cross-Validation</h4>
                       <div className="space-y-4">
@@ -1143,9 +1143,9 @@ export default function Analysis() {
 
           {/* Feature Impact Section */}
           {activeSection === 'feature-impact' && (
-            <motion.div variants={fadeIn} className="space-y-8">
+            <motion.div variants={fadeIn} className="space-y-6 sm:space-y-8">
               {/* Main Feature Impact Card */}
-              <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl rounded-3xl shadow-2xl p-8 border border-gray-100/50 dark:border-gray-700/50">
+              <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl rounded-2xl sm:rounded-3xl shadow-2xl p-6 sm:p-8 border border-gray-100/50 dark:border-gray-700/50">
                 <div className="flex items-center gap-4 mb-8">
                   <div className="p-3 bg-gradient-to-br from-indigo-500 to-blue-500 rounded-2xl shadow-lg">
                     <FiBarChart2 className="w-6 h-6 text-white" />
@@ -1161,9 +1161,9 @@ export default function Analysis() {
                 </div>
 
                 {/* Feature Importance Chart - Full Width */}
-                <div className="bg-gradient-to-br from-indigo-50/50 to-blue-50/50 dark:from-indigo-900/20 dark:to-blue-900/20 rounded-3xl p-8 backdrop-blur-sm mb-8">
-                  <h3 className="text-xl font-semibold text-indigo-900 dark:text-indigo-200 mb-6 text-center">Feature Impact on Depression Risk</h3>
-                  <div className="h-[400px] max-w-4xl mx-auto">
+                <div className="bg-gradient-to-br from-indigo-50/50 to-blue-50/50 dark:from-indigo-900/20 dark:to-blue-900/20 rounded-2xl sm:rounded-3xl p-6 sm:p-8 backdrop-blur-sm mb-6 sm:mb-8">
+                  <h3 className="text-lg sm:text-xl font-semibold text-indigo-900 dark:text-indigo-200 mb-4 sm:mb-6 text-center">Feature Impact on Depression Risk</h3>
+                  <div className="h-[300px] sm:h-[400px] max-w-4xl mx-auto">
                     <Bar
                       data={{
                         labels: ['Suicidal Thoughts (Yes)', 'Academic Pressure', 'Financial Stress', 
@@ -1233,7 +1233,7 @@ export default function Analysis() {
                 </div>
 
                 {/* Risk and Protective Factors Grid */}
-                <div className="grid grid-cols-2 gap-8">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
                   {/* Risk Factors */}
                   <div className="bg-gradient-to-br from-red-50/50 to-pink-50/50 dark:from-red-900/20 dark:to-pink-900/20 rounded-3xl p-8 backdrop-blur-sm">
                     <h3 className="text-xl font-semibold text-red-900 dark:text-red-200 mb-6">Risk Factors</h3>
@@ -1282,9 +1282,9 @@ export default function Analysis() {
                 </div>
 
                 {/* Key Insights */}
-                <div className="mt-8 bg-gradient-to-br from-gray-50/50 to-gray-100/50 dark:from-gray-800/20 dark:to-gray-700/20 rounded-3xl p-8 backdrop-blur-sm">
-                  <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-200 mb-6">Key Insights</h3>
-                  <div className="grid grid-cols-3 gap-6">
+                <div className="mt-6 sm:mt-8 bg-gradient-to-br from-gray-50/50 to-gray-100/50 dark:from-gray-800/20 dark:to-gray-700/20 rounded-2xl sm:rounded-3xl p-6 sm:p-8 backdrop-blur-sm">
+                  <h3 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-gray-200 mb-4 sm:mb-6">Key Insights</h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                     <div className="bg-white/50 dark:bg-gray-800/50 rounded-2xl p-6 hover:bg-white/80 dark:hover:bg-gray-800/80 transition-all duration-200">
                       <div className="flex items-center gap-4 mb-4">
                         <div className="p-3 bg-gradient-to-br from-red-500 to-pink-500 rounded-xl shadow-lg">
@@ -1326,9 +1326,9 @@ export default function Analysis() {
 
           {/* Model Comparison Section */}
           {activeSection === 'model-comparison' && (
-            <motion.div variants={fadeIn} className="space-y-8">
+            <motion.div variants={fadeIn} className="space-y-6 sm:space-y-8">
               {/* Main Model Comparison Card */}
-              <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl rounded-3xl shadow-2xl p-8 border border-gray-100/50 dark:border-gray-700/50">
+              <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl rounded-2xl sm:rounded-3xl shadow-2xl p-6 sm:p-8 border border-gray-100/50 dark:border-gray-700/50">
                 <div className="flex items-center gap-4 mb-8">
                   <div className="p-3 bg-gradient-to-br from-indigo-500 to-blue-500 rounded-2xl shadow-lg">
                     <FiBarChart2 className="w-6 h-6 text-white" />
@@ -1344,7 +1344,7 @@ export default function Analysis() {
                 </div>
 
                 {/* Interactive Model Comparison Charts */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 mb-8 sm:mb-12">
                   {/* Performance Metrics Chart */}
                   <div className="bg-gradient-to-br from-indigo-50/50 to-blue-50/50 dark:from-indigo-900/20 dark:to-blue-900/20 rounded-3xl p-8 backdrop-blur-sm">
                     <h3 className="text-xl font-semibold text-indigo-900 dark:text-indigo-200 mb-6">Performance Metrics</h3>
@@ -1399,7 +1399,7 @@ export default function Analysis() {
                 </div>
 
                 {/* Model Analysis Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
                   {/* KNN */}
                   <div className="bg-gradient-to-br from-blue-50/50 to-indigo-50/50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-3xl p-8 backdrop-blur-sm">
                     <div className="flex items-center gap-4 mb-6">
@@ -1540,14 +1540,14 @@ export default function Analysis() {
                 </div>
 
                 {/* Why Logistic Regression Section */}
-                <div className="mt-8 bg-gradient-to-br from-green-50/50 to-emerald-50/50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-3xl p-8 backdrop-blur-sm">
+                <div className="mt-6 sm:mt-8 bg-gradient-to-br from-green-50/50 to-emerald-50/50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-2xl sm:rounded-3xl p-6 sm:p-8 backdrop-blur-sm">
                   <div className="flex items-center gap-4 mb-6">
                     <div className="p-3 bg-gradient-to-br from-green-500 to-emerald-500 rounded-xl shadow-lg">
                       <FiTrendingUp className="w-6 h-6 text-white" />
                     </div>
                     <h3 className="text-xl font-semibold text-green-900 dark:text-green-200">Why Logistic Regression?</h3>
                   </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
                     <div className="bg-white/50 dark:bg-gray-800/50 rounded-2xl p-6">
                       <h4 className="font-medium text-green-800 dark:text-green-300 mb-4">Key Benefits</h4>
                       <ul className="space-y-3 text-sm text-green-700 dark:text-green-400">
@@ -1598,8 +1598,8 @@ export default function Analysis() {
 
           {/* Tutorial Section */}
           {activeSection === 'tutorial' && (
-            <motion.div variants={fadeIn} className="space-y-8">
-              <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl rounded-3xl shadow-2xl p-8 border border-gray-100/50 dark:border-gray-700/50">
+            <motion.div variants={fadeIn} className="space-y-6 sm:space-y-8">
+              <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl rounded-2xl sm:rounded-3xl shadow-2xl p-6 sm:p-8 border border-gray-100/50 dark:border-gray-700/50">
                 <div className="flex items-center gap-4 mb-8">
                   <div className="p-3 bg-gradient-to-br from-indigo-500 to-blue-500 rounded-2xl shadow-lg">
                     <FiBarChart2 className="w-6 h-6 text-white" />
@@ -1614,9 +1614,9 @@ export default function Analysis() {
                   </div>
                 </div>
 
-                <div className="space-y-8">
+                <div className="space-y-6 sm:space-y-8">
                   {/* Step 1: Data Collection */}
-                  <div className="bg-gradient-to-br from-indigo-50/50 to-blue-50/50 dark:from-indigo-900/20 dark:to-blue-900/20 rounded-3xl p-8">
+                  <div className="bg-gradient-to-br from-indigo-50/50 to-blue-50/50 dark:from-indigo-900/20 dark:to-blue-900/20 rounded-2xl sm:rounded-3xl p-6 sm:p-8">
                     <div className="flex items-center gap-4 mb-6">
                       <div className="p-3 bg-gradient-to-br from-indigo-500 to-blue-500 rounded-xl shadow-lg">
                         <FiUser className="w-6 h-6 text-white" />
@@ -1624,7 +1624,7 @@ export default function Analysis() {
                       <h3 className="text-xl font-semibold text-indigo-900 dark:text-indigo-200">1. Data Collection</h3>
                     </div>
                     
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
                       <div className="space-y-4">
                         <p className="text-gray-700 dark:text-gray-300">
                           We collect information about various factors that can influence mental health:
@@ -1665,7 +1665,7 @@ print("Successfully loaded 'student_depression_dataset.csv'")`}
                   </div>
 
                   {/* Step 2: Data Processing */}
-                  <div className="bg-gradient-to-br from-green-50/50 to-emerald-50/50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-3xl p-8">
+                  <div className="bg-gradient-to-br from-green-50/50 to-emerald-50/50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-2xl sm:rounded-3xl p-6 sm:p-8">
                     <div className="flex items-center gap-4 mb-6">
                       <div className="p-3 bg-gradient-to-br from-green-500 to-emerald-500 rounded-xl shadow-lg">
                         <FiTrendingUp className="w-6 h-6 text-white" />
@@ -1673,7 +1673,7 @@ print("Successfully loaded 'student_depression_dataset.csv'")`}
                       <h3 className="text-xl font-semibold text-green-900 dark:text-green-200">2. Data Processing</h3>
                     </div>
                     
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
                       <div className="space-y-4">
                         <p className="text-gray-700 dark:text-gray-300">
                           Before analysis, we prepare the data to ensure accurate predictions:
@@ -1716,7 +1716,7 @@ preprocessor = ColumnTransformer(
                   </div>
 
                   {/* Step 3: Model Training */}
-                  <div className="bg-gradient-to-br from-purple-50/50 to-pink-50/50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-3xl p-8">
+                  <div className="bg-gradient-to-br from-purple-50/50 to-pink-50/50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-2xl sm:rounded-3xl p-6 sm:p-8">
                     <div className="flex items-center gap-4 mb-6">
                       <div className="p-3 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl shadow-lg">
                         <FiPieChart className="w-6 h-6 text-white" />
@@ -1724,7 +1724,7 @@ preprocessor = ColumnTransformer(
                       <h3 className="text-xl font-semibold text-purple-900 dark:text-purple-200">3. Model Training</h3>
                     </div>
                     
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
                       <div className="space-y-4">
                         <p className="text-gray-700 dark:text-gray-300">
                           Our model learns from over 27,000 student records to identify patterns:
@@ -1772,7 +1772,7 @@ print(f"Test Accuracy: {accuracy:.2f}")`}
                   </div>
 
                   {/* Step 4: Making Predictions */}
-                  <div className="bg-gradient-to-br from-blue-50/50 to-cyan-50/50 dark:from-blue-900/20 dark:to-cyan-900/20 rounded-3xl p-8">
+                  <div className="bg-gradient-to-br from-blue-50/50 to-cyan-50/50 dark:from-blue-900/20 dark:to-cyan-900/20 rounded-2xl sm:rounded-3xl p-6 sm:p-8">
                     <div className="flex items-center gap-4 mb-6">
                       <div className="p-3 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-xl shadow-lg">
                         <FiTrendingUp className="w-6 h-6 text-white" />
@@ -1780,7 +1780,7 @@ print(f"Test Accuracy: {accuracy:.2f}")`}
                       <h3 className="text-xl font-semibold text-blue-900 dark:text-blue-200">4. Making Predictions</h3>
                     </div>
                     
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
                       <div className="space-y-4">
                         <p className="text-gray-700 dark:text-gray-300">
                           When you submit your information, our model:
