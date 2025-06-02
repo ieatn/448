@@ -17,7 +17,7 @@ import {
 import { Bar, Radar, Line } from 'react-chartjs-2';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { FiArrowRight, FiBarChart2, FiPieChart, FiTrendingUp, FiInfo } from 'react-icons/fi';
+import { FiArrowRight, FiBarChart2, FiPieChart, FiTrendingUp, FiInfo, FiUser } from 'react-icons/fi';
 
 // Register ChartJS components
 ChartJS.register(
@@ -748,6 +748,47 @@ export default function Analysis() {
                   </div>
                 </motion.div>
               </div>
+
+              {/* Key Features Box */}
+              <motion.div 
+                variants={fadeIn}
+                className="bg-gradient-to-br from-blue-50/50 to-cyan-50/50 dark:from-blue-900/20 dark:to-cyan-900/20 rounded-3xl p-8 backdrop-blur-sm"
+              >
+                <h3 className="text-xl font-semibold text-blue-900 dark:text-blue-200 mb-6">Key Features</h3>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div className="bg-white/50 dark:bg-gray-800/50 rounded-xl p-6">
+                    <h4 className="font-medium text-blue-800 dark:text-blue-300 mb-2">Probability-Based Predictions</h4>
+                    <p className="text-sm text-blue-700 dark:text-blue-400">
+                      Instead of just yes/no, we provide a percentage risk score, giving you a more nuanced understanding of your risk level.
+                    </p>
+                  </div>
+                  <div className="bg-white/50 dark:bg-gray-800/50 rounded-xl p-6">
+                    <h4 className="font-medium text-blue-800 dark:text-blue-300 mb-2">Feature Importance</h4>
+                    <p className="text-sm text-blue-700 dark:text-blue-400">
+                      The model shows exactly how each factor (like sleep duration or academic pressure) affects your risk score.
+                    </p>
+                  </div>
+                  <div className="bg-white/50 dark:bg-gray-800/50 rounded-xl p-6">
+                    <h4 className="font-medium text-blue-800 dark:text-blue-300 mb-2">Real-Time Analysis</h4>
+                    <p className="text-sm text-blue-700 dark:text-blue-400">
+                      Get instant results with our optimized model that processes your information in less than a second.
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* Important Note Box */}
+              <motion.div 
+                variants={fadeIn}
+                className="bg-gradient-to-br from-orange-50/50 to-red-50/50 dark:from-orange-900/20 dark:to-red-900/20 rounded-3xl p-8 backdrop-blur-sm"
+              >
+                <h3 className="text-xl font-semibold text-orange-900 dark:text-orange-200 mb-4">Important Note</h3>
+                <div className="bg-white/50 dark:bg-gray-800/50 rounded-xl p-6">
+                  <p className="text-sm text-orange-700 dark:text-orange-400">
+                    This tool is designed to provide insights and raise awareness about potential risk factors. It is not a substitute for professional medical advice. If you are concerned about your mental health, please consult a healthcare professional.
+                  </p>
+                </div>
+              </motion.div>
 
               {/* Model Improvement Analysis */}
               <motion.div 
@@ -1558,60 +1599,232 @@ export default function Analysis() {
           {/* Tutorial Section */}
           {activeSection === 'tutorial' && (
             <motion.div variants={fadeIn} className="space-y-8">
-              <div className="w-full">
-                <h2 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">Tutorial: Logistic Regression for Depression Risk</h2>
-                
-                <div className="space-y-4 sm:space-y-6">
-                  {/* Step 1: Data Loading */}
-                  <div className="bg-gray-50 dark:bg-gray-700 p-3 sm:p-4 rounded-lg">
-                    <h3 className="text-base sm:text-lg font-medium mb-2">Step 1: Loading the Data</h3>
-                    <pre className="bg-gray-100 dark:bg-gray-800 p-2 sm:p-3 rounded overflow-x-auto text-xs sm:text-sm">
-                      {tutorialCode.step1}
-                    </pre>
+              <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl rounded-3xl shadow-2xl p-8 border border-gray-100/50 dark:border-gray-700/50">
+                <div className="flex items-center gap-4 mb-8">
+                  <div className="p-3 bg-gradient-to-br from-indigo-500 to-blue-500 rounded-2xl shadow-lg">
+                    <FiBarChart2 className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h2 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300">
+                      How Our Model Works
+                    </h2>
+                    <p className="text-gray-600 dark:text-gray-400 mt-1">
+                      A step-by-step guide to our depression risk prediction system
+                    </p>
+                  </div>
+                </div>
+
+                <div className="space-y-8">
+                  {/* Step 1: Data Collection */}
+                  <div className="bg-gradient-to-br from-indigo-50/50 to-blue-50/50 dark:from-indigo-900/20 dark:to-blue-900/20 rounded-3xl p-8">
+                    <div className="flex items-center gap-4 mb-6">
+                      <div className="p-3 bg-gradient-to-br from-indigo-500 to-blue-500 rounded-xl shadow-lg">
+                        <FiUser className="w-6 h-6 text-white" />
+                      </div>
+                      <h3 className="text-xl font-semibold text-indigo-900 dark:text-indigo-200">1. Data Collection</h3>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                      <div className="space-y-4">
+                        <p className="text-gray-700 dark:text-gray-300">
+                          We collect information about various factors that can influence mental health:
+                        </p>
+                        <ul className="space-y-2 text-gray-600 dark:text-gray-400">
+                          <li className="flex items-start gap-2">
+                            <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-indigo-500 flex-shrink-0" />
+                            <span>Personal information (age, gender)</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-indigo-500 flex-shrink-0" />
+                            <span>Academic factors (CGPA, study satisfaction)</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-indigo-500 flex-shrink-0" />
+                            <span>Lifestyle factors (sleep duration, dietary habits)</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-indigo-500 flex-shrink-0" />
+                            <span>Mental health history (suicidal thoughts, family history)</span>
+                          </li>
+                        </ul>
+                      </div>
+                      <div className="bg-white/50 dark:bg-gray-800/50 rounded-xl p-6">
+                        <h4 className="font-medium text-indigo-800 dark:text-indigo-300 mb-4">Implementation</h4>
+                        <pre className="bg-gray-100 dark:bg-gray-900 p-4 rounded-xl overflow-x-auto text-sm">
+{`# Data handling and web framework
+import pandas as pd
+from flask import Flask, request, jsonify
+from flask_cors import CORS
+
+# Load the dataset
+data = pd.read_csv('student_depression_dataset.csv')
+print("Successfully loaded 'student_depression_dataset.csv'")`}
+                        </pre>
+                      </div>
+                    </div>
                   </div>
 
-                  {/* Step 2: Data Preprocessing */}
-                  <div className="bg-gray-50 dark:bg-gray-700 p-3 sm:p-4 rounded-lg">
-                    <h3 className="text-base sm:text-lg font-medium mb-2">Step 2: Data Preprocessing</h3>
-                    <div className="mb-3 text-sm text-gray-600 dark:text-gray-400">
-                      <p>Key preprocessing steps:</p>
-                      <ul className="list-disc list-inside mt-2">
-                        <li>Normalize numerical features (age, sleep hours, CGPA, etc.)</li>
-                        <li>One-hot encode categorical variables (gender, profession, etc.)</li>
-                        <li>Handle missing values with mean/mode imputation</li>
-                        <li>Scale features to similar ranges for better model performance</li>
-                      </ul>
+                  {/* Step 2: Data Processing */}
+                  <div className="bg-gradient-to-br from-green-50/50 to-emerald-50/50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-3xl p-8">
+                    <div className="flex items-center gap-4 mb-6">
+                      <div className="p-3 bg-gradient-to-br from-green-500 to-emerald-500 rounded-xl shadow-lg">
+                        <FiTrendingUp className="w-6 h-6 text-white" />
+                      </div>
+                      <h3 className="text-xl font-semibold text-green-900 dark:text-green-200">2. Data Processing</h3>
                     </div>
-                    <pre className="bg-gray-100 dark:bg-gray-800 p-2 sm:p-3 rounded overflow-x-auto text-xs sm:text-sm">
-                      {tutorialCode.step2}
-                    </pre>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                      <div className="space-y-4">
+                        <p className="text-gray-700 dark:text-gray-300">
+                          Before analysis, we prepare the data to ensure accurate predictions:
+                        </p>
+                        <ul className="space-y-2 text-gray-600 dark:text-gray-400">
+                          <li className="flex items-start gap-2">
+                            <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-green-500 flex-shrink-0" />
+                            <span>Convert all measurements to a common scale</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-green-500 flex-shrink-0" />
+                            <span>Handle any missing information</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-green-500 flex-shrink-0" />
+                            <span>Organize categorical data (like gender, profession)</span>
+                          </li>
+                        </ul>
+                      </div>
+                      <div className="bg-white/50 dark:bg-gray-800/50 rounded-xl p-6">
+                        <h4 className="font-medium text-green-800 dark:text-green-300 mb-4">Implementation</h4>
+                        <pre className="bg-gray-100 dark:bg-gray-900 p-4 rounded-xl overflow-x-auto text-sm">
+{`# Define feature types
+numerical_features = ['Age', 'Academic Pressure', 'Work Pressure', 'CGPA', 
+                     'Study Satisfaction', 'Job Satisfaction', 'Work/Study Hours', 
+                     'Financial Stress']
+categorical_features = ['Gender', 'Profession', 'Sleep Duration', 'Dietary Habits', 
+                       'Degree', 'Have you ever had suicidal thoughts ?', 
+                       'Family History of Mental Illness']
+
+# Create preprocessing pipeline
+preprocessor = ColumnTransformer(
+    transformers=[
+        ('num', StandardScaler(), numerical_features),
+        ('cat', OneHotEncoder(handle_unknown='ignore'), categorical_features)
+    ])`}
+                        </pre>
+                      </div>
+                    </div>
                   </div>
 
                   {/* Step 3: Model Training */}
-                  <div className="bg-gray-50 dark:bg-gray-700 p-3 sm:p-4 rounded-lg">
-                    <h3 className="text-base sm:text-lg font-medium mb-2">Step 3: Logistic Regression Model</h3>
-                    <pre className="bg-gray-100 dark:bg-gray-800 p-2 sm:p-3 rounded overflow-x-auto text-xs sm:text-sm">
-                      {tutorialCode.step3}
-                    </pre>
+                  <div className="bg-gradient-to-br from-purple-50/50 to-pink-50/50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-3xl p-8">
+                    <div className="flex items-center gap-4 mb-6">
+                      <div className="p-3 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl shadow-lg">
+                        <FiPieChart className="w-6 h-6 text-white" />
+                      </div>
+                      <h3 className="text-xl font-semibold text-purple-900 dark:text-purple-200">3. Model Training</h3>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                      <div className="space-y-4">
+                        <p className="text-gray-700 dark:text-gray-300">
+                          Our model learns from over 27,000 student records to identify patterns:
+                        </p>
+                        <ul className="space-y-2 text-gray-600 dark:text-gray-400">
+                          <li className="flex items-start gap-2">
+                            <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-purple-500 flex-shrink-0" />
+                            <span>Uses LASSO regularization to focus on important factors</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-purple-500 flex-shrink-0" />
+                            <span>Automatically identifies key risk factors</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-purple-500 flex-shrink-0" />
+                            <span>Maintains 84.8% accuracy on test data</span>
+                          </li>
+                        </ul>
+                      </div>
+                      <div className="bg-white/50 dark:bg-gray-800/50 rounded-xl p-6">
+                        <h4 className="font-medium text-purple-800 dark:text-purple-300 mb-4">Implementation</h4>
+                        <pre className="bg-gray-100 dark:bg-gray-900 p-4 rounded-xl overflow-x-auto text-sm">
+{`# Create and train the model pipeline
+model_pipeline = Pipeline(steps=[
+    ('preprocessor', preprocessor),
+    ('classifier', LogisticRegression(
+        random_state=42,
+        solver='liblinear',
+        penalty='l1',  # LASSO regularization
+        C=0.1,  # Strong regularization
+        max_iter=1000
+    ))
+])
+
+# Train the model
+model_pipeline.fit(X_train, y_train)
+
+# Evaluate performance
+y_pred = model_pipeline.predict(X_test)
+accuracy = accuracy_score(y_test, y_pred)
+print(f"Test Accuracy: {accuracy:.2f}")`}
+                        </pre>
+                      </div>
+                    </div>
                   </div>
 
                   {/* Step 4: Making Predictions */}
-                  <div className="bg-gray-50 dark:bg-gray-700 p-3 sm:p-4 rounded-lg">
-                    <h3 className="text-base sm:text-lg font-medium mb-2">Step 4: Probability-Based Prediction</h3>
-                    <pre className="bg-gray-100 dark:bg-gray-800 p-2 sm:p-3 rounded overflow-x-auto text-xs sm:text-sm">
-                      {tutorialCode.step4}
-                    </pre>
-                  </div>
-
-                  <div className="mt-3 sm:mt-4 text-xs sm:text-sm text-gray-600 dark:text-gray-400">
-                    <p>Note: This logistic regression implementation has advantages over categorical approaches:</p>
-                    <ul className="list-disc list-inside mt-2">
-                      <li>Provides probability-based predictions</li>
-                      <li>Shows exact feature impact through coefficients</li>
-                      <li>Allows for more personalized risk assessment</li>
-                      <li>Risk changes linearly with feature changes, easier to interpret</li>
-                      <li>Can be easily visualized with probability bars</li>
-                    </ul>
+                  <div className="bg-gradient-to-br from-blue-50/50 to-cyan-50/50 dark:from-blue-900/20 dark:to-cyan-900/20 rounded-3xl p-8">
+                    <div className="flex items-center gap-4 mb-6">
+                      <div className="p-3 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-xl shadow-lg">
+                        <FiTrendingUp className="w-6 h-6 text-white" />
+                      </div>
+                      <h3 className="text-xl font-semibold text-blue-900 dark:text-blue-200">4. Making Predictions</h3>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                      <div className="space-y-4">
+                        <p className="text-gray-700 dark:text-gray-300">
+                          When you submit your information, our model:
+                        </p>
+                        <ul className="space-y-2 text-gray-600 dark:text-gray-400">
+                          <li className="flex items-start gap-2">
+                            <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0" />
+                            <span>Processes your input through the same pipeline</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0" />
+                            <span>Calculates your risk probability</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0" />
+                            <span>Provides detailed insights about risk factors</span>
+                          </li>
+                        </ul>
+                      </div>
+                      <div className="bg-white/50 dark:bg-gray-800/50 rounded-xl p-6">
+                        <h4 className="font-medium text-blue-800 dark:text-blue-300 mb-4">Implementation</h4>
+                        <pre className="bg-gray-100 dark:bg-gray-900 p-4 rounded-xl overflow-x-auto text-sm">
+{`@app.route('/predict', methods=['POST'])
+def predict():
+    # Get data from request
+    data = request.get_json(force=True)
+    
+    # Convert to DataFrame
+    input_df = pd.DataFrame([data])
+    
+    # Get prediction probabilities
+    proba = model_pipeline.predict_proba(input_df)
+    depression_prob = proba[0][1] * 100
+    
+    # Get binary prediction
+    prediction = model_pipeline.predict(input_df)[0]
+    
+    return jsonify({
+        "predicted_depression": bool(prediction),
+        "probability_of_depression": round(depression_prob, 2)
+    })`}
+                        </pre>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
