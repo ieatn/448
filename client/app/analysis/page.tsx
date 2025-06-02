@@ -15,7 +15,7 @@ import {
   Filler,
 } from 'chart.js';
 import { Bar, Radar, Line } from 'react-chartjs-2';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 // Register ChartJS components
 ChartJS.register(
@@ -353,10 +353,93 @@ print(feature_importance.sort_values('Importance', ascending=False))`,
     }`
 };
 
+// Add cross-validation data type
+interface CrossValidationResults {
+  scores: number[];
+  mean_score: number;
+  std_score: number;
+  folds: number;
+}
+
+// Add model evaluation data type
+interface ModelEvaluation {
+  test_accuracy: number;
+  classification_report: {
+    '0': { precision: number; recall: number; 'f1-score': number };
+    '1': { precision: number; recall: number; 'f1-score': number };
+  };
+  feature_importance: Array<{ Feature: string; Coefficient: number }>;
+  cv_results: {
+    scores: number[];
+    mean_score: number;
+    std_score: number;
+    folds: number;
+  };
+}
+
 export default function Analysis() {
   const [selectedMetric, setSelectedMetric] = useState<MetricName>('accuracy');
   const [selectedModel, setSelectedModel] = useState<ModelName>('Logistic Regression');
   const [activeSection, setActiveSection] = useState('overview');
+  const [cvResults, setCvResults] = useState<CrossValidationResults | null>(null);
+  const [modelEvaluation, setModelEvaluation] = useState<ModelEvaluation | null>(null);
+
+  // Fetch cross-validation results
+  useEffect(() => {
+    const fetchCvResults = async () => {
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/cv-results`);
+        if (!response.ok) throw new Error('Failed to fetch CV results');
+        const data = await response.json();
+        setCvResults(data);
+      } catch (error) {
+        console.error('Error fetching CV results:', error);
+      }
+    };
+    fetchCvResults();
+  }, []);
+
+  // Fetch model evaluation data
+  useEffect(() => {
+    const fetchModelEvaluation = async () => {
+      try {
+        // Use a sample prediction to get model evaluation data
+        const sampleData = {
+          Age: 25,
+          Gender: 'Male',
+          Profession: 'Student',
+          'Academic Pressure': 3,
+          'Work Pressure': 2,
+          CGPA: 7.5,
+          'Study Satisfaction': 4,
+          'Job Satisfaction': 3,
+          'Sleep Duration': '7-8 hours',
+          'Dietary Habits': 'Healthy',
+          Degree: 'BSc',
+          'Have you ever had suicidal thoughts ?': 'No',
+          'Work/Study Hours': 6,
+          'Financial Stress': 2,
+          'Family History of Mental Illness': 'No'
+        };
+
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/predict`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(sampleData),
+        });
+
+        if (!response.ok) throw new Error('Failed to fetch model evaluation');
+        const data = await response.json();
+        setModelEvaluation(data.model_evaluation);
+      } catch (error) {
+        console.error('Error fetching model evaluation:', error);
+      }
+    };
+
+    fetchModelEvaluation();
+  }, []);
 
   // Navigation items
   const navItems = [
@@ -746,6 +829,118 @@ export default function Analysis() {
                   </div>
                   <div className="mt-4 text-sm text-gray-600 dark:text-gray-400">
                     <p>Note: The close performance between training and test sets indicates good generalization.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Cross-Validation Analysis */}
+            <div className="w-full bg-white dark:bg-gray-700 p-4 sm:p-6 rounded-lg shadow">
+              <h2 className="text-lg sm:text-xl font-semibold mb-4">Cross-Validation Analysis</h2>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* CV Scores Visualization */}
+                <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                  <h3 className="text-base font-medium mb-3">5-Fold Cross-Validation Scores</h3>
+                  {modelEvaluation && (
+                    <div className="h-[200px]">
+                      <Bar
+                        data={{
+                          labels: modelEvaluation.cv_results.scores.map((_, i) => `Fold ${i + 1}`),
+                          datasets: [{
+                            label: 'Accuracy Score',
+                            data: modelEvaluation.cv_results.scores,
+                            backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            borderWidth: 1
+                          }]
+                        }}
+                        options={{
+                          responsive: true,
+                          plugins: {
+                            legend: {
+                              display: false
+                            },
+                            title: {
+                              display: true,
+                              text: 'Cross-Validation Performance'
+                            }
+                          },
+                          scales: {
+                            y: {
+                              beginAtZero: true,
+                              max: 1,
+                              title: {
+                                display: true,
+                                text: 'Accuracy Score'
+                              }
+                            }
+                          }
+                        }}
+                      />
+                    </div>
+                  )}
+                </div>
+
+                {/* CV Statistics */}
+                <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                  <h3 className="text-base font-medium mb-3">Cross-Validation Statistics</h3>
+                  {modelEvaluation && (
+                    <div className="space-y-4">
+                      <div className="p-3 bg-blue-50 dark:bg-blue-900 rounded-lg">
+                        <h4 className="font-medium text-blue-800 dark:text-blue-200 mb-2">Mean Accuracy</h4>
+                        <p className="text-2xl font-bold text-blue-600 dark:text-blue-300">
+                          {(modelEvaluation.cv_results.mean_score * 100).toFixed(1)}%
+                        </p>
+                        <p className="text-sm text-blue-700 dark:text-blue-400">
+                          ±{(modelEvaluation.cv_results.std_score * 100).toFixed(1)}% (95% confidence interval)
+                        </p>
+                      </div>
+
+                      <div className="p-3 bg-green-50 dark:bg-green-900 rounded-lg">
+                        <h4 className="font-medium text-green-800 dark:text-green-200 mb-2">Model Stability</h4>
+                        <p className="text-sm text-green-700 dark:text-green-300">
+                          The standard deviation of {modelEvaluation.cv_results.std_score.toFixed(3)} indicates 
+                          {modelEvaluation.cv_results.std_score < 0.02 ? ' high' : modelEvaluation.cv_results.std_score < 0.05 ? ' moderate' : ' some'} 
+                          model stability across different data splits.
+                        </p>
+                      </div>
+
+                      <div className="p-3 bg-purple-50 dark:bg-purple-900 rounded-lg">
+                        <h4 className="font-medium text-purple-800 dark:text-purple-200 mb-2">Cross-Validation Benefits</h4>
+                        <ul className="text-sm text-purple-700 dark:text-purple-300 space-y-1">
+                          <li>• More robust performance estimate</li>
+                          <li>• Better understanding of model stability</li>
+                          <li>• Reduced impact of data splitting randomness</li>
+                          <li>• Helps detect potential overfitting</li>
+                        </ul>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* CV Interpretation */}
+              <div className="mt-6 bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                <h3 className="text-base font-medium mb-3">Cross-Validation Interpretation</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <h4 className="font-medium text-indigo-600 dark:text-indigo-400 mb-2">What This Means</h4>
+                    <ul className="list-disc list-inside text-sm space-y-1">
+                      <li>Model performance is consistent across different data splits</li>
+                      <li>Low standard deviation indicates stable predictions</li>
+                      <li>Mean accuracy provides a reliable performance estimate</li>
+                      <li>Model generalizes well to unseen data</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h4 className="font-medium text-indigo-600 dark:text-indigo-400 mb-2">Practical Implications</h4>
+                    <ul className="list-disc list-inside text-sm space-y-1">
+                      <li>Confidence in model's real-world performance</li>
+                      <li>Reliable risk predictions for new students</li>
+                      <li>Stable feature importance rankings</li>
+                      <li>Consistent probability estimates</li>
+                    </ul>
                   </div>
                 </div>
               </div>

@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import pandas as pd
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, cross_val_score, KFold
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
@@ -70,12 +70,19 @@ model_pipeline = Pipeline(steps=[
     ))
 ])
 
-# 7. Train the model
-print("\nTraining model...")
+# 7. Perform cross-validation
+print("\nPerforming 5-fold cross-validation...")
+cv = KFold(n_splits=5, shuffle=True, random_state=42)
+cv_scores = cross_val_score(model_pipeline, X_train, y_train, cv=cv, scoring='accuracy')
+print(f"Cross-validation scores: {cv_scores}")
+print(f"Mean CV accuracy: {cv_scores.mean():.3f} (+/- {cv_scores.std() * 2:.3f})")
+
+# 8. Train the model on the full training set
+print("\nTraining final model...")
 model_pipeline.fit(X_train, y_train)
 print("Model training complete!")
 
-# 8. Evaluate the model
+# 9. Evaluate the model
 y_pred = model_pipeline.predict(X_test)
 accuracy = accuracy_score(y_test, y_pred)
 print(f"\nModel Performance:")
@@ -107,6 +114,19 @@ feature_importance = pd.DataFrame({
 feature_importance['Abs_Coefficient'] = abs(feature_importance['Coefficient'])
 feature_importance = feature_importance.sort_values('Abs_Coefficient', ascending=False)
 print(feature_importance[['Feature', 'Coefficient']].head(10))
+
+# Store model evaluation results
+model_evaluation = {
+    'test_accuracy': float(accuracy),
+    'classification_report': report,
+    'feature_importance': feature_importance[['Feature', 'Coefficient']].head(10).to_dict('records'),
+    'cv_results': {
+        'scores': cv_scores.tolist(),
+        'mean_score': float(cv_scores.mean()),
+        'std_score': float(cv_scores.std()),
+        'folds': 5
+    }
+}
 
 # --- Flask Routes ---
 
@@ -144,7 +164,8 @@ def predict():
         # 4. Return the prediction as a JSON response
         response = {
             "predicted_depression": bool(predicted_class),
-            "probability_of_depression": round(depression_percentage, 2)
+            "probability_of_depression": round(depression_percentage, 2),
+            "model_evaluation": model_evaluation  # Include model evaluation results
         }
         print(f"Prediction successful: {response}")
         return jsonify(response)
