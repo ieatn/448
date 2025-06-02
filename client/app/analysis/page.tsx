@@ -1103,234 +1103,185 @@ export default function Analysis() {
           {/* Feature Impact Section */}
           {activeSection === 'feature-impact' && (
             <motion.div variants={fadeIn} className="space-y-8">
-              {/* LASSO Regularization Analysis */}
-              <div className="w-full bg-white dark:bg-gray-700 p-4 sm:p-6 rounded-lg shadow">
-                <h2 className="text-lg sm:text-xl font-semibold mb-4">LASSO Regularization Analysis</h2>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {/* Feature Importance */}
-                  <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
-                    <h3 className="text-base font-medium mb-3">Top 10 Most Important Features</h3>
-                    <div className="h-[400px]">
-                      <Bar
-                        data={{
-                          labels: ['Suicidal Thoughts (Yes)', 'Academic Pressure', 'Financial Stress', 
-                                  'Dietary Habits (Unhealthy)', 'Age', 'Dietary Habits (Healthy)',
-                                  'Work/Study Hours', 'Sleep Duration (<5h)', 'Study Satisfaction'],
-                          datasets: [{
-                            label: 'LASSO Coefficient',
-                            data: [1.27, 1.16, 0.80, 0.59, -0.53, -0.46, 0.43, 0.33, -0.33],
-                            backgroundColor: 'rgba(54, 162, 235, 0.6)',
-                            borderColor: 'rgba(54, 162, 235, 1)',
-                            borderWidth: 1
-                          }]
-                        }}
-                        options={{
-                          indexAxis: 'y',
-                          responsive: true,
-                          plugins: {
-                            legend: {
+              {/* Main Feature Impact Card */}
+              <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl rounded-3xl shadow-2xl p-8 border border-gray-100/50 dark:border-gray-700/50">
+                <div className="flex items-center gap-4 mb-8">
+                  <div className="p-3 bg-gradient-to-br from-indigo-500 to-blue-500 rounded-2xl shadow-lg">
+                    <FiBarChart2 className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h2 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300">
+                      Feature Impact Analysis
+                    </h2>
+                    <p className="text-gray-600 dark:text-gray-400 mt-1">
+                      Understanding how different factors influence depression risk
+                    </p>
+                  </div>
+                </div>
+
+                {/* Feature Importance Chart - Full Width */}
+                <div className="bg-gradient-to-br from-indigo-50/50 to-blue-50/50 dark:from-indigo-900/20 dark:to-blue-900/20 rounded-3xl p-8 backdrop-blur-sm mb-8">
+                  <h3 className="text-xl font-semibold text-indigo-900 dark:text-indigo-200 mb-6 text-center">Feature Impact on Depression Risk</h3>
+                  <div className="h-[400px] max-w-4xl mx-auto">
+                    <Bar
+                      data={{
+                        labels: ['Suicidal Thoughts (Yes)', 'Academic Pressure', 'Financial Stress', 
+                                'Dietary Habits (Unhealthy)', 'Age', 'Dietary Habits (Healthy)',
+                                'Work/Study Hours', 'Sleep Duration (<5h)', 'Study Satisfaction'],
+                        datasets: [{
+                          label: 'LASSO Coefficient',
+                          data: [1.27, 1.16, 0.80, 0.59, -0.53, -0.46, 0.43, 0.33, -0.33],
+                          backgroundColor: [
+                            'rgba(239, 68, 68, 0.7)',
+                            'rgba(239, 68, 68, 0.7)',
+                            'rgba(239, 68, 68, 0.7)',
+                            'rgba(239, 68, 68, 0.7)',
+                            'rgba(34, 197, 94, 0.7)',
+                            'rgba(34, 197, 94, 0.7)',
+                            'rgba(239, 68, 68, 0.7)',
+                            'rgba(239, 68, 68, 0.7)',
+                            'rgba(34, 197, 94, 0.7)',
+                          ],
+                          borderColor: [
+                            'rgb(239, 68, 68)',
+                            'rgb(239, 68, 68)',
+                            'rgb(239, 68, 68)',
+                            'rgb(239, 68, 68)',
+                            'rgb(34, 197, 94)',
+                            'rgb(34, 197, 94)',
+                            'rgb(239, 68, 68)',
+                            'rgb(239, 68, 68)',
+                            'rgb(34, 197, 94)',
+                          ],
+                          borderWidth: 2,
+                          borderRadius: 4
+                        }]
+                      }}
+                      options={{
+                        indexAxis: 'y',
+                        responsive: true,
+                        plugins: {
+                          legend: {
+                            display: false
+                          },
+                          title: {
+                            display: false
+                          }
+                        },
+                        scales: {
+                          x: {
+                            grid: {
                               display: false
                             },
-                            title: {
-                              display: true,
-                              text: 'Feature Impact on Depression Risk'
+                            border: {
+                              display: false
                             }
                           },
-                          scales: {
-                            x: {
-                              title: {
-                                display: true,
-                                text: 'LASSO Coefficient'
-                              }
-                            }
-                          }
-                        }}
-                      />
-                    </div>
-                  </div>
-
-                  {/* Regularization Explanation */}
-                  <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
-                    <h3 className="text-base font-medium mb-3">LASSO Regularization Benefits</h3>
-                    <div className="space-y-4">
-                      <div className="p-3 bg-blue-50 dark:bg-blue-900 rounded-lg">
-                        <h4 className="font-medium text-blue-800 dark:text-blue-200 mb-2">Feature Selection</h4>
-                        <p className="text-sm text-blue-700 dark:text-blue-300">
-                          LASSO (L1 regularization) automatically identifies and selects the most important features by setting less relevant features' coefficients to zero, helping to reduce model complexity.
-                        </p>
-                      </div>
-                      
-                      <div className="p-3 bg-green-50 dark:bg-green-900 rounded-lg">
-                        <h4 className="font-medium text-green-800 dark:text-green-200 mb-2">Overfitting Prevention</h4>
-                        <p className="text-sm text-green-700 dark:text-green-300">
-                          By penalizing large coefficients with C=0.1, LASSO helps prevent the model from overfitting to the training data, resulting in better generalization.
-                        </p>
-                      </div>
-
-                      <div className="p-3 bg-purple-50 dark:bg-purple-900 rounded-lg">
-                        <h4 className="font-medium text-purple-800 dark:text-purple-200 mb-2">Model Interpretability</h4>
-                        <p className="text-sm text-purple-700 dark:text-purple-300">
-                          The LASSO coefficients provide clear insights into how each feature affects depression risk prediction, with positive values indicating increased risk and negative values indicating decreased risk.
-                        </p>
-                      </div>
-
-                      <div className="mt-4 text-sm text-gray-600 dark:text-gray-400">
-                        <p>Regularization Strength (C=0.1):</p>
-                        <ul className="list-disc list-inside mt-2">
-                          <li>Stronger regularization to prevent overfitting</li>
-                          <li>More aggressive feature selection through L1 penalty</li>
-                          <li>Better generalization to new data</li>
-                          <li>Clearer interpretation of feature importance</li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Feature Impact Analysis */}
-              <div className="mt-6 bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
-                <h3 className="text-base font-medium mb-3">Feature Impact Analysis</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <h4 className="font-medium text-indigo-600 dark:text-indigo-400 mb-2">Risk Factors</h4>
-                    <ul className="list-disc list-inside text-sm space-y-1">
-                      <li>Suicidal Thoughts (Yes) (1.27) - Strongest risk factor</li>
-                      <li>Academic Pressure (1.16) - Major contributor to risk</li>
-                      <li>Financial Stress (0.80) - Significant impact on risk</li>
-                      <li>Dietary Habits (Unhealthy) (0.59) - Moderate risk factor</li>
-                      <li>Work/Study Hours (0.43) - Notable contribution to risk</li>
-                      <li>Sleep Duration (&lt;5h) (0.33) - Moderate risk factor</li>
-                    </ul>
-                  </div>
-                  <div>
-                    <h4 className="font-medium text-indigo-600 dark:text-indigo-400 mb-2">Protective Factors</h4>
-                    <ul className="list-disc list-inside text-sm space-y-1">
-                      <li>Age (-0.53) - Strong protective factor</li>
-                      <li>Dietary Habits (Healthy) (-0.46) - Significant protective effect</li>
-                      <li>Study Satisfaction (-0.33) - Moderate protective influence</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-
-              {/* Prediction Visualizations */}
-              <div className="w-full space-y-4 sm:space-y-6">
-                <h2 className="text-lg sm:text-xl font-semibold">Model Predictions & Feature Impact</h2>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-                  {/* Academic Pressure Impact */}
-                  <div className="bg-white dark:bg-gray-700 p-3 sm:p-4 rounded-lg shadow">
-                    <h3 className="text-base sm:text-lg font-medium mb-3 sm:mb-4">Academic Pressure Impact</h3>
-                    <div className="h-[250px] sm:h-[300px]">
-                      <Line 
-                        options={{
-                          ...lineOptions,
-                          plugins: {
-                            ...lineOptions.plugins,
-                            title: {
-                              display: true,
-                              text: 'LASSO Coefficient: 1.16 (Major Risk Factor)'
-                            }
-                          }
-                        }} 
-                        data={{
-                          labels: [1, 2, 3, 4, 5],
-                          datasets: [{
-                            label: 'Risk Percentage',
-                            data: [25, 40, 55, 70, 85],
-                            borderColor: 'rgb(255, 99, 132)',
-                            tension: 0.1,
-                            fill: false
-                          }]
-                        }} 
-                      />
-                    </div>
-                  </div>
-
-                  {/* Sleep Duration Impact */}
-                  <div className="bg-white dark:bg-gray-700 p-3 sm:p-4 rounded-lg shadow">
-                    <h3 className="text-base sm:text-lg font-medium mb-3 sm:mb-4">Sleep Duration Impact</h3>
-                    <div className="h-[250px] sm:h-[300px]">
-                      <Line 
-                        options={{
-                          ...lineOptions,
-                          plugins: {
-                            ...lineOptions.plugins,
-                            title: {
-                              display: true,
-                              text: 'LASSO Coefficient: 0.33 (Moderate Risk Factor)'
-                            }
-                          }
-                        }} 
-                        data={{
-                          labels: ['&lt;6 hours', '6-7 hours', '7-8 hours', '8-9 hours', '&gt;9 hours'],
-                          datasets: [{
-                            label: 'Risk Percentage',
-                            data: [75, 60, 45, 35, 30],
-                            borderColor: 'rgb(75, 192, 192)',
-                            tension: 0.1,
-                            fill: false
-                          }]
-                        }} 
-                      />
-                    </div>
-                  </div>
-
-                  {/* Work & Financial Impact */}
-                  <div className="bg-white dark:bg-gray-700 p-3 sm:p-4 rounded-lg shadow md:col-span-2">
-                    <h3 className="text-base sm:text-lg font-medium mb-3 sm:mb-4">Work & Financial Impact</h3>
-                    <div className="h-[250px] sm:h-[300px] flex justify-center items-center">
-                      <Line 
-                        options={{
-                          ...lineOptions,
-                          plugins: {
-                            ...lineOptions.plugins,
-                            title: {
-                              display: true,
-                              text: 'LASSO Coefficients: Financial Stress (0.80) & Work/Study Hours (0.43)'
-                            }
-                          }
-                        }} 
-                        data={{
-                          labels: [1, 2, 3, 4, 5],
-                          datasets: [
-                            {
-                              label: 'Financial Stress',
-                              data: [30, 45, 60, 75, 90],
-                              borderColor: 'rgb(153, 102, 255)',
-                              tension: 0.1,
-                              fill: false
+                          y: {
+                            grid: {
+                              display: false
                             },
-                            {
-                              label: 'Work/Study Hours',
-                              data: [25, 35, 45, 60, 75],
-                              borderColor: 'rgb(255, 159, 64)',
-                              tension: 0.1,
-                              fill: false
+                            border: {
+                              display: false
                             }
-                          ]
-                        }} 
-                      />
+                          }
+                        }
+                      }}
+                    />
+                  </div>
+                </div>
+
+                {/* Risk and Protective Factors Grid */}
+                <div className="grid grid-cols-2 gap-8">
+                  {/* Risk Factors */}
+                  <div className="bg-gradient-to-br from-red-50/50 to-pink-50/50 dark:from-red-900/20 dark:to-pink-900/20 rounded-3xl p-8 backdrop-blur-sm">
+                    <h3 className="text-xl font-semibold text-red-900 dark:text-red-200 mb-6">Risk Factors</h3>
+                    <div className="space-y-4">
+                      {featureImpactAnalysis.positiveImpact.map((factor, index) => (
+                        <motion.div
+                          key={index}
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: index * 0.1 }}
+                          className="flex items-start gap-4 p-4 bg-white/50 dark:bg-gray-800/50 rounded-2xl hover:bg-white/80 dark:hover:bg-gray-800/80 transition-all duration-200"
+                        >
+                          <div className="mt-1 w-2 h-2 rounded-full bg-gradient-to-r from-red-500 to-pink-500" />
+                          <div>
+                            <p className="font-semibold text-red-900 dark:text-red-200">{factor.feature}</p>
+                            <p className="text-sm text-red-700 dark:text-red-300 mt-1">{factor.description}</p>
+                            <p className="text-xs font-medium text-red-600 dark:text-red-400 mt-2">Impact: {factor.coefficient}</p>
+                          </div>
+                        </motion.div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Protective Factors */}
+                  <div className="bg-gradient-to-br from-green-50/50 to-emerald-50/50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-3xl p-8 backdrop-blur-sm">
+                    <h3 className="text-xl font-semibold text-green-900 dark:text-green-200 mb-6">Protective Factors</h3>
+                    <div className="space-y-4">
+                      {featureImpactAnalysis.negativeImpact.map((factor, index) => (
+                        <motion.div
+                          key={index}
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: index * 0.1 }}
+                          className="flex items-start gap-4 p-4 bg-white/50 dark:bg-gray-800/50 rounded-2xl hover:bg-white/80 dark:hover:bg-gray-800/80 transition-all duration-200"
+                        >
+                          <div className="mt-1 w-2 h-2 rounded-full bg-gradient-to-r from-green-500 to-emerald-500" />
+                          <div>
+                            <p className="font-semibold text-green-900 dark:text-green-200">{factor.feature}</p>
+                            <p className="text-sm text-green-700 dark:text-green-300 mt-1">{factor.description}</p>
+                            <p className="text-xs font-medium text-green-600 dark:text-green-400 mt-2">Impact: {factor.coefficient}</p>
+                          </div>
+                        </motion.div>
+                      ))}
                     </div>
                   </div>
                 </div>
 
-                <div className="mt-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                  <h3 className="text-base font-medium mb-2">Feature Impact Analysis</h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
-                    These visualizations show the three most significant feature groups affecting depression risk:
-                  </p>
-                  <ul className="list-disc list-inside mt-2 text-sm text-gray-600 dark:text-gray-400">
-                    <li>Suicidal Thoughts (1.27) & Academic Pressure (1.16): The strongest risk factors, showing a clear positive correlation with depression risk</li>
-                    <li>Financial Stress (0.80) & Work/Study Hours (0.43): Combined impact showing how work and financial factors contribute to risk</li>
-                    <li>Age (-0.53) & Dietary Habits (Healthy) (-0.46): Strong protective factors that help reduce depression risk</li>
-                  </ul>
+                {/* Key Insights */}
+                <div className="mt-8 bg-gradient-to-br from-gray-50/50 to-gray-100/50 dark:from-gray-800/20 dark:to-gray-700/20 rounded-3xl p-8 backdrop-blur-sm">
+                  <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-200 mb-6">Key Insights</h3>
+                  <div className="grid grid-cols-3 gap-6">
+                    <div className="bg-white/50 dark:bg-gray-800/50 rounded-2xl p-6 hover:bg-white/80 dark:hover:bg-gray-800/80 transition-all duration-200">
+                      <div className="flex items-center gap-4 mb-4">
+                        <div className="p-3 bg-gradient-to-br from-red-500 to-pink-500 rounded-xl shadow-lg">
+                          <FiTrendingUp className="w-6 h-6 text-white" />
+                        </div>
+                        <h4 className="text-lg font-semibold text-red-900 dark:text-red-200">Strongest Risk Factors</h4>
+                      </div>
+                      <p className="text-sm text-red-700 dark:text-red-300 leading-relaxed">
+                        Suicidal thoughts and academic pressure show the strongest positive correlation with depression risk.
+                      </p>
+                    </div>
+                    <div className="bg-white/50 dark:bg-gray-800/50 rounded-2xl p-6 hover:bg-white/80 dark:hover:bg-gray-800/80 transition-all duration-200">
+                      <div className="flex items-center gap-4 mb-4">
+                        <div className="p-3 bg-gradient-to-br from-green-500 to-emerald-500 rounded-xl shadow-lg">
+                          <FiTrendingUp className="w-6 h-6 text-white" />
+                        </div>
+                        <h4 className="text-lg font-semibold text-green-900 dark:text-green-200">Protective Factors</h4>
+                      </div>
+                      <p className="text-sm text-green-700 dark:text-green-300 leading-relaxed">
+                        Age and healthy dietary habits show strong protective effects against depression risk.
+                      </p>
+                    </div>
+                    <div className="bg-white/50 dark:bg-gray-800/50 rounded-2xl p-6 hover:bg-white/80 dark:hover:bg-gray-800/80 transition-all duration-200">
+                      <div className="flex items-center gap-4 mb-4">
+                        <div className="p-3 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-xl shadow-lg">
+                          <FiPieChart className="w-6 h-6 text-white" />
+                        </div>
+                        <h4 className="text-lg font-semibold text-blue-900 dark:text-blue-200">Moderate Factors</h4>
+                      </div>
+                      <p className="text-sm text-blue-700 dark:text-blue-300 leading-relaxed">
+                        Sleep duration and work/study hours show moderate but significant impact on risk levels.
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </motion.div>
-          )}  
+          )}
 
           {/* Model Comparison Section */}
           {activeSection === 'model-comparison' && (
