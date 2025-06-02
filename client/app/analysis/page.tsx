@@ -34,7 +34,7 @@ ChartJS.register(
 );
 
 // Type definitions
-type ModelName = 'Logistic Regression' | 'KNN' | 'Random Forest' | 'SVM';
+type ModelName = 'Logistic Regression' | 'KNN' | 'Neural Networks' | 'SVM';
 type MetricName = 'accuracy' | 'training_time' | 'interpretability' | 'scalability';
 
 interface ModelMetrics {
@@ -59,25 +59,25 @@ const modelPerformance: ModelMetrics = {
   accuracy: {
     'Logistic Regression': 0.848,  // From server's test accuracy
     'KNN': 0.82,
-    'Random Forest': 0.83,
+    'Neural Networks': 0.85,
     'SVM': 0.81
   },
   training_time: {
     'Logistic Regression': 0.2,
     'KNN': 0.5,
-    'Random Forest': 0.8,
+    'Neural Networks': 1.2,
     'SVM': 0.7
   },
   interpretability: {
     'Logistic Regression': 0.95,
     'KNN': 0.70,
-    'Random Forest': 0.75,
+    'Neural Networks': 0.45,
     'SVM': 0.65
   },
   scalability: {
     'Logistic Regression': 0.90,
     'KNN': 0.60,
-    'Random Forest': 0.85,
+    'Neural Networks': 0.95,
     'SVM': 0.80
   }
 };
@@ -98,12 +98,12 @@ const modelCharacteristics: ModelCharacteristics = {
     'Feature Handling': 0.80,
     'Scalability': 0.60
   },
-  'Random Forest': {
-    'Accuracy': 0.83,
+  'Neural Networks': {
+    'Accuracy': 0.85,
     'Speed': 0.75,
-    'Interpretability': 0.75,
-    'Feature Handling': 0.90,
-    'Scalability': 0.85
+    'Interpretability': 0.45,
+    'Feature Handling': 0.95,
+    'Scalability': 0.95
   },
   'SVM': {
     'Accuracy': 0.81,
@@ -1286,46 +1286,267 @@ export default function Analysis() {
           {/* Model Comparison Section */}
           {activeSection === 'model-comparison' && (
             <motion.div variants={fadeIn} className="space-y-8">
-              <div className="w-full space-y-4 sm:space-y-6">
-                <h2 className="text-lg sm:text-xl font-semibold">Model Comparison</h2>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-                  {/* Bar Chart for Model Performance */}
-                  <div className="bg-white dark:bg-gray-700 p-3 sm:p-4 rounded-lg shadow">
-                    <h3 className="text-base sm:text-lg font-medium mb-3 sm:mb-4">Performance Metrics</h3>
-                    <div>
-                      <select 
-                        value={selectedMetric}
-                        onChange={(e) => setSelectedMetric(e.target.value as MetricName)}
-                        className="mb-3 sm:mb-4 w-full sm:w-auto pl-2 pr-8 py-1 text-sm sm:text-base border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-transform duration-200 hover:scale-105 active:scale-95"
-                      >
-                        <option value="accuracy">Accuracy</option>
-                        <option value="training_time">Training Time</option>
-                        <option value="interpretability">Interpretability</option>
-                        <option value="scalability">Scalability</option>
-                      </select>
-                      <div className="h-[250px] sm:h-[300px]">
-                        <Bar options={barOptions} data={performanceData} />
+              {/* Main Model Comparison Card */}
+              <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl rounded-3xl shadow-2xl p-8 border border-gray-100/50 dark:border-gray-700/50">
+                <div className="flex items-center gap-4 mb-8">
+                  <div className="p-3 bg-gradient-to-br from-indigo-500 to-blue-500 rounded-2xl shadow-lg">
+                    <FiBarChart2 className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h2 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300">
+                      Model Comparison
+                    </h2>
+                    <p className="text-gray-600 dark:text-gray-400 mt-1">
+                      Interactive comparison of different machine learning models
+                    </p>
+                  </div>
+                </div>
+
+                {/* Interactive Model Comparison Charts */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+                  {/* Performance Metrics Chart */}
+                  <div className="bg-gradient-to-br from-indigo-50/50 to-blue-50/50 dark:from-indigo-900/20 dark:to-blue-900/20 rounded-3xl p-8 backdrop-blur-sm">
+                    <h3 className="text-xl font-semibold text-indigo-900 dark:text-indigo-200 mb-6">Performance Metrics</h3>
+                    <div className="h-[400px]">
+                      <Bar
+                        data={performanceData}
+                        options={barOptions}
+                      />
+                    </div>
+                    <div className="mt-4 flex justify-center gap-4">
+                      {Object.keys(modelPerformance).map((metric) => (
+                        <button
+                          key={metric}
+                          onClick={() => setSelectedMetric(metric as MetricName)}
+                          className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                            selectedMetric === metric
+                              ? 'bg-indigo-600 text-white shadow-md'
+                              : 'bg-white/50 text-gray-600 dark:text-gray-300 hover:bg-white/80'
+                          }`}
+                        >
+                          {metric.charAt(0).toUpperCase() + metric.slice(1)}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Model Characteristics Radar Chart */}
+                  <div className="bg-gradient-to-br from-green-50/50 to-emerald-50/50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-3xl p-8 backdrop-blur-sm">
+                    <h3 className="text-xl font-semibold text-green-900 dark:text-green-200 mb-6">Model Characteristics</h3>
+                    <div className="h-[400px]">
+                      <Radar
+                        data={radarData}
+                        options={radarOptions}
+                      />
+                    </div>
+                    <div className="mt-4 flex justify-center gap-4">
+                      {Object.keys(modelCharacteristics).map((model) => (
+                        <button
+                          key={model}
+                          onClick={() => setSelectedModel(model as ModelName)}
+                          className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                            selectedModel === model
+                              ? 'bg-green-600 text-white shadow-md'
+                              : 'bg-white/50 text-gray-600 dark:text-gray-300 hover:bg-white/80'
+                          }`}
+                        >
+                          {model}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Model Analysis Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                  {/* KNN */}
+                  <div className="bg-gradient-to-br from-blue-50/50 to-indigo-50/50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-3xl p-8 backdrop-blur-sm">
+                    <div className="flex items-center gap-4 mb-6">
+                      <div className="p-3 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-xl shadow-lg">
+                        <FiPieChart className="w-6 h-6 text-white" />
+                      </div>
+                      <h3 className="text-xl font-semibold text-blue-900 dark:text-blue-200">K-Nearest Neighbors</h3>
+                    </div>
+                    <div className="space-y-4">
+                      <div className="bg-white/50 dark:bg-gray-800/50 rounded-2xl p-4">
+                        <h4 className="font-medium text-blue-800 dark:text-blue-300 mb-2">Advantages</h4>
+                        <ul className="space-y-2 text-sm text-blue-700 dark:text-blue-400">
+                          <li className="flex items-start gap-2">
+                            <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0" />
+                            <span>Simple to understand and implement</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0" />
+                            <span>Can capture complex, non-linear relationships</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0" />
+                            <span>No training required, just stores training data</span>
+                          </li>
+                        </ul>
+                      </div>
+                      <div className="bg-white/50 dark:bg-gray-800/50 rounded-2xl p-4">
+                        <h4 className="font-medium text-blue-800 dark:text-blue-300 mb-2">Limitations</h4>
+                        <ul className="space-y-2 text-sm text-blue-700 dark:text-blue-400">
+                          <li className="flex items-start gap-2">
+                            <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0" />
+                            <span>Computationally expensive with large datasets</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0" />
+                            <span>Less interpretable predictions</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0" />
+                            <span>Sensitive to feature scaling</span>
+                          </li>
+                        </ul>
                       </div>
                     </div>
                   </div>
 
-                  {/* Radar Chart for Model Characteristics */}
-                  <div className="bg-white dark:bg-gray-700 p-3 sm:p-4 rounded-lg shadow">
-                    <h3 className="text-base sm:text-lg font-medium mb-3 sm:mb-4">Model Characteristics</h3>
-                    <div>
-                      <select 
-                        value={selectedModel}
-                        onChange={(e) => setSelectedModel(e.target.value as ModelName)}
-                        className="mb-3 sm:mb-4 w-full sm:w-auto pl-2 pr-8 py-1 text-sm sm:text-base border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-transform duration-200 hover:scale-105 active:scale-95"
-                      >
-                        <option value="Logistic Regression">Logistic Regression</option>
-                        <option value="KNN">KNN</option>
-                        <option value="Random Forest">Random Forest</option>
-                        <option value="SVM">SVM</option>
-                      </select>
-                      <div className="h-[250px] sm:h-[300px]">
-                        <Radar options={radarOptions} data={radarData} />
+                  {/* SVM */}
+                  <div className="bg-gradient-to-br from-purple-50/50 to-pink-50/50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-3xl p-8 backdrop-blur-sm">
+                    <div className="flex items-center gap-4 mb-6">
+                      <div className="p-3 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl shadow-lg">
+                        <FiPieChart className="w-6 h-6 text-white" />
+                      </div>
+                      <h3 className="text-xl font-semibold text-purple-900 dark:text-purple-200">Support Vector Machines</h3>
+                    </div>
+                    <div className="space-y-4">
+                      <div className="bg-white/50 dark:bg-gray-800/50 rounded-2xl p-4">
+                        <h4 className="font-medium text-purple-800 dark:text-purple-300 mb-2">Advantages</h4>
+                        <ul className="space-y-2 text-sm text-purple-700 dark:text-purple-400">
+                          <li className="flex items-start gap-2">
+                            <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-purple-500 flex-shrink-0" />
+                            <span>Effective in high-dimensional spaces</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-purple-500 flex-shrink-0" />
+                            <span>Powerful for classification tasks</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-purple-500 flex-shrink-0" />
+                            <span>Robust against overfitting</span>
+                          </li>
+                        </ul>
+                      </div>
+                      <div className="bg-white/50 dark:bg-gray-800/50 rounded-2xl p-4">
+                        <h4 className="font-medium text-purple-800 dark:text-purple-300 mb-2">Limitations</h4>
+                        <ul className="space-y-2 text-sm text-purple-700 dark:text-purple-400">
+                          <li className="flex items-start gap-2">
+                            <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-purple-500 flex-shrink-0" />
+                            <span>Less interpretable than Logistic Regression</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-purple-500 flex-shrink-0" />
+                            <span>Can be slow for very large datasets</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-purple-500 flex-shrink-0" />
+                            <span>Sensitive to parameter tuning</span>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Neural Networks */}
+                  <div className="bg-gradient-to-br from-red-50/50 to-orange-50/50 dark:from-red-900/20 dark:to-orange-900/20 rounded-3xl p-8 backdrop-blur-sm">
+                    <div className="flex items-center gap-4 mb-6">
+                      <div className="p-3 bg-gradient-to-br from-red-500 to-orange-500 rounded-xl shadow-lg">
+                        <FiPieChart className="w-6 h-6 text-white" />
+                      </div>
+                      <h3 className="text-xl font-semibold text-red-900 dark:text-red-200">Neural Networks</h3>
+                    </div>
+                    <div className="space-y-4">
+                      <div className="bg-white/50 dark:bg-gray-800/50 rounded-2xl p-4">
+                        <h4 className="font-medium text-red-800 dark:text-red-300 mb-2">Advantages</h4>
+                        <ul className="space-y-2 text-sm text-red-700 dark:text-red-400">
+                          <li className="flex items-start gap-2">
+                            <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-red-500 flex-shrink-0" />
+                            <span>Can learn extremely complex patterns</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-red-500 flex-shrink-0" />
+                            <span>Potential for very high accuracy</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-red-500 flex-shrink-0" />
+                            <span>Excellent for large datasets</span>
+                          </li>
+                        </ul>
+                      </div>
+                      <div className="bg-white/50 dark:bg-gray-800/50 rounded-2xl p-4">
+                        <h4 className="font-medium text-red-800 dark:text-red-300 mb-2">Limitations</h4>
+                        <ul className="space-y-2 text-sm text-red-700 dark:text-red-400">
+                          <li className="flex items-start gap-2">
+                            <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-red-500 flex-shrink-0" />
+                            <span>Requires large amounts of data</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-red-500 flex-shrink-0" />
+                            <span>Computationally intensive to train</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-red-500 flex-shrink-0" />
+                            <span>Low interpretability ("black box")</span>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Why Logistic Regression Section */}
+                <div className="mt-8 bg-gradient-to-br from-green-50/50 to-emerald-50/50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-3xl p-8 backdrop-blur-sm">
+                  <div className="flex items-center gap-4 mb-6">
+                    <div className="p-3 bg-gradient-to-br from-green-500 to-emerald-500 rounded-xl shadow-lg">
+                      <FiTrendingUp className="w-6 h-6 text-white" />
+                    </div>
+                    <h3 className="text-xl font-semibold text-green-900 dark:text-green-200">Why Logistic Regression?</h3>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="bg-white/50 dark:bg-gray-800/50 rounded-2xl p-6">
+                      <h4 className="font-medium text-green-800 dark:text-green-300 mb-4">Key Benefits</h4>
+                      <ul className="space-y-3 text-sm text-green-700 dark:text-green-400">
+                        <li className="flex items-start gap-3">
+                          <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-green-500 flex-shrink-0" />
+                          <span>Provides clear, interpretable probability-based predictions</span>
+                        </li>
+                        <li className="flex items-start gap-3">
+                          <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-green-500 flex-shrink-0" />
+                          <span>LASSO regularization helps identify key risk factors</span>
+                        </li>
+                        <li className="flex items-start gap-3">
+                          <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-green-500 flex-shrink-0" />
+                          <span>Fast computation time for real-time predictions</span>
+                        </li>
+                        <li className="flex items-start gap-3">
+                          <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-green-500 flex-shrink-0" />
+                          <span>Clear interpretation of feature importance through coefficients</span>
+                        </li>
+                      </ul>
+                    </div>
+                    <div className="bg-white/50 dark:bg-gray-800/50 rounded-2xl p-6">
+                      <h4 className="font-medium text-green-800 dark:text-green-300 mb-4">Performance Metrics</h4>
+                      <div className="space-y-4">
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm text-green-700 dark:text-green-400">Accuracy</span>
+                          <span className="font-medium text-green-900 dark:text-green-200">84.8%</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm text-green-700 dark:text-green-400">Training Time</span>
+                          <span className="font-medium text-green-900 dark:text-green-200">0.2s</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm text-green-700 dark:text-green-400">Interpretability</span>
+                          <span className="font-medium text-green-900 dark:text-green-200">95%</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm text-green-700 dark:text-green-400">Scalability</span>
+                          <span className="font-medium text-green-900 dark:text-green-200">90%</span>
+                        </div>
                       </div>
                     </div>
                   </div>
