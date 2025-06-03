@@ -1906,6 +1906,23 @@ print("Successfully loaded 'student_depression_dataset.csv'")`}
                             <li>Depression: Binary (0=No, 1=Yes)</li>
                           </ul>
                         </div>
+                        <div className="mt-4 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
+                          <h5 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Dataset Citation</h5>
+                          <p className="text-sm text-gray-600 dark:text-gray-400">
+                            This dataset is sourced from Kaggle: Student Depression Dataset by Adil Shamim.
+                          </p>
+                          <a 
+                            href="https://www.kaggle.com/datasets/adilshamim8/student-depression-dataset"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-sm text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 dark:hover:text-indigo-300 mt-1 inline-flex items-center"
+                          >
+                            View Dataset on Kaggle
+                            <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                            </svg>
+                          </a>
+                        </div>
                       </div>
                     </div>
                   </div>
