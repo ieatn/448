@@ -1806,6 +1806,108 @@ print("Successfully loaded 'student_depression_dataset.csv'")`}
                         </pre>
                       </div>
                     </div>
+
+                    {/* Data Preview Section */}
+                    <div className="mt-6 bg-white/50 dark:bg-gray-800/50 rounded-xl p-6">
+                      <h4 className="font-medium text-indigo-800 dark:text-indigo-300 mb-4">Sample Data Preview</h4>
+                      <div className="overflow-x-auto">
+                        <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                          <thead className="bg-gray-50 dark:bg-gray-800">
+                            <tr>
+                              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Age</th>
+                              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Gender</th>
+                              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Profession</th>
+                              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Academic Pressure</th>
+                              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Work Pressure</th>
+                              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">CGPA</th>
+                              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Study Satisfaction</th>
+                              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Job Satisfaction</th>
+                              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Sleep Duration</th>
+                              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Dietary Habits</th>
+                              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Degree</th>
+                              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Suicidal Thoughts</th>
+                              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Work/Study Hours</th>
+                              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Financial Stress</th>
+                              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Family History</th>
+                              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Depression</th>
+                            </tr>
+                          </thead>
+                          <tbody className="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700">
+                            <tr>
+                              <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-300">22</td>
+                              <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-300">Male</td>
+                              <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-300">Student</td>
+                              <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-300">4</td>
+                              <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-300">3</td>
+                              <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-300">7.5</td>
+                              <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-300">3</td>
+                              <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-300">4</td>
+                              <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-300">6-7 hours</td>
+                              <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-300">Unhealthy</td>
+                              <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-300">BSc</td>
+                              <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-300">No</td>
+                              <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-300">6</td>
+                              <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-300">3</td>
+                              <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-300">No</td>
+                              <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-300">1</td>
+                            </tr>
+                            <tr>
+                              <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-300">19</td>
+                              <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-300">Female</td>
+                              <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-300">Student</td>
+                              <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-300">3</td>
+                              <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-300">2</td>
+                              <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-300">8.2</td>
+                              <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-300">4</td>
+                              <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-300">3</td>
+                              <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-300">7-8 hours</td>
+                              <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-300">Healthy</td>
+                              <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-300">BSc</td>
+                              <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-300">No</td>
+                              <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-300">5</td>
+                              <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-300">2</td>
+                              <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-300">No</td>
+                              <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-300">0</td>
+                            </tr>
+                            <tr>
+                              <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-300">21</td>
+                              <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-300">Male</td>
+                              <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-300">Student</td>
+                              <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-300">5</td>
+                              <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-300">4</td>
+                              <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-300">6.8</td>
+                              <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-300">2</td>
+                              <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-300">3</td>
+                              <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-300">5-6 hours</td>
+                              <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-300">Unhealthy</td>
+                              <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-300">BSc</td>
+                              <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-300">Yes</td>
+                              <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-300">8</td>
+                              <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-300">4</td>
+                              <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-300">Yes</td>
+                              <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-300">1</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                        <div className="mt-4 space-y-2">
+                          <p className="text-sm text-gray-600 dark:text-gray-400">
+                            Note: This is a small sample of our dataset. The actual dataset contains 27,901 student records with 15 features.
+                          </p>
+                          <p className="text-sm text-gray-600 dark:text-gray-400">
+                            Feature Descriptions:
+                          </p>
+                          <ul className="text-sm text-gray-600 dark:text-gray-400 list-disc list-inside space-y-1">
+                            <li>Academic Pressure: Scale 1-5 (1=Low, 5=High)</li>
+                            <li>Work Pressure: Scale 1-5 (1=Low, 5=High)</li>
+                            <li>CGPA: Scale 0-10</li>
+                            <li>Study/Job Satisfaction: Scale 1-5 (1=Low, 5=High)</li>
+                            <li>Work/Study Hours: Hours per day</li>
+                            <li>Financial Stress: Scale 1-5 (1=Low, 5=High)</li>
+                            <li>Depression: Binary (0=No, 1=Yes)</li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
                   </div>
 
                   {/* Step 2: Data Processing */}
